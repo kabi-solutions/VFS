@@ -40,6 +40,8 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# local / editor
-.cursor/
+# local / editor — keep Cursor local state out of git; share project rules with Cloud Agents
+.cursor/*
+!.cursor/rules/
+!.cursor/rules/**
 _deploy_status.txt

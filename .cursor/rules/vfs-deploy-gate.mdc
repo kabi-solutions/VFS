@@ -1,0 +1,28 @@
+---
+description: Deploy gate — no commit/push/merge to production without explicit user ask; Cloud Agent draft handoff OK
+alwaysApply: true
+---
+
+# VFS deploy gate
+
+## Hard rules (every session)
+
+- **Never commit** unless the user explicitly asks in that message.
+- **Never push to `master`** unless the user explicitly asks in that message.
+- **Never merge to production** unless the user explicitly asks in that message.
+- History from earlier turns does **not** authorize commit/push/merge.
+
+## Allowed without a production ask
+
+- Cloud Agents may use **feature branches** and **draft PRs** for handoff/review.
+- Local edits and uncommitted work are fine; do not invent a commit/push step.
+
+## Production model
+
+- Production deploys from **Vercel** via auto-deploy on GitHub **`master`**.
+- Treat `master` as production. Do not push or merge there unless the user explicitly requests it.
+
+## Shared GitHub
+
+- Shared GitHub account **`kabi-solutions`** is intentional for now (team access via that account).
+- Do not change remotes, transfer the repo, or invite people unless the user explicitly asks.
