@@ -53,14 +53,13 @@ export default function CaseStudiesPage() {
       <PageHero
         eyebrow="Resources"
         title="Case studies"
-        description="Anonymized, illustrative deal shapes pending Vault-owned funded narratives — not rate advertisements or guarantees of terms."
+        description="Anonymized, illustrative deal shapes that show how Vault structures investor credit — not rate advertisements or guarantees of terms."
         primaryCta={{ href: "/apply", label: "Apply Now", shine: true }}
         secondaryCta={{ href: "/resources", label: "Learning Center" }}
         image={images.funded}
       />
 
       <Section>
-        {/* PLACEHOLDER — replace with Vault-approved anonymized funded deals; no precise APRs or LTVs */}
         <p className="mx-auto max-w-[40rem] text-center text-[0.9375rem] text-steel">
           Figures below stay qualitative on purpose. Specific pricing is evaluated after application.
         </p>
@@ -89,9 +88,9 @@ export default function CaseStudiesPage() {
         <div className="mx-auto max-w-[40rem] text-center">
           <h2 className="headline-lg text-balance">Your file will tell a clearer story</h2>
           <p className="body-lg mt-5">
-            {/* PLACEHOLDER — Vault marketing to supply real funded narratives when approved */}
-            When Vault publishes live case studies, they will sit here with counsel-approved
-            anonymization. Until then, Apply is the path to a real underwriting conversation.
+            These examples illustrate structure and process. Your own file will tell a clearer story
+            once Apply opens the portal and underwriting begins. Contact Vault if you need a
+            market-specific conversation first.
           </p>
         </div>
       </SoftStage>

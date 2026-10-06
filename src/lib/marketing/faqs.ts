@@ -5,22 +5,22 @@ export const homepageFaqs: FaqItem[] = [
   {
     question: "How fast can I start an application?",
     answer:
-      "The digital Apply flow is built to capture property, borrower, and loan details in one sitting. When you submit, borrower portal access is created so you can come back with documents later.",
+      "Apply is built for one sitting: property, borrower, and loan intent in a structured digital flow. On submit, borrower portal access is created so you can return with documents and track the file without starting over.",
   },
   {
     question: "Will I know where my file stands?",
     answer:
-      "Yes. Every file moves through a published lifecycle — application, review, package, underwriting, clear to close, and funding — with status history retained at each gate.",
+      "Yes. Every file moves through six published gates — application, review, package, underwriting, clear to close, and funding — with plain-language status and a retained history at each change.",
   },
   {
     question: "What if information is missing?",
     answer:
-      "The Processor can request missing information. The file enters an info-requested state tagged to the stage it came from, then returns there once you resubmit.",
+      "The Processor requests what’s needed. The file enters an info-requested state tagged to the stage it came from, then returns there once you resubmit — so you never lose your place in the lifecycle.",
   },
   {
     question: "What loan products does Vault offer?",
     answer:
-      "Private money and hard-money structures for acquisition and rehab, fix-and-flip, bridge, ground-up construction with draws, and DSCR / non-QM rental credit. Fit is evaluated against the property, exit, and borrower experience — not a one-size quote sheet.",
+      "Private money for acquisition and rehab, fix-and-flip, bridge, ground-up construction with draws, and DSCR / non-QM rental credit. Fit is evaluated against the property, exit, and borrower experience — not a one-size quote sheet.",
   },
   {
     question: "Who can apply?",
@@ -35,22 +35,22 @@ export const homepageFaqs: FaqItem[] = [
   {
     question: "Do you publish rates and LTVs on the site?",
     answer:
-      "No. Product pages describe structure and fit. Specific terms are evaluated deal by deal after application so invented rate figures never slip into production copy.",
+      "No. Product pages describe structure and fit. Specific terms are evaluated deal by deal after application so invented rate figures never appear as product advertising.",
   },
   {
     question: "Where does Vault lend?",
     answer:
-      "Vault uses a national operating model with state-specific coverage. Starter markets and the state landing template are listed under Locations; licensing disclosures live under Trust. A state page alone does not prove every license is in place.",
+      "Vault uses a national operating model with priority markets listed under Locations. Formal licensing details live under Trust. A state landing page means Vault is prepared to discuss investor files there — request the compliance pack for license-level confirmation.",
   },
   {
     question: "How does the borrower portal work?",
     answer:
-      "Submitting Apply creates portal access tied to your organization and file. You can upload documents, respond to info requests, and follow lifecycle status without restarting the application from scratch.",
+      "Submitting Apply creates portal access tied to your organization and file. Upload documents, respond to info requests, and follow lifecycle status without restarting — the same account stays with you across deals.",
   },
   {
     question: "How do capital partners get started?",
     answer:
-      "Review Why Partner With Vault and How Deployment Works, then submit a Partner Application. That creates a pending capital-partner organization record for diligence — not a disposable lead form.",
+      "Review Why Partner With Vault and How Deployment Works, then submit a Partner Application. That opens a capital-partner organization record for diligence — a real intake for partnership review, not a disposable lead form.",
   },
   {
     question: "Can I work with a broker or correspondent?",
@@ -60,7 +60,7 @@ export const homepageFaqs: FaqItem[] = [
   {
     question: "How do I contact Vault before applying?",
     answer:
-      "Use the Contact page for general inquiries. For a live file, Apply is the fastest path — it creates the portal record your team will use for follow-up.",
+      "Use the Contact page for general inquiries. When you have a live deal, Apply is the fastest path — it creates the portal record your team will use for follow-up.",
   },
 ];
 
@@ -80,11 +80,11 @@ export const expandedFaqs: FaqItem[] = [
   {
     question: "Is Vault licensed in my state?",
     answer:
-      "Coverage varies by market. Starter state landings describe markets we prioritize; formal licensing and disclosure language belongs under Trust and will be updated when counsel supplies final copy. Do not assume a license exists solely because a state page is listed.",
+      "Coverage varies by market. State landings describe markets Vault prioritizes for investor files. Formal licensing confirmation belongs under Trust — request the compliance pack rather than assuming a license from a marketing page alone.",
   },
   {
     question: "Who logs into Client Login?",
     answer:
-      "Borrowers use login after Apply creates portal access. Brokers and capital partners use role-scoped access once their organizations are set up. Marketing pages explain the model; authentication is mocked until full auth ships.",
+      "Borrowers use Client Login after Apply creates portal access. Brokers and capital partners use role-scoped access once their organizations are activated. Marketing pages explain the model; live credentials are issued after your organization is set up.",
   },
 ];

@@ -9,7 +9,7 @@ import { images } from "@/lib/marketing/images";
 export const metadata: Metadata = {
   title: "FAQs",
   description:
-    "Expanded Vault FAQs for borrowers and capital partners — lifecycle, documents, markets, and portal access.",
+    "Answers for borrowers and capital partners on Vault’s funding lifecycle, documents, markets, products, and portal access — without invented rate tables.",
 };
 
 function getFaqPageJsonLd() {
@@ -35,7 +35,7 @@ export default function FaqsPage() {
       <PageHero
         eyebrow="Resources"
         title="Vault FAQs"
-        description="Straight answers for borrowers and capital partners — without invented rate tables or licensing IDs."
+        description="Clear answers on how Vault funds investor deals — from Apply through signing — without invented rate tables or license IDs on the page."
         primaryCta={{ href: "/apply", label: "Apply Now", shine: true }}
         secondaryCta={{ href: "/contact", label: "Contact Vault" }}
       />
@@ -44,8 +44,8 @@ export default function FaqsPage() {
         <div className="mx-auto max-w-[36rem] text-center">
           <h2 className="headline-lg text-balance">Questions we hear most</h2>
           <p className="body-lg mt-5">
-            Includes the homepage set plus deeper coverage of products, documents, draws, and
-            markets.
+            The homepage set plus deeper coverage of products, documents, draws, DSCR, and market
+            coverage — written for operators who need process clarity before they apply.
           </p>
         </div>
         <div className="mx-auto mt-10 max-w-[880px] rounded-[2rem] bg-white/95 px-5 py-2 shadow-[0_20px_60px_rgba(0,0,0,0.06)] backdrop-blur-sm sm:px-8">

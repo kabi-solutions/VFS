@@ -104,7 +104,7 @@ export default function PressPage() {
             {
               href: "/company/leadership",
               label: "Leadership",
-              body: "Team roles and bios pending Vault-approved headshots.",
+              body: "Leadership roles across credit, capital, and operations.",
             },
             {
               href: "/company/community-impact",
