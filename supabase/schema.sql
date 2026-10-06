@@ -31,6 +31,7 @@ create type public.loan_type as enum (
   'rehab_fix_flip',
   'bridge',
   'ground_up',
+  'new_construction',
   'dscr_non_qm'
 );
 
@@ -128,6 +129,8 @@ create table public.loan_applications (
   assigned_processor_id uuid references public.users (id),
   attribution_source_id text references public.attribution_sources (id),
   commission_rate numeric(7, 4),
+  package jsonb,
+  package_complete boolean not null default false,
   created_at timestamptz not null default now(),
   updated_at timestamptz not null default now(),
   funded_at timestamptz,

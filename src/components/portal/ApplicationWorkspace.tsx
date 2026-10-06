@@ -38,6 +38,7 @@ import {
   docTypeLabels,
   loanTypeLabels,
 } from "@/lib/mock/status-labels";
+import { PackageCompletenessPanel } from "@/components/portal/PackageCompletenessPanel";
 import type {
   ApplicationStatus,
   Condition,
@@ -213,6 +214,8 @@ export function ApplicationWorkspace({ role }: { role: WorkspaceRole }) {
           value={`${orgName(app.processor_org_id)} · ${orgName(app.lender_org_id)} · ${orgName(app.escrow_org_id)}`}
         />
       </div>
+
+      <PackageCompletenessPanel app={app} docTypes={docs.map((d) => d.doc_type)} />
 
       <section className="mt-10 rounded-2xl bg-white p-5 ring-1 ring-black/[0.04] sm:p-6">
         <h2 className="text-[1.125rem] font-semibold tracking-[-0.02em] text-ink">Actions</h2>

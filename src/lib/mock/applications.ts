@@ -1,3 +1,5 @@
+import type { ApplicationPackage } from "@/lib/apply/package";
+import { displayName, getPackageCompleteness } from "@/lib/apply/package";
 import type {
   AttributionSourceId,
   Condition,
@@ -47,6 +49,8 @@ export type CreateApplicationInput = {
   attribution_source_id?: AttributionSourceId;
   prior_application_id?: string | null;
   documents?: MockDocumentInput[];
+  /** Full soft-required borrower package (may be incomplete). */
+  package?: ApplicationPackage | null;
 };
 
 export type CreateApplicationResult = {
@@ -126,6 +130,14 @@ function writePersisted() {
   persistMockState();
 }
 
+function normalizeApplication(app: LoanApplication): LoanApplication {
+  if (app.package === undefined) app.package = null;
+  if (typeof app.package_complete !== "boolean") {
+    app.package_complete = false;
+  }
+  return app;
+}
+
 /** Merge localStorage Apply + portal mutations into in-memory mock arrays. Safe to call repeatedly. */
 export function hydrateMockApplicationsFromStorage() {
   if (typeof window === "undefined" || hydrated) return;
@@ -133,7 +145,7 @@ export function hydrateMockApplicationsFromStorage() {
   const bundle = readPersisted();
   if (!bundle) return;
   upsertById(users, bundle.users ?? []);
-  upsertById(loanApplications, bundle.applications ?? []);
+  upsertById(loanApplications, (bundle.applications ?? []).map(normalizeApplication));
   upsertById(statusEvents, bundle.statusEvents ?? []);
   upsertById(documents, bundle.documents ?? []);
   upsertById(conditions, bundle.conditions ?? []);
@@ -192,6 +204,10 @@ export function createApplication(input: CreateApplicationInput): CreateApplicat
     noteParts.push(input.notes.trim());
   }
 
+  const pkg = input.package ?? null;
+  const docTypes = (input.documents ?? []).map((d) => d.doc_type);
+  const completeness = getPackageCompleteness(pkg, input.loan_type, docTypes);
+
   const application: LoanApplication = {
     id: applicationId,
     reference_code,
@@ -213,6 +229,8 @@ export function createApplication(input: CreateApplicationInput): CreateApplicat
     assigned_processor_id: null,
     attribution_source_id: input.attribution_source_id ?? "direct_apply",
     commission_rate: null,
+    package: pkg,
+    package_complete: completeness.missing.length === 0,
     created_at: now,
     updated_at: now,
     funded_at: null,
@@ -321,4 +339,39 @@ export function resolveBorrowerId(): string {
     }
   }
   return "user-borrower-1";
+}
+
+/** Replace package payload and recompute soft completeness from package + docs. */
+export function updateApplicationPackage(
+  applicationId: string,
+  pkg: ApplicationPackage,
+): LoanApplication {
+  hydrateMockApplicationsFromStorage();
+  const app = loanApplications.find((a) => a.id === applicationId);
+  if (!app) throw new Error(`Application not found: ${applicationId}`);
+
+  const docTypes = documents
+    .filter((d) => d.application_id === applicationId)
+    .map((d) => d.doc_type);
+  const completeness = getPackageCompleteness(pkg, app.loan_type, docTypes);
+
+  app.package = pkg;
+  app.package_complete = completeness.missing.length === 0;
+  app.updated_at = new Date().toISOString();
+
+  if (pkg.borrower) {
+    const name = displayName(pkg.borrower);
+    if (name) {
+      const user = users.find((u) => u.id === app.borrower_id);
+      if (user) {
+        user.full_name = name;
+        if (pkg.borrower.email.trim()) user.email = pkg.borrower.email.trim().toLowerCase();
+        if (pkg.borrower.cell_phone.trim()) user.phone = pkg.borrower.cell_phone.trim();
+        user.updated_at = app.updated_at;
+      }
+    }
+  }
+
+  writePersisted();
+  return app;
 }
