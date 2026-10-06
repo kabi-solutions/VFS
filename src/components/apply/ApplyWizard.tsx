@@ -4,7 +4,9 @@ import { useMemo, useState, type DragEvent } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { ContactFields } from "@/components/apply/ContactFields";
+import { ConstructionBudgetEditor } from "@/components/apply/ConstructionBudgetEditor";
 import { ContractorFields, needsContractorPackage } from "@/components/apply/ContractorFields";
+import { DeclarationsFields } from "@/components/apply/DeclarationsFields";
 import {
   errorClass,
   fieldClass,
@@ -17,11 +19,15 @@ import { SreoEditor } from "@/components/apply/SreoEditor";
 import { TrackRecordEditor } from "@/components/apply/TrackRecordEditor";
 import {
   BUSINESS_PURPOSE_ATTESTATION,
+  CREDIT_AUTHORIZATION_ATTESTATION,
+  ECOA_APPRAISAL_ATTESTATION,
   displayName,
   emptyApplicationPackage,
   emptyBorrowerParty,
+  emptyConstructionBudget,
   emptyContractor,
   getPackageCompleteness,
+  needsConstructionBudgetPackage,
   type ApplicationPackage,
   type LoanRequestInfo,
   type StrategyInfo,
@@ -44,23 +50,29 @@ const steps = [
   { id: 5, label: "Strategy" },
   { id: 6, label: "Track record" },
   { id: 7, label: "SREO" },
-  { id: 8, label: "Contractor" },
-  { id: 9, label: "Documents" },
+  { id: 8, label: "Budget" },
+  { id: 9, label: "Contractor" },
+  { id: 10, label: "Documents" },
 ] as const;
 
 type StepId = (typeof steps)[number]["id"];
 
 const docCategories = [
   "purchase_contract",
+  "payoff_statement",
   "entity_docs",
   "insurance",
   "bank_statements",
+  "photo_id",
+  "lease_agreement",
   "rehab_budget",
+  "construction_budget",
   "contractor_license",
   "contractor_drivers_license",
   "contractor_w9",
   "workers_comp_insurance",
   "commercial_gl_insurance",
+  "personal_liability_insurance",
   "sreo_schedule",
   "track_record_schedule",
   "other",
@@ -131,10 +143,21 @@ export function ApplyWizard({ priorApplicationId }: { priorApplicationId?: strin
     loanType,
     pkg.loan_request.requesting_rehab_financing,
   );
+  const showBudget = needsConstructionBudgetPackage(
+    loanType,
+    pkg.loan_request.requesting_rehab_financing,
+    pkg.loan_request.requesting_ground_up,
+    pkg.strategy.rehab_or_upgrade,
+  );
 
   const visibleSteps = useMemo(
-    () => steps.filter((s) => (s.id === 8 ? showContractor : true)),
-    [showContractor],
+    () =>
+      steps.filter((s) => {
+        if (s.id === 8) return showBudget;
+        if (s.id === 9) return showContractor;
+        return true;
+      }),
+    [showBudget, showContractor],
   );
 
   function patchPkg(updater: (prev: ApplicationPackage) => ApplicationPackage) {
@@ -280,6 +303,9 @@ export function ApplyWizard({ priorApplicationId }: { priorApplicationId?: strin
       const validDocs = pendingDocs.filter((d) => !d.error);
       const finalPkg: ApplicationPackage = applyGroundUpFromExpansion({
         ...pkg,
+        construction_budget: showBudget
+          ? pkg.construction_budget ?? emptyConstructionBudget()
+          : pkg.construction_budget,
         contractor: showContractor ? pkg.contractor ?? emptyContractor() : null,
         co_borrower: pkg.has_co_borrower ? pkg.co_borrower ?? emptyBorrowerParty() : null,
       });
@@ -485,6 +511,43 @@ export function ApplyWizard({ priorApplicationId }: { priorApplicationId?: strin
             {errors.business_purpose ? (
               <p className={errorClass}>{errors.business_purpose}</p>
             ) : null}
+            <label className="flex items-start gap-3 rounded-[1.5rem] border border-line px-4 py-4 text-[0.9375rem] text-charcoal">
+              <input
+                type="checkbox"
+                className="mt-1"
+                checked={pkg.ecoa_appraisal_acknowledged}
+                onChange={(e) =>
+                  patchPkg((prev) => ({
+                    ...prev,
+                    ecoa_appraisal_acknowledged: e.target.checked,
+                  }))
+                }
+              />
+              <span>{ECOA_APPRAISAL_ATTESTATION}</span>
+            </label>
+            <label className="flex items-start gap-3 rounded-[1.5rem] border border-line px-4 py-4 text-[0.9375rem] text-charcoal">
+              <input
+                type="checkbox"
+                className="mt-1"
+                checked={pkg.credit_authorization_acknowledged}
+                onChange={(e) =>
+                  patchPkg((prev) => ({
+                    ...prev,
+                    credit_authorization_acknowledged: e.target.checked,
+                  }))
+                }
+              />
+              <span>{CREDIT_AUTHORIZATION_ATTESTATION}</span>
+            </label>
+            <div>
+              <h2 className={sectionTitleClass}>Declarations</h2>
+              <div className="mt-4">
+                <DeclarationsFields
+                  declarations={pkg.declarations}
+                  onChange={(declarations) => patchPkg((prev) => ({ ...prev, declarations }))}
+                />
+              </div>
+            </div>
             <label className="flex items-start gap-3 text-[0.9375rem] text-charcoal">
               <input
                 type="checkbox"
@@ -827,6 +890,30 @@ export function ApplyWizard({ priorApplicationId }: { priorApplicationId?: strin
                   />
                 </div>
               </div>
+              {pkg.loan_request.transaction_type === "rate_term_refinance" ||
+              pkg.loan_request.transaction_type === "cash_out_refinance" ? (
+                <div className="mt-6 grid gap-6 sm:grid-cols-2">
+                  {(
+                    [
+                      ["refinance_current_debt", "Current debt on property"],
+                      ["refinance_original_cost", "Original cost"],
+                      ["refinance_year_acquired", "Year acquired"],
+                      ["refinance_as_is_value", "As-is value"],
+                      ["refinance_rehab_completed", "Rehab already completed"],
+                      ["refinance_rehab_to_complete", "Rehab still to complete"],
+                    ] as const
+                  ).map(([key, label]) => (
+                    <div key={key}>
+                      <label className={labelClass}>{label}</label>
+                      <input
+                        className={fieldClass}
+                        value={pkg.loan_request[key]}
+                        onChange={(e) => patchLoan({ [key]: e.target.value })}
+                      />
+                    </div>
+                  ))}
+                </div>
+              ) : null}
             </div>
             <div>
               <h2 className={sectionTitleClass}>Vesting</h2>
@@ -959,6 +1046,43 @@ export function ApplyWizard({ priorApplicationId }: { priorApplicationId?: strin
                   onChange={(e) => patchStrategy({ projected_monthly_rent: e.target.value })}
                 />
               </div>
+              {pkg.strategy.plan_for_property === "rental" ? (
+                <>
+                  <div>
+                    <label className={labelClass}>Plan to increase rents?</label>
+                    <select
+                      className={fieldClass}
+                      value={
+                        pkg.strategy.plan_increase_rents === null
+                          ? ""
+                          : pkg.strategy.plan_increase_rents
+                            ? "yes"
+                            : "no"
+                      }
+                      onChange={(e) =>
+                        patchStrategy({
+                          plan_increase_rents:
+                            e.target.value === "" ? null : e.target.value === "yes",
+                        })
+                      }
+                    >
+                      <option value="">Select…</option>
+                      <option value="yes">Yes</option>
+                      <option value="no">No</option>
+                    </select>
+                  </div>
+                  {pkg.strategy.plan_increase_rents ? (
+                    <div>
+                      <label className={labelClass}>Future monthly rent</label>
+                      <input
+                        className={fieldClass}
+                        value={pkg.strategy.future_monthly_rent}
+                        onChange={(e) => patchStrategy({ future_monthly_rent: e.target.value })}
+                      />
+                    </div>
+                  ) : null}
+                </>
+              ) : null}
               <div>
                 <label className={labelClass}>Rehab or upgrade?</label>
                 <select
@@ -1086,6 +1210,16 @@ export function ApplyWizard({ priorApplicationId }: { priorApplicationId?: strin
                       <option value="no">No</option>
                     </select>
                   </div>
+                  <div className="sm:col-span-2">
+                    <label className={labelClass}>Scope of work</label>
+                    <textarea
+                      className={`${fieldClass} resize-y`}
+                      rows={3}
+                      value={pkg.strategy.scope_of_work}
+                      onChange={(e) => patchStrategy({ scope_of_work: e.target.value })}
+                      placeholder="Itemized scope summary; attach budget if costs exceed $10,000"
+                    />
+                  </div>
                 </>
               ) : null}
               <div className="sm:col-span-2">
@@ -1150,14 +1284,23 @@ export function ApplyWizard({ priorApplicationId }: { priorApplicationId?: strin
           />
         ) : null}
 
-        {step === 8 && showContractor && pkg.contractor ? (
+        {step === 8 && showBudget ? (
+          <ConstructionBudgetEditor
+            budget={pkg.construction_budget ?? emptyConstructionBudget()}
+            onChange={(construction_budget) =>
+              patchPkg((prev) => ({ ...prev, construction_budget }))
+            }
+          />
+        ) : null}
+
+        {step === 9 && showContractor && pkg.contractor ? (
           <ContractorFields
             contractor={pkg.contractor}
             onChange={(contractor) => patchPkg((prev) => ({ ...prev, contractor }))}
           />
         ) : null}
 
-        {step === 9 ? (
+        {step === 10 ? (
           <div className="space-y-6">
             <p className="text-[0.9375rem] leading-relaxed text-steel">
               Upload is mocked. Files stay in this browser session as metadata — skip and add later

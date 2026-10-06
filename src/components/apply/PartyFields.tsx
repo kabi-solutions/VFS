@@ -109,6 +109,18 @@ export function PartyFields({ idPrefix, party, onChange, hardRequired, errors }:
         />
         {errors?.cell_phone ? <p className={errorClass}>{errors.cell_phone}</p> : null}
       </div>
+      <div>
+        <label htmlFor={`${idPrefix}-secondary-phone`} className={labelClass}>
+          Secondary phone{soft}
+        </label>
+        <input
+          id={`${idPrefix}-secondary-phone`}
+          type="tel"
+          className={fieldClass}
+          value={party.secondary_phone}
+          onChange={(e) => set("secondary_phone", e.target.value)}
+        />
+      </div>
       <div className="sm:col-span-2">
         <label htmlFor={`${idPrefix}-primary`} className={labelClass}>
           Primary residence address{soft}

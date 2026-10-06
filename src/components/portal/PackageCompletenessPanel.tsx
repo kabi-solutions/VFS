@@ -51,8 +51,20 @@ function summaryBits(pkg: ApplicationPackage | null): Array<{ label: string; val
       ),
     },
   ];
-  if (pkg.contractor?.business_entity_name) {
-    bits.push({ label: "Contractor", value: pkg.contractor.business_entity_name });
+  if (pkg.contractor?.business_entity_name || pkg.contractor?.owner_builder_name) {
+    bits.push({
+      label: pkg.contractor.role === "owner_builder" ? "Owner-builder" : "Contractor",
+      value:
+        pkg.contractor.role === "owner_builder"
+          ? pkg.contractor.owner_builder_name || "Listed"
+          : pkg.contractor.business_entity_name || "Listed",
+    });
+  }
+  if (pkg.construction_budget?.construction_level) {
+    bits.push({
+      label: "Construction level",
+      value: `Level ${pkg.construction_budget.construction_level}`,
+    });
   }
   return bits;
 }

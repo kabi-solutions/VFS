@@ -10,13 +10,17 @@ export type LoanTermYears = "1" | "2";
 export type VestingType = "llc" | "corp" | "trust" | "llp" | "individual" | "other";
 export type PropertyPlan = "flip" | "rental" | "bridge";
 export type ExitStrategy = "sell" | "refinance" | "other";
-export type TrackProjectStatus = "current" | "complete";
+export type TrackProjectStatus = "current" | "complete" | "active";
 export type TrackProjectType = "fix_flip" | "fix_hold" | "ground_up";
 export type ContractorBusinessType =
   | "sole_proprietor"
   | "partnership"
   | "corporation"
   | "limited_liability";
+/** Owner-builder and GC are mutually exclusive roles on the Vault F-008 form. */
+export type ContractorRole = "owner_builder" | "general_contractor";
+export type ConstructionLevel = "1" | "2" | "3" | "4" | "5";
+export type FinishLevel = "basic" | "mid_range" | "high_end";
 
 export type ContactBlock = {
   name: string;
@@ -48,8 +52,23 @@ export type BorrowerParty = {
   estimated_annual_income: string;
   estimated_liquid_assets: string;
   cell_phone: string;
+  secondary_phone: string;
   email: string;
   employment: EmploymentInfo;
+};
+
+/** Loan Submission Package declarations / questionnaire. */
+export type DeclarationAnswers = {
+  outstanding_judgments: boolean | null;
+  bankrupt_last_7_years: boolean | null;
+  foreclosure_history: boolean | null;
+  party_to_lawsuit: boolean | null;
+  delinquent_federal_debt: boolean | null;
+  felony_conviction: boolean | null;
+  civil_union_or_non_borrowing_spouse: boolean | null;
+  us_citizen: boolean | null;
+  permanent_resident_alien: boolean | null;
+  intend_occupy_primary: boolean | null;
 };
 
 export type SubjectPropertyInfo = {
@@ -96,6 +115,8 @@ export type StrategyInfo = {
   plan_for_property: PropertyPlan | "";
   anticipated_hold_months: string;
   projected_monthly_rent: string;
+  plan_increase_rents: boolean | null;
+  future_monthly_rent: string;
   rehab_or_upgrade: boolean | null;
   estimated_rehab_cost: string;
   estimated_arv: string;
@@ -104,6 +125,7 @@ export type StrategyInfo = {
   expands_structure_50_percent: boolean | null;
   rehab_budget_attached: boolean | null;
   work_already_begun: boolean | null;
+  scope_of_work: string;
   investment_strategy: string;
   exit_strategy: ExitStrategy | "";
   exit_strategy_detail: string;
@@ -121,6 +143,8 @@ export type TrackRecordRow = {
   purchase_date: string;
   purchase_price: string;
   renovation_costs: string;
+  disposition_date: string;
+  disposition_price: string;
 };
 
 export type SreoPropertyRow = {
@@ -131,6 +155,9 @@ export type SreoPropertyRow = {
   city: string;
   state: string;
   zip: string;
+  entity_name_on_title: string;
+  ownership_percent: string;
+  investment_type: string;
   property_type: string;
   units_occupied: string;
   lease_start: string;
@@ -180,7 +207,39 @@ export type ContractorSalesHistory = {
   type_of_projects: string;
 };
 
+export type ContractorCompletedProject = {
+  year: string;
+  status: string;
+  project_address: string;
+  project_cost: string;
+  project_scope: string;
+};
+
+export type ConstructionBudgetLine = {
+  line_item: string;
+  budget_amount: string;
+  description: string;
+};
+
+export type ConstructionBudgetPackage = {
+  construction_level: ConstructionLevel | "";
+  finish_level: FinishLevel | "";
+  renovation_description: string;
+  project_duration_months: string;
+  permits_required: boolean | null;
+  permits_issued: boolean | null;
+  permits_obtain_months: string;
+  adding_square_footage: boolean | null;
+  expansion_type: string;
+  line_items: ConstructionBudgetLine[];
+};
+
 export type ContractorPackage = {
+  role: ContractorRole | "";
+  owner_builder_name: string;
+  owner_builder_street: string;
+  owner_builder_city_state_zip: string;
+  planned_project_levels: ConstructionLevel[];
   business_entity_name: string;
   street_address: string;
   city: string;
@@ -194,6 +253,9 @@ export type ContractorPackage = {
   tin_ssn: string;
   years_in_business: string;
   sales_history: ContractorSalesHistory[];
+  completed_projects: ContractorCompletedProject[];
+  no_contractor_license: boolean;
+  has_employees: boolean | null;
   license_state: string;
   license_number: string;
   license_issue_date: string;
@@ -219,6 +281,9 @@ export type ApplicationPackage = {
   has_co_borrower: boolean;
   co_borrower: BorrowerParty | null;
   business_purpose_attested: boolean;
+  ecoa_appraisal_acknowledged: boolean;
+  credit_authorization_acknowledged: boolean;
+  declarations: DeclarationAnswers;
   subject_property: SubjectPropertyInfo;
   loan_request: LoanRequestInfo;
   vesting: VestingInfo;
@@ -228,6 +293,7 @@ export type ApplicationPackage = {
   strategy: StrategyInfo;
   track_record: TrackRecordRow[];
   sreo: SreoPropertyRow[];
+  construction_budget: ConstructionBudgetPackage | null;
   contractor: ContractorPackage | null;
   notes: string;
 };
@@ -405,6 +471,54 @@ export function getPackageCompleteness(
       severity: "required_for_package",
     });
   }
+  if (!pkg.ecoa_appraisal_acknowledged) {
+    missing.push({
+      id: "ecoa_appraisal",
+      section: "Attestation",
+      label: "ECOA notice of right to copy of appraisal",
+      severity: "required_for_package",
+    });
+  }
+  if (!pkg.credit_authorization_acknowledged) {
+    missing.push({
+      id: "credit_authorization",
+      section: "Attestation",
+      label: "Credit & background check authorization",
+      severity: "required_for_package",
+    });
+  }
+
+  const declarations = pkg.declarations ?? emptyDeclarations();
+  const declarationLabels: Array<[keyof DeclarationAnswers, string]> = [
+    ["outstanding_judgments", "Outstanding judgments?"],
+    ["bankrupt_last_7_years", "Bankruptcy in last 7 years?"],
+    ["foreclosure_history", "Foreclosure history?"],
+    ["party_to_lawsuit", "Party to a lawsuit?"],
+    ["delinquent_federal_debt", "Delinquent on federal debt / obligations?"],
+    ["felony_conviction", "Felony conviction?"],
+    ["civil_union_or_non_borrowing_spouse", "Civil union / non-borrowing spouse / DBA?"],
+    ["us_citizen", "US citizen?"],
+    ["permanent_resident_alien", "Permanent resident alien?"],
+    ["intend_occupy_primary", "Intend to occupy as primary residence?"],
+  ];
+  for (const [key, label] of declarationLabels) {
+    if (declarations[key] === null) {
+      missing.push({
+        id: `declarations.${key}`,
+        section: "Declarations",
+        label,
+        severity: "required_for_package",
+      });
+    }
+  }
+  if (declarations.intend_occupy_primary === true) {
+    missing.push({
+      id: "declarations.occupy_conflict",
+      section: "Declarations",
+      label: "Investor loans require non-owner occupancy (answered Yes to occupy)",
+      severity: "required_for_package",
+    });
+  }
 
   const sp = pkg.subject_property;
   for (const [key, label] of [
@@ -560,6 +674,14 @@ export function getPackageCompleteness(
         severity: "required_for_package",
       });
     }
+    if (!filled(st.scope_of_work)) {
+      missing.push({
+        id: "strategy.scope_of_work",
+        section: "Strategy",
+        label: "Scope of work",
+        severity: "required_for_package",
+      });
+    }
     if (st.adding_square_footage === null) {
       missing.push({
         id: "strategy.adding_sqft",
@@ -584,14 +706,6 @@ export function getPackageCompleteness(
         severity: "required_for_package",
       });
     }
-    if (st.rehab_budget_attached !== true && !docTypes.includes("rehab_budget")) {
-      missing.push({
-        id: "strategy.rehab_budget_doc",
-        section: "Documents",
-        label: "Rehab budget attached",
-        severity: "required_for_package",
-      });
-    }
     if (st.work_already_begun === null) {
       missing.push({
         id: "strategy.work_begun",
@@ -601,13 +715,31 @@ export function getPackageCompleteness(
       });
     }
   }
-  if (st.plan_for_property === "rental" && !filled(st.projected_monthly_rent)) {
-    missing.push({
-      id: "strategy.rent",
-      section: "Strategy",
-      label: "Projected monthly rental income",
-      severity: "required_for_package",
-    });
+  if (st.plan_for_property === "rental") {
+    if (!filled(st.projected_monthly_rent)) {
+      missing.push({
+        id: "strategy.rent",
+        section: "Strategy",
+        label: "Projected monthly rental income",
+        severity: "required_for_package",
+      });
+    }
+    if (st.plan_increase_rents === null) {
+      missing.push({
+        id: "strategy.increase_rents",
+        section: "Strategy",
+        label: "Plan to increase rents?",
+        severity: "required_for_package",
+      });
+    }
+    if (st.plan_increase_rents && !filled(st.future_monthly_rent)) {
+      missing.push({
+        id: "strategy.future_rent",
+        section: "Strategy",
+        label: "Future monthly rent",
+        severity: "required_for_package",
+      });
+    }
   }
   if (lr.transaction_type === "cash_out_refinance" && !filled(st.cash_out_proceeds_use)) {
     missing.push({
@@ -664,30 +796,113 @@ export function getPackageCompleteness(
     }
   }
 
-  const needsContractor =
-    lr.requesting_rehab_financing === true ||
-    loanType === "rehab_fix_flip" ||
-    loanType === "ground_up" ||
-    loanType === "new_construction";
-  if (needsContractor) {
-    const c = pkg.contractor;
-    if (!c || !filled(c.business_entity_name) || !filled(c.phone) || !filled(c.email) || !c.release_authorized) {
+  const needsConstructionBudget = needsConstructionBudgetPackage(
+    loanType,
+    lr.requesting_rehab_financing,
+    lr.requesting_ground_up,
+    st.rehab_or_upgrade,
+  );
+  if (needsConstructionBudget) {
+    const budget = pkg.construction_budget;
+    if (!budget || !filled(budget.construction_level)) {
       missing.push({
-        id: "contractor",
-        section: "Rehab / contractor",
-        label: "Contractor business profile + release authorization",
+        id: "construction.level",
+        section: "Construction budget",
+        label: "Construction level (1–5)",
         severity: "required_for_package",
       });
     }
-    const contractorDocs = [
-      "contractor_license",
-      "contractor_drivers_license",
-      "contractor_w9",
-      "workers_comp_insurance",
-      "commercial_gl_insurance",
-      "rehab_budget",
-    ];
-    for (const doc of contractorDocs) {
+    if (!budget || !filled(budget.finish_level)) {
+      missing.push({
+        id: "construction.finish",
+        section: "Construction budget",
+        label: "Finish level",
+        severity: "required_for_package",
+      });
+    }
+    if (!budget || !filled(budget.renovation_description)) {
+      missing.push({
+        id: "construction.description",
+        section: "Construction budget",
+        label: "Renovation / scope description",
+        severity: "required_for_package",
+      });
+    }
+    const hasBudgetLines =
+      budget?.line_items.some((line) => {
+        const amount = Number(String(line.budget_amount).replace(/,/g, ""));
+        return filled(line.line_item) && !Number.isNaN(amount) && amount > 0;
+      }) ?? false;
+    const hasBudgetDoc =
+      docTypes.includes("construction_budget") ||
+      docTypes.includes("rehab_budget") ||
+      st.rehab_budget_attached === true;
+    if (!hasBudgetLines && !hasBudgetDoc) {
+      missing.push({
+        id: "construction.budget_items",
+        section: "Construction budget",
+        label: "Itemized construction budget (in-form lines or Excel / PDF upload)",
+        severity: "required_for_package",
+      });
+    }
+  }
+
+  const needsContractor = needsContractorPackage(loanType, lr.requesting_rehab_financing);
+  if (needsContractor) {
+    const c = pkg.contractor;
+    if (!c || !filled(c.role)) {
+      missing.push({
+        id: "contractor.role",
+        section: "Owner-builder / GC",
+        label: "Owner-builder or general contractor role",
+        severity: "required_for_package",
+      });
+    } else if (c.role === "owner_builder") {
+      if (!filled(c.owner_builder_name) || !filled(c.owner_builder_street)) {
+        missing.push({
+          id: "contractor.owner_builder",
+          section: "Owner-builder / GC",
+          label: "Owner-builder name and address",
+          severity: "required_for_package",
+        });
+      }
+      if (!c.planned_project_levels.length) {
+        missing.push({
+          id: "contractor.project_levels",
+          section: "Owner-builder / GC",
+          label: "Planned project levels (next 24 months)",
+          severity: "required_for_package",
+        });
+      }
+    } else if (c.role === "general_contractor") {
+      if (!filled(c.business_entity_name) || !filled(c.phone) || !filled(c.email)) {
+        missing.push({
+          id: "contractor.gc_profile",
+          section: "Owner-builder / GC",
+          label: "General contractor business profile (name, phone, email)",
+          severity: "required_for_package",
+        });
+      }
+    }
+    if (!c?.release_authorized) {
+      missing.push({
+        id: "contractor.release",
+        section: "Owner-builder / GC",
+        label: "Release authorization",
+        severity: "required_for_package",
+      });
+    }
+    if (c && !c.no_contractor_license) {
+      if (!filled(c.license_state) || !filled(c.license_number)) {
+        missing.push({
+          id: "contractor.license",
+          section: "Owner-builder / GC",
+          label: "Contractor license state and number (or mark unlicensed)",
+          severity: "required_for_package",
+        });
+      }
+    }
+    for (const doc of contractorDocRequirements(c)) {
       if (!docTypes.includes(doc)) {
         missing.push({
           id: `doc.${doc}`,
@@ -697,6 +912,56 @@ export function getPackageCompleteness(
         });
       }
     }
+    if (c?.role === "owner_builder") {
+      const hasGl =
+        docTypes.includes("commercial_gl_insurance") ||
+        docTypes.includes("personal_liability_insurance");
+      if (!hasGl) {
+        missing.push({
+          id: "doc.owner_builder_liability",
+          section: "Documents",
+          label: "Commercial GL or personal liability insurance (owner-builder)",
+          severity: "required_for_package",
+        });
+      }
+    }
+  }
+
+  const coreDocs: Array<{ id: string; label: string; needed: boolean }> = [
+    { id: "bank_statements", label: "Bank statements (2 months)", needed: true },
+    { id: "photo_id", label: "Photo ID", needed: true },
+    {
+      id: "entity_docs",
+      label: "Entity docs (articles / operating agreement)",
+      needed: pkg.vesting.vesting_in === "entity",
+    },
+    {
+      id: "purchase_contract",
+      label: "Fully executed purchase contract",
+      needed: lr.transaction_type === "purchase",
+    },
+    {
+      id: "payoff_statement",
+      label: "Payoff demand or mortgage statement",
+      needed:
+        lr.transaction_type === "rate_term_refinance" ||
+        lr.transaction_type === "cash_out_refinance",
+    },
+    {
+      id: "lease_agreement",
+      label: "Lease agreement(s)",
+      needed: sp.occupancy === "leased",
+    },
+  ];
+  for (const doc of coreDocs) {
+    if (doc.needed && !docTypes.includes(doc.id)) {
+      missing.push({
+        id: `doc.${doc.id}`,
+        section: "Documents",
+        label: doc.label,
+        severity: "required_for_package",
+      });
+    }
   }
 
   const totalCount = missing.length + 40;
@@ -704,6 +969,49 @@ export function getPackageCompleteness(
   const percent = Math.round((completeCount / totalCount) * 100);
 
   return { missing, completeCount, totalCount, percent };
+}
+
+export function needsContractorPackage(
+  loanType: LoanType | string,
+  requestingRehab: boolean | null,
+): boolean {
+  return (
+    requestingRehab === true ||
+    loanType === "rehab_fix_flip" ||
+    loanType === "ground_up" ||
+    loanType === "new_construction"
+  );
+}
+
+export function needsConstructionBudgetPackage(
+  loanType: LoanType | string,
+  requestingRehab: boolean | null,
+  requestingGroundUp: boolean | null,
+  rehabOrUpgrade: boolean | null,
+): boolean {
+  return (
+    requestingRehab === true ||
+    requestingGroundUp === true ||
+    rehabOrUpgrade === true ||
+    loanType === "rehab_fix_flip" ||
+    loanType === "ground_up" ||
+    loanType === "new_construction"
+  );
+}
+
+export function contractorDocRequirements(
+  contractor: ContractorPackage | null | undefined,
+): string[] {
+  if (!contractor?.role) return [];
+  const docs: string[] = [];
+  if (!contractor.no_contractor_license) docs.push("contractor_license");
+  if (contractor.role === "general_contractor") {
+    docs.push("commercial_gl_insurance", "contractor_drivers_license", "contractor_w9");
+    if (contractor.has_employees === true) docs.push("workers_comp_insurance");
+  } else if (contractor.has_employees === true) {
+    docs.push("workers_comp_insurance");
+  }
+  return docs;
 }
 
 export function emptyEmployment(): EmploymentInfo {
@@ -731,8 +1039,24 @@ export function emptyBorrowerParty(): BorrowerParty {
     estimated_annual_income: "",
     estimated_liquid_assets: "",
     cell_phone: "",
+    secondary_phone: "",
     email: "",
     employment: emptyEmployment(),
+  };
+}
+
+export function emptyDeclarations(): DeclarationAnswers {
+  return {
+    outstanding_judgments: null,
+    bankrupt_last_7_years: null,
+    foreclosure_history: null,
+    party_to_lawsuit: null,
+    delinquent_federal_debt: null,
+    felony_conviction: null,
+    civil_union_or_non_borrowing_spouse: null,
+    us_citizen: null,
+    permanent_resident_alien: null,
+    intend_occupy_primary: null,
   };
 }
 
@@ -752,6 +1076,8 @@ export function emptyTrackRow(): TrackRecordRow {
     purchase_date: "",
     purchase_price: "",
     renovation_costs: "",
+    disposition_date: "",
+    disposition_price: "",
   };
 }
 
@@ -764,6 +1090,9 @@ export function emptySreoRow(): SreoPropertyRow {
     city: "",
     state: "",
     zip: "",
+    entity_name_on_title: "",
+    ownership_percent: "",
+    investment_type: "",
     property_type: "",
     units_occupied: "",
     lease_start: "",
@@ -787,8 +1116,111 @@ export function emptySreoRow(): SreoPropertyRow {
   };
 }
 
+export const DEFAULT_CONSTRUCTION_LINE_ITEMS: string[] = [
+  "Plans (Architectural, Structural, Civil, etc.)",
+  "Permits",
+  "Additional Soft Costs (Soil Reports, Deputy Inspections, etc.)",
+  "Project Management (If not our client or part of the entity)",
+  "GC Fee (If not our client or part of the entity)",
+  "Temporary Facilities (Fencing, toilets, power etc.)",
+  "Sewer Connection",
+  "Trash Out",
+  "Demolition",
+  "Excavation/Grading/Shoring/Site Work",
+  "Trenching",
+  "Foundation",
+  "Retaining Wall(s)",
+  "Site Water Proofing",
+  "Structural Steel",
+  "Rough Framing Labor",
+  "Rough Framing Material",
+  "Rough Plumbing Labor",
+  "Rough Plumbing Material",
+  "Rough Electrical Labor",
+  "Rough Electrical Material",
+  "HVAC Rough Labor",
+  "HVAC Rough Material",
+  "Fire Sprinklers",
+  "Phone/Data/Smarthome Rough Wiring (M&L)",
+  "Ext Door Labor",
+  "Ext Door Material",
+  "Window Labor",
+  "Window Material",
+  "Siding/Brick/Stucco",
+  "Exterior Paint",
+  "Fireplace (Unit, Mantel, Surround)",
+  "Roofing",
+  "Insulation",
+  "Drywall",
+  "Interior Waterproofing",
+  "Balcony/Deck Waterproofing",
+  "Tile Labor",
+  "Tile Material",
+  "Interior Doors/Hardware (M&L)",
+  "Finish Carpentry (Base/Casing/Crown/Wainscot etc.)(M&L)",
+  "Kitchen Cabinets",
+  "Bathroom Vanities",
+  "Custom Cabinets",
+  "Interior Painting",
+  "Flooring Labor",
+  "Flooring Material",
+  "Countertop Labor",
+  "Countertop Material",
+  "Plumbing Final Install Labor",
+  "Plumbing Final Install Material",
+  "Electrical Final Install Labor",
+  "Electrical Final Install Material",
+  "Low Voltage Finish (Equipment, etc.)",
+  "HVAC Finish Labor",
+  "HVAC Finish Material",
+  "Shower Glass",
+  "Custom Glass Work",
+  "Appliances",
+  "Accessories (Door Stops, Towel Bars, etc.)",
+  "Garage Door",
+  "Fence/Gate/Trellis",
+  "Gutters/Downspouts",
+  "Swimming Pool/Jacuzzi",
+  "Hardscape",
+  "Landscaping Labor",
+  "Landscaping Material",
+  "Irrigation",
+  "Dumpsters",
+  "Final Cleaning",
+  "Open",
+  "Open",
+  "Open",
+  "Open",
+  "Open",
+  "Contingency",
+];
+
+export function emptyConstructionBudgetLine(lineItem = ""): ConstructionBudgetLine {
+  return { line_item: lineItem, budget_amount: "", description: "" };
+}
+
+export function emptyConstructionBudget(): ConstructionBudgetPackage {
+  return {
+    construction_level: "",
+    finish_level: "",
+    renovation_description: "",
+    project_duration_months: "",
+    permits_required: null,
+    permits_issued: null,
+    permits_obtain_months: "",
+    adding_square_footage: null,
+    expansion_type: "",
+    line_items: DEFAULT_CONSTRUCTION_LINE_ITEMS.map((item) => emptyConstructionBudgetLine(item)),
+  };
+}
+
 export function emptyContractor(): ContractorPackage {
   return {
+    role: "",
+    owner_builder_name: "",
+    owner_builder_street: "",
+    owner_builder_city_state_zip: "",
+    planned_project_levels: [],
     business_entity_name: "",
     street_address: "",
     city: "",
@@ -805,6 +1237,13 @@ export function emptyContractor(): ContractorPackage {
     tin_ssn: "",
     years_in_business: "",
     sales_history: [{ year: "", yearly_gross_sales: "", yearly_projects_completed: "", type_of_projects: "" }],
+    completed_projects: [
+      { year: "", status: "", project_address: "", project_cost: "", project_scope: "" },
+      { year: "", status: "", project_address: "", project_cost: "", project_scope: "" },
+      { year: "", status: "", project_address: "", project_cost: "", project_scope: "" },
+    ],
+    no_contractor_license: false,
+    has_employees: null,
     license_state: "",
     license_number: "",
     license_issue_date: "",
@@ -840,6 +1279,9 @@ export function emptyApplicationPackage(): ApplicationPackage {
     has_co_borrower: false,
     co_borrower: null,
     business_purpose_attested: false,
+    ecoa_appraisal_acknowledged: false,
+    credit_authorization_acknowledged: false,
+    declarations: emptyDeclarations(),
     subject_property: {
       address: "",
       city: "",
@@ -884,6 +1326,8 @@ export function emptyApplicationPackage(): ApplicationPackage {
       plan_for_property: "",
       anticipated_hold_months: "",
       projected_monthly_rent: "",
+      plan_increase_rents: null,
+      future_monthly_rent: "",
       rehab_or_upgrade: null,
       estimated_rehab_cost: "",
       estimated_arv: "",
@@ -892,6 +1336,7 @@ export function emptyApplicationPackage(): ApplicationPackage {
       expands_structure_50_percent: null,
       rehab_budget_attached: null,
       work_already_begun: null,
+      scope_of_work: "",
       investment_strategy: "",
       exit_strategy: "",
       exit_strategy_detail: "",
@@ -899,6 +1344,7 @@ export function emptyApplicationPackage(): ApplicationPackage {
     },
     track_record: [emptyTrackRow()],
     sreo: [emptySreoRow()],
+    construction_budget: emptyConstructionBudget(),
     contractor: emptyContractor(),
     notes: "",
   };
@@ -910,3 +1356,17 @@ export function displayName(party: Pick<BorrowerParty, "first_name" | "middle_na
 
 export const BUSINESS_PURPOSE_ATTESTATION =
   "I confirm this is a non-owner-occupied, business-purpose transaction only. I do not intend to occupy the subject property as my primary residence. (Placeholder attestation — replace with Vault counsel-approved language.)";
+
+export const ECOA_APPRAISAL_ATTESTATION =
+  "I acknowledge the ECOA notice of right to a copy of appraisal / valuation reports, and that I may waive the 3-business-day review period prior to closing.";
+
+export const CREDIT_AUTHORIZATION_ATTESTATION =
+  "I authorize the lender to conduct a background and/or credit check and to disclose credit experience to necessary third parties for due diligence on this application.";
+
+export const CONSTRUCTION_LEVEL_LABELS: Record<ConstructionLevel, string> = {
+  "1": "Level 1 — Light scope (cosmetic)",
+  "2": "Level 2 — Medium scope",
+  "3": "Level 3 — Heavy renovation",
+  "4": "Level 4 — Footprint expansion",
+  "5": "Level 5 — Ground up construction",
+};

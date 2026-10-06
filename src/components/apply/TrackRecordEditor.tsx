@@ -89,6 +89,7 @@ export function TrackRecordEditor({ rows, onChange }: Props) {
               >
                 <option value="">Select…</option>
                 <option value="current">Current</option>
+                <option value="active">Active</option>
                 <option value="complete">Complete</option>
               </select>
             </div>
@@ -166,11 +167,27 @@ export function TrackRecordEditor({ rows, onChange }: Props) {
               />
             </div>
             <div>
-              <label className={labelClass}>Renovation costs</label>
+              <label className={labelClass}>Renovation costs / rehab cost</label>
               <input
                 className={fieldClass}
                 value={row.renovation_costs}
                 onChange={(e) => updateRow(index, { renovation_costs: e.target.value })}
+              />
+            </div>
+            <div>
+              <label className={labelClass}>Disposition date</label>
+              <input
+                className={fieldClass}
+                value={row.disposition_date}
+                onChange={(e) => updateRow(index, { disposition_date: e.target.value })}
+              />
+            </div>
+            <div>
+              <label className={labelClass}>Disposition price</label>
+              <input
+                className={fieldClass}
+                value={row.disposition_price}
+                onChange={(e) => updateRow(index, { disposition_price: e.target.value })}
               />
             </div>
           </div>
