@@ -111,7 +111,7 @@ export default function AboutPage() {
             {
               href: "/company/leadership",
               label: "Leadership",
-              body: "Team bios and roles — photos pending Vault approval.",
+              body: "Meet the operators behind Vault’s credit and capital process.",
             },
             {
               href: "/company/community-impact",

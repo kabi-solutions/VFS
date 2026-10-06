@@ -15,10 +15,10 @@ const productFeatures: ProductFeature[] = [
   {
     href: "/solutions/private-money",
     title: "Private Money",
-    headline: "Custom private capital structured around the deal.",
+    headline: "Structure that flexes when the deal won't wait.",
     bullets: [
       "First and second trust deed options evaluated case by case",
-      "Leverage structured for acquisition speed — not bank templates",
+      "Leverage built for acquisition speed — not bank templates",
       "Clear path from application to LOI when the file fits",
     ],
     image: images.privateMoney,
@@ -30,9 +30,9 @@ const productFeatures: ProductFeature[] = [
   {
     href: "/solutions/rehab-fix-flip",
     title: "Rehab / Fix & Flip",
-    headline: "Acquisition and renovation capital on your timeline.",
+    headline: "Buy, renovate, and exit without funding friction.",
     bullets: [
-      "Funding sized for purchase plus rehab scope",
+      "Capital sized for purchase plus rehab scope",
       "Built for investors who move between contracts quickly",
       "Document center and status tracking in one borrower portal",
     ],
@@ -45,7 +45,7 @@ const productFeatures: ProductFeature[] = [
   {
     href: "/solutions/bridge-loans",
     title: "Bridge Loans",
-    headline: "Short-term capital when ownership is transitional.",
+    headline: "Bridge the gap. Keep the close on your calendar.",
     bullets: [
       "Bridge acquisition, refinance, or hold periods",
       "Designed for clean exits into permanent or DSCR financing",
@@ -60,7 +60,7 @@ const productFeatures: ProductFeature[] = [
   {
     href: "/solutions/ground-up",
     title: "Ground-Up Construction",
-    headline: "Draw schedules that follow the build.",
+    headline: "Draws that release when the build earns them.",
     bullets: [
       "Foundation, framing, and completion milestones",
       "Draw requests tied to verified progress",
@@ -75,7 +75,7 @@ const productFeatures: ProductFeature[] = [
   {
     href: "/solutions/dscr-non-qm",
     title: "DSCR & Non-QM",
-    headline: "Qualify on rental cash flow — not W-2 paperwork alone.",
+    headline: "Qualify on rent rolls — not W-2 paperwork alone.",
     bullets: [
       "Debt-service coverage focused underwriting for rentals",
       "Built for portfolio investors and non-traditional income",
@@ -94,37 +94,37 @@ const lifecycleSteps: LifecycleStep[] = [
     id: "application",
     title: "Application",
     body: "Submit property, borrower, and loan details in minutes. Your borrower portal opens so you can return and update the file anytime.",
-    icon: "apply",
+    image: images.lifecycleApply,
   },
   {
     id: "initial_review",
     title: "Initial review",
     body: "Vault reviews the file. Approval triggers a Letter of Intent and a package request. Denial ends cleanly with notice.",
-    icon: "review",
+    image: images.lifecycleReview,
   },
   {
     id: "package",
     title: "Package",
     body: "Upload the full loan package. Missing items return as info requested — then snap back to the right stage once resolved.",
-    icon: "package",
+    image: images.lifecyclePackage,
   },
   {
     id: "underwriting",
     title: "Underwriting",
     body: "A Processor routes the package to the assigned Lender. Conditions stay attached to the file until cleared.",
-    icon: "underwrite",
+    image: images.lifecycleUnderwrite,
   },
   {
     id: "clear_to_close",
     title: "Clear to close",
     body: "Prior-to-funding conditions are issued and satisfied. Closing prep moves documents to Escrow/Title.",
-    icon: "close",
+    image: images.lifecycleClose,
   },
   {
     id: "funding",
     title: "Signing & funding",
     body: "Documents are signed, funds move to Title, recording is confirmed, and the seller or lienholder is paid.",
-    icon: "fund",
+    image: images.lifecycleFund,
   },
 ];
 
@@ -136,11 +136,10 @@ export function HomePage() {
         <div className="mx-auto grid max-w-[1080px] items-center gap-10 px-6 pb-16 pt-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12 lg:px-8 lg:pb-20 lg:pt-16">
           <div>
             <p className="inline-flex items-center gap-2 rounded-full bg-green-soft px-3 py-1 text-[0.8125rem] font-semibold text-green">
-              {/* PLACEHOLDER — Vault to supply real metrics */}
-              $[XXX]M+ deployed · [XX] states · closings in days
+              Investor credit · Multi-state coverage · Closings measured in days
             </p>
-            <h1 className="headline-xl mt-5 max-w-[14ch] text-balance text-ink">
-              Borrow the capital your deal needs.
+            <h1 className="headline-xl mt-5 max-w-[16ch] text-balance text-ink">
+              Capital that moves as fast as your deal.
             </h1>
             <p className="body-lg mt-5 max-w-[34rem]">
               Private money for fix &amp; flip, bridge, ground-up, and DSCR investors — with a
@@ -179,13 +178,11 @@ export function HomePage() {
               </Link>
             </div>
             <p className="mt-5 text-[0.8125rem] text-steel">
-              {/* PLACEHOLDER — compliance review */}
               Subject to credit approval and applicable state licensing. Terms vary by deal.
             </p>
           </div>
           <div className="relative">
             <div className="relative aspect-[4/5] overflow-hidden rounded-[2rem] bg-green-mist sm:aspect-[5/4]">
-              {/* PLACEHOLDER — commissioned bright property photography */}
               <BrandImage
                 src={images.hero.src}
                 alt={images.hero.alt}
@@ -257,10 +254,9 @@ export function HomePage() {
         <ProductFeatureSection key={feature.href} feature={feature} />
       ))}
 
-      {/* How it works — soft stage + pastel cards + interactive flow */}
+      {/* How it works — interactive image-led lifecycle */}
       <section className="relative overflow-hidden bg-green-mist">
         <div className="pointer-events-none absolute inset-0" aria-hidden>
-          {/* PLACEHOLDER — commissioned photography */}
           <Image
             src={images.plans.src}
             alt=""
@@ -274,77 +270,9 @@ export function HomePage() {
           <div className="mx-auto max-w-[36rem] text-center">
             <h2 className="headline-lg text-balance">How funding moves through Vault.</h2>
             <p className="body-lg mt-5">
-              Start the file, see every gate, and move to funding on one audited path.
+              Six clear gates from application to funding — the same audited path you track in the
+              borrower portal.
             </p>
-          </div>
-
-          <ul className="mx-auto mt-12 grid max-w-[900px] gap-4 sm:grid-cols-3">
-            {[
-              {
-                step: "1",
-                title: "Apply",
-                body: "Submit the deal. Portal access is created so the file stays with you.",
-                icon: (
-                  <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" aria-hidden>
-                    <path
-                      d="M7 4.5h7l4 4V19a1 1 0 0 1-1 1H7a1 1 0 0 1-1-1V5.5a1 1 0 0 1 1-1Z"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                    />
-                    <path d="M14 4.5V9h4.5" stroke="currentColor" strokeWidth="1.5" />
-                  </svg>
-                ),
-              },
-              {
-                step: "2",
-                title: "See the path",
-                body: "Review, LOI, package, underwriting, and conditions — visible at every gate.",
-                icon: (
-                  <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" aria-hidden>
-                    <circle cx="11" cy="11" r="6.25" stroke="currentColor" strokeWidth="1.5" />
-                    <path d="M16 16l3.5 3.5" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" />
-                  </svg>
-                ),
-              },
-              {
-                step: "3",
-                title: "Fund the close",
-                body: "Signing, title funding, and recording confirmation close the lifecycle.",
-                icon: (
-                  <svg viewBox="0 0 24 24" className="h-6 w-6" fill="none" aria-hidden>
-                    <path
-                      d="M12 4v16M8.5 8.5c0-1.7 1.6-3 3.5-3s3.5 1.3 3.5 3-1.6 2.5-3.5 2.5-3.5.9-3.5 2.5 1.6 3 3.5 3 3.5-1.3 3.5-3"
-                      stroke="currentColor"
-                      strokeWidth="1.5"
-                      strokeLinecap="round"
-                    />
-                  </svg>
-                ),
-              },
-            ].map((item) => (
-              <li
-                key={item.step}
-                className="flex flex-col items-center rounded-[1.75rem] bg-white/95 px-6 py-8 text-center shadow-[0_12px_40px_rgba(0,0,0,0.05)] backdrop-blur-sm"
-              >
-                <span className="text-ink">{item.icon}</span>
-                <span className="mt-4 inline-flex h-8 w-8 items-center justify-center rounded-full bg-green text-[0.8125rem] font-semibold text-white">
-                  {item.step}
-                </span>
-                <h3 className="mt-3 text-[1.25rem] font-semibold tracking-[-0.02em] text-ink">
-                  {item.title}
-                </h3>
-                <p className="mt-2 text-[0.9375rem] leading-relaxed text-steel">{item.body}</p>
-              </li>
-            ))}
-          </ul>
-
-          <div className="mx-auto mt-6 max-w-xs">
-            <div className="flex gap-1.5" aria-hidden>
-              <span className="h-1 flex-1 rounded-full bg-green" />
-              <span className="h-1 flex-1 rounded-full bg-green" />
-              <span className="h-1 flex-1 rounded-full bg-black/10" />
-            </div>
-            <p className="mt-3 text-center text-[0.8125rem] text-steel">2/3 · Follow the full lifecycle</p>
           </div>
 
           <LifecycleFlow steps={lifecycleSteps} />

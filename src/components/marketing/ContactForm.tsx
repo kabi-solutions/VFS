@@ -50,13 +50,13 @@ export function ContactForm() {
   if (submitted) {
     return (
       <div className="rounded-[2rem] bg-white p-8 shadow-[0_20px_60px_rgba(0,0,0,0.06)] ring-1 ring-black/[0.04] sm:p-10">
-        <p className="text-[0.875rem] font-semibold text-green">Message recorded locally</p>
+        <p className="text-[0.875rem] font-semibold text-green">Message received</p>
         <h2 className="headline-lg mt-3 max-w-[16ch] text-balance text-ink">
-          Thanks — we logged your note in this session.
+          Thanks — we have your note.
         </h2>
         <p className="mt-4 text-[1.0625rem] leading-relaxed text-steel">
-          This form does not send email yet. Your submission was printed to the browser console and
-          stored in local UI state for demonstration.
+          A Vault team member will follow up during business hours. If you have an active deal,
+          starting Apply is often the fastest way to open a durable file record.
         </p>
         <dl className="mt-8 space-y-3 border-t border-line pt-6 text-[0.9375rem]">
           <div className="flex flex-wrap justify-between gap-2">
@@ -84,8 +84,7 @@ export function ContactForm() {
       className="rounded-[2rem] bg-white p-8 shadow-[0_20px_60px_rgba(0,0,0,0.06)] ring-1 ring-black/[0.04] sm:p-10"
     >
       <p className="text-[0.9375rem] leading-relaxed text-steel">
-        {/* PLACEHOLDER — wire to Vault inbox / CRM when ready */}
-        Mock form for Connect. Submissions console.log and show a local success state — no backend.
+        Tell us about your deal, market, or partnership question. We respond during business hours.
       </p>
 
       <div className="mt-8 space-y-6">

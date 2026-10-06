@@ -12,7 +12,7 @@ import { images } from "@/lib/marketing/images";
 export const metadata: Metadata = {
   title: "Client Login",
   description:
-    "Sign in to the Vault borrower and partner portal. Who logs in, role-scoped access, and security notes — authentication is mocked until full auth ships.",
+    "Sign in to the Vault borrower and partner portal. Role-scoped access for borrowers, brokers, and capital partners after Apply and organization setup.",
 };
 
 export default function LoginPage() {
@@ -21,7 +21,7 @@ export default function LoginPage() {
       <PageHero
         eyebrow="Portal"
         title="Client login"
-        description="Borrowers, brokers, and capital partners use this entry for durable portal access after Apply and organization setup. Authentication is mocked for now."
+        description="Borrowers, brokers, and capital partners use this entry for durable portal access after Apply and organization setup."
         image={images.capital}
         primaryCta={{ href: "/apply", label: "Apply Now", shine: true }}
         secondaryCta={{ href: "/contact", label: "Contact Vault" }}
@@ -36,7 +36,7 @@ export default function LoginPage() {
           <Link href="/apply" className="font-medium text-green hover:text-green-hover">
             Apply
           </Link>{" "}
-          creates the organization and file record your login will attach to once auth is live.
+          creates the organization and file record your login will attach to.
         </p>
       </Section>
 

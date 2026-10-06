@@ -72,14 +72,12 @@ export function PartnerApplicationForm() {
       <div className="rounded-[2rem] bg-white p-8 shadow-[0_20px_60px_rgba(0,0,0,0.06)] ring-1 ring-black/[0.04] sm:p-10">
         <p className="text-[0.875rem] font-semibold text-green">Application received</p>
         <h2 className="headline-lg mt-3 max-w-[18ch] text-balance text-ink">
-          Pending organization created for diligence.
+          Your partnership intake is in review.
         </h2>
         <p className="mt-4 text-[1.0625rem] leading-relaxed text-steel">
-          Your Partner Application created a{" "}
-          <span className="font-medium text-charcoal">capital_partner</span> organization record
-          for <span className="font-medium text-charcoal">{result.firmName}</span> with status{" "}
-          <span className="font-medium text-charcoal">{result.status}</span>. This is not a
-          disposable lead — Vault will use the record for partnership diligence.
+          Your Partner Application opened a capital-partner organization record for{" "}
+          <span className="font-medium text-charcoal">{result.firmName}</span>. Vault will use
+          this intake for diligence — not as a disposable marketing lead.
         </p>
         <dl className="mt-8 space-y-3 border-t border-line pt-6 text-[0.9375rem]">
           <div className="flex flex-wrap justify-between gap-2">
@@ -119,10 +117,9 @@ export function PartnerApplicationForm() {
       className="rounded-[2rem] bg-white p-8 shadow-[0_20px_60px_rgba(0,0,0,0.06)] ring-1 ring-black/[0.04] sm:p-10"
     >
       <p className="text-[0.9375rem] leading-relaxed text-steel">
-        Submitting creates a pending{" "}
-        <span className="font-medium text-charcoal">capital_partner</span> organization with status{" "}
-        <span className="font-medium text-charcoal">pending_review</span> for diligence — not a
-        marketing lead capture.
+        Submitting opens a capital-partner organization for diligence. Vault reviews firm fit,
+        mandate alignment, and reporting needs before activation — this is partnership intake, not
+        a marketing lead capture.
       </p>
 
       <div className="mt-8 grid gap-6 sm:grid-cols-2">
@@ -229,8 +226,8 @@ export function PartnerApplicationForm() {
           {isSubmitting ? "Submitting…" : "Submit Partner Application"}
         </Button>
         <p className="text-[0.8125rem] text-steel">
-          {/* PLACEHOLDER — compliance review of partner intake disclosures */}
-          Subject to Vault diligence and applicable partnership terms.
+          By submitting, you confirm the information is accurate and authorize Vault to contact you
+          about partnership diligence. Subject to Vault review and applicable partnership terms.
         </p>
       </div>
     </form>

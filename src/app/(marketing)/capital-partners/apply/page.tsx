@@ -7,7 +7,7 @@ import { images } from "@/lib/marketing/images";
 export const metadata: Metadata = {
   title: "Partner Application",
   description:
-    "Submit a capital partner application to create a pending capital_partner organization record for diligence.",
+    "Submit a capital partner application to open a partnership diligence intake with Vault Financial Services.",
 };
 
 export default function Page() {
@@ -16,7 +16,7 @@ export default function Page() {
       <PageHero
         eyebrow="Capital partners"
         title="Partner Application."
-        description="This form creates a pending capital-partner organization for diligence. It is not a disposable lead capture — Vault uses the record to evaluate partnership fit."
+        description="Open a capital-partner diligence intake with Vault. This is partnership review — not a disposable lead form — so we can evaluate mandate fit, reporting needs, and deployment readiness."
         primaryCta={{
           href: "/capital-partners/deployment",
           label: "How Deployment Works",
@@ -35,19 +35,21 @@ export default function Page() {
             <h2 className="headline-lg max-w-[12ch] text-balance">What happens on submit.</h2>
             <ul className="mt-6 space-y-4 text-[1.0625rem] leading-relaxed text-steel">
               <li>
-                <span className="font-medium text-charcoal">Organization type:</span> capital_partner
+                <span className="font-medium text-charcoal">Organization:</span> capital-partner
+                record opened for your firm
               </li>
               <li>
-                <span className="font-medium text-charcoal">Initial status:</span> pending_review
+                <span className="font-medium text-charcoal">Review:</span> Vault diligence before
+                activation — not an automated approval email
               </li>
               <li>
-                <span className="font-medium text-charcoal">Next step:</span> Vault diligence before
-                activation — not an automated approval email.
+                <span className="font-medium text-charcoal">Next step:</span> Follow-up on mandate
+                fit, reporting, and deployment readiness
               </li>
             </ul>
             <p className="mt-8 text-[0.875rem] text-steel">
-              {/* PLACEHOLDER — partner intake privacy / data-use disclosure */}
-              Contact details are used for partnership diligence and follow-up only.
+              Contact details are used for partnership diligence and follow-up only. See Privacy
+              under Trust for how Vault handles business contact information.
             </p>
           </div>
           <PartnerApplicationForm />
