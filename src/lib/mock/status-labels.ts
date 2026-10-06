@@ -56,6 +56,7 @@ export const loanTypeLabels: Record<LoanType, string> = {
   rehab_fix_flip: "Rehab / Fix & Flip",
   bridge: "Bridge",
   ground_up: "Ground-Up Construction",
+  new_construction: "New Construction",
   dscr_non_qm: "DSCR & Non-QM",
 };
 
@@ -65,6 +66,13 @@ export const docTypeLabels: Record<string, string> = {
   insurance: "Insurance",
   bank_statements: "Bank statements",
   rehab_budget: "Rehab budget / scope",
+  contractor_license: "Contractor / builders license",
+  contractor_drivers_license: "Contractor driver's license",
+  contractor_w9: "Contractor W-9",
+  workers_comp_insurance: "Workers' compensation insurance",
+  commercial_gl_insurance: "Commercial general liability insurance",
+  sreo_schedule: "SREO schedule upload",
+  track_record_schedule: "Track record upload",
   loi: "Letter of intent",
   other: "Other",
 };
