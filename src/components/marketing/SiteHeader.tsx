@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useId, useState } from "react";
+import { CTA_PRIMARY } from "@/lib/config/ctas";
 
 const solutions = [
   { href: "/solutions/private-money", label: "Private Money" },
@@ -10,6 +11,7 @@ const solutions = [
   { href: "/solutions/bridge-loans", label: "Bridge Loans" },
   { href: "/solutions/ground-up", label: "Ground-Up Construction" },
   { href: "/solutions/dscr-non-qm", label: "DSCR & Non-QM" },
+  { href: "/strategies", label: "By strategy / experience" },
 ];
 
 const company = [
@@ -28,9 +30,11 @@ const capital = [
 
 const resources = [
   { href: "/resources", label: "Learning Center" },
+  { href: "/resources/tools", label: "Investor Tools" },
   { href: "/resources/glossary", label: "Glossary" },
   { href: "/resources/faqs", label: "FAQs" },
   { href: "/resources/case-studies", label: "Case Studies" },
+  { href: "/screener", label: "Deal screener" },
 ];
 
 const trust = [
@@ -155,10 +159,10 @@ export function SiteHeader() {
             Client Login
           </Link>
           <Link
-            href="/apply"
+            href={CTA_PRIMARY.href}
             className="btn-shine rounded-full bg-green px-4 py-1.5 text-[0.75rem] font-medium text-white transition-colors hover:bg-green-hover"
           >
-            <span>Apply Now</span>
+            <span>{CTA_PRIMARY.label}</span>
           </Link>
         </div>
 
@@ -252,11 +256,11 @@ export function SiteHeader() {
                 Client Login
               </Link>
               <Link
-                href="/apply"
+                href={CTA_PRIMARY.href}
                 className="btn-shine rounded-full bg-green px-4 py-3 text-center font-medium text-white"
                 onClick={() => setMobileOpen(false)}
               >
-                <span>Apply Now</span>
+                <span>{CTA_PRIMARY.label}</span>
               </Link>
             </div>
           </div>

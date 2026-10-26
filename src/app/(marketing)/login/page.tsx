@@ -23,7 +23,7 @@ export default function LoginPage() {
         title="Client login"
         description="Borrowers, brokers, and capital partners use this entry for durable portal access after Apply and organization setup."
         image={images.capital}
-        primaryCta={{ href: "/apply", label: "Apply Now", shine: true }}
+        primaryCta={{ href: "/apply", label: "Start your file", shine: true }}
         secondaryCta={{ href: "/contact", label: "Contact Vault" }}
       />
 

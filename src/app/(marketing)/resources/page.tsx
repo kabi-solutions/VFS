@@ -6,6 +6,7 @@ import {
   PhotoTile,
   Section,
 } from "@/components/marketing/page";
+import { CTA_PRIMARY, CTA_SECONDARY } from "@/lib/config/ctas";
 import { images } from "@/lib/marketing/images";
 
 export const metadata: Metadata = {
@@ -21,7 +22,7 @@ export default function ResourcesPage() {
         eyebrow="Resources"
         title="Learning Center"
         description="Plain-language guides and reference material for investors evaluating private capital — without invented rate tables."
-        primaryCta={{ href: "/apply", label: "Apply Now", shine: true }}
+        primaryCta={{ href: CTA_PRIMARY.href, label: CTA_PRIMARY.label, shine: true }}
         secondaryCta={{ href: "/resources/faqs", label: "Read FAQs" }}
         image={images.plans}
       />
@@ -50,9 +51,16 @@ export default function ResourcesPage() {
             cta="Read guide"
           />
           <PhotoTile
+            href="/resources/tools"
+            title="Investor Tools"
+            body="DSCR, fix & flip, bridge cash-to-close, and draw schedule calculators."
+            image={images.plans}
+            cta="Open tools"
+          />
+          <PhotoTile
             href="/resources/case-studies"
             title="Case Studies"
-            body="Anonymized deal shapes that show how Vault structures investor credit."
+            body="Published only when Vault approves anonymized files — empty until then."
             image={images.funded}
             cta="View examples"
           />

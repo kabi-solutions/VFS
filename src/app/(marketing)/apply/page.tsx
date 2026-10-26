@@ -2,14 +2,16 @@ import type { Metadata } from "next";
 import { ApplyWizard } from "@/components/apply/ApplyWizard";
 import { PageHero, Section } from "@/components/marketing/page";
 import { images } from "@/lib/marketing/images";
+import { parseApplyPrefill } from "@/lib/config/apply-prefill";
+import { CTA_PRIMARY } from "@/lib/config/ctas";
 
 export const metadata: Metadata = {
-  title: "Apply Now",
+  title: "Start your file",
   description:
     "Submit a Vault private capital application — property, borrower, loan details, and documents in one digital file.",
 };
 
-type ApplySearchParams = Promise<{ prior?: string | string[] }>;
+type ApplySearchParams = Promise<Record<string, string | string[] | undefined>>;
 
 export default async function ApplyPage({
   searchParams,

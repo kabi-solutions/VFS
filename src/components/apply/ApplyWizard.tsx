@@ -41,6 +41,11 @@ import { starterStates } from "@/lib/marketing/states";
 import { createApplication, type MockDocumentInput } from "@/lib/mock/applications";
 import { docTypeLabels, loanTypeLabels } from "@/lib/mock/status-labels";
 import type { LoanType } from "@/lib/types/database";
+import {
+  isLoanType,
+  timelineToHoldMonths,
+  type ApplyPrefill,
+} from "@/lib/config/apply-prefill";
 
 const MAX_FILE_BYTES = 25 * 1024 * 1024;
 const loanTypes = Object.keys(loanTypeLabels) as LoanType[];
@@ -114,11 +119,62 @@ function isEmail(value: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
 }
 
-export function ApplyWizard({ priorApplicationId }: { priorApplicationId?: string }) {
+export function ApplyWizard({
+  priorApplicationId,
+  prefill,
+}: {
+  priorApplicationId?: string;
+  prefill?: ApplyPrefill;
+}) {
   const [step, setStep] = useState<StepId>(1);
   const [pkg, setPkg] = useState<ApplicationPackage>(() => emptyApplicationPackage());
   const [loanType, setLoanType] = useState<LoanType>("rehab_fix_flip");
   const [loanTypeAutoNote, setLoanTypeAutoNote] = useState<string | null>(null);
+
+  // Screener / calculator query-param prefill into early Apply fields (surgical).
+  const [prefillApplied, setPrefillApplied] = useState(false);
+  useEffect(() => {
+    if (prefillApplied || !prefill) return;
+    setPrefillApplied(true);
+    if (prefill.address) {
+      setPkg((prev) => ({
+        ...prev,
+        subject_property: { ...prev.subject_property, address: prefill.address || prev.subject_property.address },
+      }));
+    }
+    if (isLoanType(prefill.loanType)) setLoanType(prefill.loanType);
+    if (prefill.amount) {
+      setPkg((prev) => ({
+        ...prev,
+        loan_request: { ...prev.loan_request, loan_amount: prefill.amount || prev.loan_request.loan_amount },
+      }));
+    }
+    if (prefill.purchasePrice || prefill.rehabBudget || prefill.arv) {
+      setPkg((prev) => ({
+        ...prev,
+        loan_request: {
+          ...prev.loan_request,
+          purchase_price: prefill.purchasePrice || prev.loan_request.purchase_price,
+          budget_amount: prefill.rehabBudget || prev.loan_request.budget_amount,
+          estimated_arv: prefill.arv || prev.loan_request.estimated_arv,
+        },
+      }));
+    }
+    const hold = timelineToHoldMonths(prefill.timeline);
+    if (hold || prefill.timeline) {
+      setPkg((prev) => ({
+        ...prev,
+        strategy: {
+          ...prev.strategy,
+          anticipated_hold_months: hold || prev.strategy.anticipated_hold_months,
+          exit_strategy_detail: prefill.timeline
+            ? `Screener timeline: ${prefill.timeline}`
+            : prev.strategy.exit_strategy_detail,
+        },
+      }));
+    }
+  }, [prefill, prefillApplied]);
+
   const [pendingDocs, setPendingDocs] = useState<PendingDoc[]>([]);
   const [dragOver, setDragOver] = useState(false);
   const [defaultDocType, setDefaultDocType] = useState<string>("other");
