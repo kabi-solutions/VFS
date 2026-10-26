@@ -59,10 +59,10 @@ export default function LocationsPage() {
         <div className="mx-auto max-w-[40rem] text-center">
           <h2 className="headline-lg text-balance">Licensing caveat</h2>
           <p className="body-lg mt-5">
-            {/* PLACEHOLDER — counsel to confirm licensed markets before production claims */}
-            Formal licensing and disclosure language will live under Trust when finalized. Do not
-            treat this index as a license roster. A listed state means Vault is prepared to discuss
-            investor files there — not that every license ID is published on the marketing site.
+            This index is a market coverage guide, not a license roster. A listed state means Vault
+            is prepared to discuss investor files there. Formal licensing confirmation belongs under
+            Trust — request the compliance pack rather than inferring license IDs from marketing
+            pages alone.
           </p>
           <p className="mt-6 text-[0.9375rem] text-steel">
             See{" "}

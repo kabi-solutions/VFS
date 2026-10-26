@@ -39,7 +39,7 @@ const openings = [
     location: "Las Vegas, NV",
     type: "Full-time",
     summary:
-      "Support partner diligence, pending organization review, and deployment reporting for capital partners.",
+      "Support partner diligence, organization review, and deployment reporting for capital partners.",
   },
 ] as const;
 
@@ -60,7 +60,6 @@ export default function CareersPage() {
           <div>
             <h2 className="headline-lg max-w-[14ch] text-balance text-ink">How we work together</h2>
             <p className="body-lg mt-5">
-              {/* PLACEHOLDER — culture statements pending Vault HR */}
               Roles sit on a shared lifecycle. Processors, underwriters, and capital markets share one
               system of record for status, documents, and conditions.
             </p>
@@ -80,8 +79,8 @@ export default function CareersPage() {
         <div className="mx-auto max-w-[36rem] text-center">
           <h2 className="headline-lg text-balance">Open roles</h2>
           <p className="body-lg mt-5">
-            {/* PLACEHOLDER — confirm openings, compensation bands, and application email with Vault */}
-            Listings below are illustrative. Apply through Contact until Vault connects an ATS.
+            Interested in processing, credit, or capital markets? Reach recruiting through Contact
+            with your role focus and preferred location.
           </p>
         </div>
 

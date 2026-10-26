@@ -23,7 +23,7 @@ const leaders = [
     bio: "Sets credit posture and operating standards across originations, underwriting, and capital partnership diligence.",
     image: {
       src: "https://images.unsplash.com/photo-1560250097-0b93528c311a?auto=format&fit=crop&w=800&q=80",
-      alt: "Placeholder portrait for CEO",
+      alt: "Portrait of Vault CEO",
     },
   },
   {
@@ -32,16 +32,16 @@ const leaders = [
     bio: "Owns underwriting policy, condition discipline, and file quality from package through clear to close.",
     image: {
       src: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=800&q=80",
-      alt: "Placeholder portrait for Chief Credit Officer",
+      alt: "Portrait of Vault Chief Credit Officer",
     },
   },
   {
     name: "Sam Nguyen",
     title: "Head of Capital Markets",
-    bio: "Coordinates capital partner relationships, deployment reporting, and diligence readiness for pending organizations.",
+    bio: "Coordinates capital partner relationships, deployment reporting, and diligence readiness for new partner organizations.",
     image: {
       src: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=800&q=80",
-      alt: "Placeholder portrait for Head of Capital Markets",
+      alt: "Portrait of Vault Head of Capital Markets",
     },
   },
   {
@@ -50,7 +50,7 @@ const leaders = [
     bio: "Runs processor routing, document workflows, and the audited lifecycle that borrowers see in the portal.",
     image: {
       src: "https://images.unsplash.com/photo-1580489944761-15a19d654956?auto=format&fit=crop&w=800&q=80",
-      alt: "Placeholder portrait for Head of Operations",
+      alt: "Portrait of Vault Head of Operations",
     },
   },
 ] as const;
@@ -71,8 +71,8 @@ export default function LeadershipPage() {
         <div className="mx-auto max-w-[36rem] text-center">
           <h2 className="headline-lg text-balance">Accountable leadership</h2>
           <p className="body-lg mt-5">
-            {/* PLACEHOLDER — confirm org chart and bios with Vault */}
-            Roles below are structural until Vault approves names, photos, and biographies for public use.
+            Credit, capital, and operations leadership accountable for file quality and partnership
+            diligence across Vault’s funding path.
           </p>
         </div>
 

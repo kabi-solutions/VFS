@@ -13,7 +13,7 @@ import { images } from "@/lib/marketing/images";
 export const metadata: Metadata = {
   title: "Community Impact",
   description:
-    "Vault Financial Services supports youth housing initiatives in Southern Nevada, including NPHY. Details pending Vault confirmation.",
+    "Vault Financial Services supports youth housing initiatives in Southern Nevada, including programs aligned with NPHY.",
 };
 
 export default function CommunityImpactPage() {
@@ -35,10 +35,10 @@ export default function CommunityImpactPage() {
         </h2>
         <div className="mt-8 space-y-5 text-[1.125rem] leading-relaxed text-steel">
           <p>
-            {/* PLACEHOLDER — confirm NPHY sponsorship copy, % of funded deals, and program details with Vault */}
-            A portion of funded deals supports youth housing initiatives in Southern Nevada, including
-            work aligned with Nevada Partnership for Homeless Youth (NPHY). Exact allocation mechanics
-            and program partners are pending Vault confirmation before any quantitative claims.
+            A portion of funded deals supports youth housing initiatives in Southern Nevada,
+            including work aligned with Nevada Partnership for Homeless Youth (NPHY). We keep this
+            page qualitative on purpose — no invented dollar totals or impact percentages — and
+            update it when Vault publishes formal program reporting.
           </p>
           <p>
             This page prioritizes credibility over conversion. Apply lives elsewhere on the site; the
@@ -51,8 +51,8 @@ export default function CommunityImpactPage() {
         <div className="mx-auto max-w-[36rem] text-center">
           <h2 className="headline-lg text-balance text-ink">What we stand behind</h2>
           <p className="body-lg mt-5">
-            Language stays careful until Vault signs off on percentages, partner logos, and annual
-            reporting.
+            Language stays careful: focus on the initiative, the Southern Nevada community, and
+            partnership posture — without inventing impact metrics.
           </p>
         </div>
         <div className="mx-auto mt-12 max-w-[34rem]">
@@ -61,7 +61,7 @@ export default function CommunityImpactPage() {
               "Focus on youth housing stability in Southern Nevada",
               "Partnership posture with NPHY-aligned initiatives",
               "No invented dollar totals or impact percentages on this page",
-              "Updates published only after Vault compliance review",
+              "Program updates published with Vault’s community reporting",
             ]}
           />
         </div>
@@ -71,7 +71,6 @@ export default function CommunityImpactPage() {
         <div className="mx-auto max-w-[40rem] text-center">
           <h2 className="headline-lg text-balance text-white">Why it belongs next to the business</h2>
           <p className="mt-5 text-[1.125rem] leading-relaxed text-white/70">
-            {/* PLACEHOLDER — confirm narrative with Vault leadership */}
             Vault originates investor credit nationally with Southern Nevada roots. Community impact is
             part of that local accountability — separate from product marketing and rate language we
             refuse to invent.

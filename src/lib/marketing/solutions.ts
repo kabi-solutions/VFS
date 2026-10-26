@@ -36,9 +36,9 @@ export const solutions: Record<SolutionSlug, SolutionContent> = {
     href: "/solutions/private-money",
     name: "Private Money",
     eyebrow: "Umbrella structure",
-    headline: "Custom private capital structured around the deal.",
+    headline: "Structure that flexes when the deal won't wait.",
     description:
-      "Private Money is Vault’s umbrella for investor credit — first and second trust deed options evaluated case by case, with a clear path from application to LOI when the file fits.",
+      "Private Money is Vault’s umbrella for investor credit — first and second trust deed options evaluated case by case, with a clear path from application to LOI when the file fits. Built for operators who need capital to move with the contract, not the bank calendar.",
     whoFor: [
       "Investors who need acquisition speed outside bank templates",
       "Borrowers comparing structures before choosing rehab, bridge, ground-up, or DSCR",
@@ -89,9 +89,9 @@ export const solutions: Record<SolutionSlug, SolutionContent> = {
     href: "/solutions/rehab-fix-flip",
     name: "Rehab / Fix & Flip",
     eyebrow: "Acquisition + rehab",
-    headline: "Acquisition and renovation capital on your timeline.",
+    headline: "Buy, renovate, and exit without funding friction.",
     description:
-      "Sized for purchase plus rehab scope — built for investors who move between contracts quickly and need document clarity while work is underway.",
+      "Sized for purchase plus rehab scope — built for investors who move between contracts quickly and need document clarity while work is underway. Scope, budget, and exit stay visible from package through funding.",
     whoFor: [
       "Fix-and-flip operators with defined scopes and exit plans",
       "Investors who need purchase and rehab capital in one file",
@@ -142,9 +142,9 @@ export const solutions: Record<SolutionSlug, SolutionContent> = {
     href: "/solutions/bridge-loans",
     name: "Bridge Loans",
     eyebrow: "Transitional capital",
-    headline: "Short-term capital when ownership is transitional.",
+    headline: "Bridge the gap. Keep the close on your calendar.",
     description:
-      "Bridge acquisition, refinance, or hold periods — designed for clean exits into permanent or DSCR financing when the file is ready.",
+      "Bridge acquisition, refinance, or hold periods — designed for clean exits into permanent or DSCR financing when the file is ready. Transitional capital with a defined exit, not a long amortization narrative.",
     whoFor: [
       "Investors closing quickly with a defined exit window",
       "Owners bridging to refinance or sale",
@@ -195,9 +195,9 @@ export const solutions: Record<SolutionSlug, SolutionContent> = {
     href: "/solutions/ground-up",
     name: "Ground-Up Construction",
     eyebrow: "Draw schedule",
-    headline: "Draw schedules that follow the build.",
+    headline: "Draws that release when the build earns them.",
     description:
-      "Foundation, framing, and completion milestones with draw requests tied to verified progress — same audited lifecycle from package through funding.",
+      "Foundation, framing, and completion milestones with draw requests tied to verified progress — same audited lifecycle from package through funding. Capital advances with the project, not ahead of it.",
     whoFor: [
       "Builders and investor-sponsors with defined construction plans",
       "Projects that need milestone-based capital releases",
@@ -248,9 +248,9 @@ export const solutions: Record<SolutionSlug, SolutionContent> = {
     href: "/solutions/dscr-non-qm",
     name: "DSCR & Non-QM",
     eyebrow: "Rental cash flow",
-    headline: "Qualify on rental cash flow — not W-2 paperwork alone.",
+    headline: "Qualify on rent rolls — not W-2 paperwork alone.",
     description:
-      "Debt-service coverage focused underwriting for rentals — built for portfolio investors and non-traditional income when the property cash flow supports the file.",
+      "Debt-service coverage focused underwriting for rentals — built for portfolio investors and non-traditional income when the property cash flow supports the file. Investor credit framed around the asset, not a consumer mortgage checklist.",
     whoFor: [
       "Portfolio landlords evaluating rental coverage",
       "Investors with non-traditional income documentation",

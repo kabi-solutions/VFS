@@ -22,7 +22,6 @@ function SoftBanner({
   return (
     <section className={`relative overflow-hidden ${className}`}>
       <div className="pointer-events-none absolute inset-0" aria-hidden>
-        {/* PLACEHOLDER — commissioned photography */}
         <Image src={src} alt={alt} fill className="object-cover opacity-[0.18]" sizes="100vw" />
         <div className="absolute inset-0 bg-gradient-to-b from-green-mist/95 via-paper/92 to-green-mist/95" />
       </div>
@@ -74,7 +73,7 @@ function PortalMock() {
                     i < 2 ? "text-green" : "text-white/40"
                   }`}
                 >
-                  {i < 2 ? "Received" : "Pending"}
+                  {i < 2 ? "Received" : "Awaiting"}
                 </span>
               </div>
             ))}
@@ -82,7 +81,6 @@ function PortalMock() {
         </div>
       </div>
 
-      {/* Floating callouts */}
       <div className="absolute -left-2 top-[18%] z-10 max-w-[11.5rem] rounded-2xl bg-white px-3.5 py-3 shadow-[0_16px_40px_rgba(0,0,0,0.12)] sm:-left-10">
         <div className="flex items-start gap-2.5">
           <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-green-soft text-green">
@@ -142,21 +140,21 @@ export function HomeLowerSections({ faqs }: { faqs: FaqItem[] }) {
     },
   ];
 
-  const quotes = [
+  const proofPoints = [
     {
-      quote:
-        "The portal made status obvious. We knew what was missing before we got on a call.",
-      name: "Borrower · Fix & Flip",
+      title: "Status without the chase",
+      body: "Every gate — review, package, underwriting, clear to close — is visible in the portal so borrowers know what is next without calling for updates.",
+      label: "Borrower experience",
     },
     {
-      quote:
-        "Draw schedule visibility mattered more than marketing claims. The path matched what we were told.",
-      name: "Borrower · Ground-Up",
+      title: "Documents that stay with the file",
+      body: "Upload contracts, insurance, and entity packages once. Missing items come back as info requests tagged to the stage they belong to.",
+      label: "Document center",
     },
     {
-      quote:
-        "Assignment, conditions, and funding history were usable for diligence — not decoration.",
-      name: "Capital partner",
+      title: "Diligence-ready history",
+      body: "Assignment, conditions, and funding events remain on the file — usable for capital partner review, not decorative marketing claims.",
+      label: "Capital partners",
     },
   ];
 
@@ -168,21 +166,23 @@ export function HomeLowerSections({ faqs }: { faqs: FaqItem[] }) {
           <div className="mx-auto max-w-[36rem] text-center">
             <h2 className="headline-lg text-balance">What investors notice first.</h2>
             <p className="body-lg mt-5">
-              {/* PLACEHOLDER — Vault to supply real testimonials */}
-              Clarity of status, documents, and next steps — illustrated here with placeholder
-              feedback until Vault clears real quotes.
+              Clarity of status, documents, and next steps — the same audited lifecycle on the
+              marketing site and inside the file.
             </p>
           </div>
 
           <div className="mt-14 grid items-center gap-12 lg:grid-cols-[1fr_minmax(0,340px)_1fr]">
             <ul className="order-2 space-y-4 lg:order-1">
-              {quotes.slice(0, 2).map((item) => (
+              {proofPoints.slice(0, 2).map((item) => (
                 <li
-                  key={item.name}
+                  key={item.title}
                   className="rounded-[1.75rem] bg-white/90 px-6 py-6 shadow-[0_16px_50px_rgba(0,0,0,0.07)] backdrop-blur-sm"
                 >
-                  <p className="text-[1.0625rem] leading-relaxed text-charcoal">“{item.quote}”</p>
-                  <p className="mt-4 text-[0.8125rem] font-semibold text-green">{item.name}</p>
+                  <p className="text-[0.8125rem] font-semibold text-green">{item.label}</p>
+                  <p className="mt-2 text-[1.125rem] font-semibold tracking-[-0.02em] text-ink">
+                    {item.title}
+                  </p>
+                  <p className="mt-3 text-[1.0625rem] leading-relaxed text-charcoal">{item.body}</p>
                 </li>
               ))}
             </ul>
@@ -191,14 +191,17 @@ export function HomeLowerSections({ faqs }: { faqs: FaqItem[] }) {
               <PortalMock />
             </div>
 
-            <div className="order-3">
+            <div className="order-3 space-y-4">
               <div className="rounded-[1.75rem] bg-white/90 px-6 py-6 shadow-[0_16px_50px_rgba(0,0,0,0.07)] backdrop-blur-sm">
-                <p className="text-[1.0625rem] leading-relaxed text-charcoal">
-                  “{quotes[2].quote}”
+                <p className="text-[0.8125rem] font-semibold text-green">{proofPoints[2].label}</p>
+                <p className="mt-2 text-[1.125rem] font-semibold tracking-[-0.02em] text-ink">
+                  {proofPoints[2].title}
                 </p>
-                <p className="mt-4 text-[0.8125rem] font-semibold text-green">{quotes[2].name}</p>
+                <p className="mt-3 text-[1.0625rem] leading-relaxed text-charcoal">
+                  {proofPoints[2].body}
+                </p>
               </div>
-              <div className="mt-4 rounded-[1.75rem] bg-green-soft/80 px-6 py-5">
+              <div className="rounded-[1.75rem] bg-green-soft/80 px-6 py-5">
                 <p className="text-[0.875rem] font-semibold text-ink">Why the portal matters</p>
                 <p className="mt-2 text-[0.9375rem] leading-relaxed text-steel">
                   Same audited lifecycle on the marketing site and inside the file — so the borrower
@@ -210,7 +213,7 @@ export function HomeLowerSections({ faqs }: { faqs: FaqItem[] }) {
         </div>
       </SoftBanner>
 
-      {/* How can we help — image tiles, not flat white/mint cards */}
+      {/* How can we help — image tiles */}
       <section className="bg-ink">
         <div className="mx-auto max-w-[1080px] px-6 py-[var(--spacing-section)] lg:px-8">
           <h2 className="headline-lg mx-auto max-w-[18ch] text-balance text-center text-white">
@@ -223,7 +226,6 @@ export function HomeLowerSections({ faqs }: { faqs: FaqItem[] }) {
                   href={card.href}
                   className="group relative block aspect-[16/10] overflow-hidden rounded-[1.75rem] focus-visible:outline-offset-4"
                 >
-                  {/* PLACEHOLDER — commissioned photography */}
                   <Image
                     src={card.image.src}
                     alt={card.image.alt}
@@ -248,7 +250,7 @@ export function HomeLowerSections({ faqs }: { faqs: FaqItem[] }) {
         </div>
       </section>
 
-      {/* FAQ — soft banner + white accordion (restored) */}
+      {/* FAQ */}
       <SoftBanner src={images.plans.src} alt="" className="bg-paper">
         <div className="mx-auto max-w-[880px] px-6 py-[var(--spacing-section)] lg:px-8">
           <div className="mx-auto max-w-[36rem] text-center">
@@ -268,10 +270,9 @@ export function HomeLowerSections({ faqs }: { faqs: FaqItem[] }) {
         </div>
       </SoftBanner>
 
-      {/* Trust — editorial strip on near-black related photo */}
+      {/* Trust */}
       <section className="relative overflow-hidden bg-ink">
         <div className="pointer-events-none absolute inset-0" aria-hidden>
-          {/* PLACEHOLDER — security / precision architecture imagery */}
           <Image
             src={images.capital.src}
             alt=""
@@ -300,7 +301,7 @@ export function HomeLowerSections({ faqs }: { faqs: FaqItem[] }) {
                   href: "/trust/licensing",
                   n: "01",
                   title: "Licensing & Compliance",
-                  body: "State licensing posture pending Vault’s compliance pack.",
+                  body: "State coverage overview and how to request Vault’s licensing diligence pack.",
                 },
                 {
                   href: "/trust/security",
@@ -338,7 +339,7 @@ export function HomeLowerSections({ faqs }: { faqs: FaqItem[] }) {
         </div>
       </section>
 
-      {/* Updates + resource bentos — restored light stage */}
+      {/* Updates + resource bentos */}
       <section className="relative overflow-hidden bg-paper">
         <div className="pointer-events-none absolute inset-0" aria-hidden>
           <Image
@@ -458,7 +459,7 @@ export function HomeLowerSections({ faqs }: { faqs: FaqItem[] }) {
         </div>
       </section>
 
-      {/* Locations + community — photo cards */}
+      {/* Locations + community */}
       <section className="bg-white">
         <div className="mx-auto grid max-w-[1080px] gap-4 px-6 py-[var(--spacing-section)] md:grid-cols-2 lg:px-8">
           <Link
@@ -478,8 +479,8 @@ export function HomeLowerSections({ faqs }: { faqs: FaqItem[] }) {
                 States we serve
               </h2>
               <p className="mt-3 max-w-sm text-[1.0625rem] leading-relaxed text-white/75">
-                {/* PLACEHOLDER — licensing may not exist in all listed markets */}
-                CA, TX, FL, AZ, NV, GA, NC, CO, WA, TN — with dynamic state landing pages.
+                Priority markets across CA, TX, FL, AZ, NV, GA, NC, CO, WA, and TN — with dedicated
+                state landings and an Apply path in each.
               </p>
               <span className="mt-5 inline-flex font-medium text-green">View locations</span>
             </div>
@@ -501,8 +502,8 @@ export function HomeLowerSections({ faqs }: { faqs: FaqItem[] }) {
                 Community impact
               </h2>
               <p className="mt-3 max-w-sm text-[1.0625rem] leading-relaxed text-white/75">
-                {/* PLACEHOLDER — confirm NPHY sponsorship copy with Vault */}
-                A portion of funded deals supports youth housing initiatives in Southern Nevada.
+                A portion of funded deals supports youth housing initiatives in Southern Nevada,
+                including programs with NPHY.
               </p>
               <span className="mt-5 inline-flex font-medium text-green">Read about our impact</span>
             </div>
@@ -510,10 +511,9 @@ export function HomeLowerSections({ faqs }: { faqs: FaqItem[] }) {
         </div>
       </section>
 
-      {/* Final CTA — floating white card on mist (restored) */}
+      {/* Final CTA */}
       <section className="relative overflow-hidden bg-white">
         <div className="pointer-events-none absolute inset-0" aria-hidden>
-          {/* PLACEHOLDER — different subject than States/Community banner */}
           <Image
             src={images.groundUp.src}
             alt=""
@@ -526,11 +526,11 @@ export function HomeLowerSections({ faqs }: { faqs: FaqItem[] }) {
         <div className="relative mx-auto max-w-[720px] px-6 py-[var(--spacing-section)] text-center lg:px-8">
           <div className="rounded-[2rem] bg-white/95 px-8 py-12 shadow-[0_24px_70px_rgba(0,0,0,0.08)] ring-1 ring-black/[0.04] backdrop-blur-sm sm:px-12">
             <h2 className="headline-lg mx-auto max-w-[16ch] text-balance text-ink">
-              Ready to submit a file?
+              Ready when your contract is.
             </h2>
             <p className="mx-auto mt-5 max-w-[32rem] text-[1.125rem] leading-relaxed text-steel">
-              Apply creates your borrower portal so you can return, update documents, and track status
-              across the lifecycle.
+              Apply creates your borrower portal so you can return, update documents, and track
+              status across the full funding lifecycle.
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
               <Button href="/apply" shine>

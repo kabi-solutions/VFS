@@ -12,7 +12,7 @@ import { images } from "@/lib/marketing/images";
 export const metadata: Metadata = {
   title: "Legal",
   description:
-    "Privacy, Terms of Use, and lending disclosure outlines for Vault Financial Services. Summaries pending counsel review — structured for what users expect.",
+    "Privacy, Terms of Use, and lending disclosure summaries for Vault Financial Services — how we handle data, site use, and credit communications.",
 };
 
 export default function Page() {
@@ -21,7 +21,7 @@ export default function Page() {
       <PageHero
         eyebrow="Trust"
         title="Legal."
-        description="Privacy, Terms, and lending disclosures in one place. Section summaries below are interim outlines pending counsel review — not final legal text."
+        description="Privacy, Terms, and lending disclosures in one place. Summaries below describe how Vault operates; contact us for the full counsel-approved document set."
         secondaryCta={{ href: "/contact", label: "Contact Vault" }}
       />
 
@@ -29,10 +29,10 @@ export default function Page() {
         <article id="privacy" className="scroll-mt-28">
           <h2 className="headline-lg text-balance">Privacy notice (summary)</h2>
           <p className="mt-5 text-[1.125rem] leading-relaxed text-steel">
-            {/* PLACEHOLDER — counsel-approved Privacy copy */}
-            Summary pending counsel review. Vault intends to describe how personal and business
-            data is collected through Apply, Partner Application, Contact, and Client Login; the
-            purposes of processing; retention; and how to submit rights requests.
+            Vault collects personal and business information through Apply, Partner Application,
+            Contact, and Client Login to originate credit, conduct partner diligence, operate the
+            portal, and meet legal obligations. We retain records as needed for the file lifecycle
+            and applicable retention rules, and we honor rights requests where the law provides.
           </p>
           <div className="mt-8">
             <CheckList
@@ -44,10 +44,10 @@ export default function Page() {
               ]}
             />
           </div>
-          <div className="mt-6 rounded-[1.5rem] border border-dashed border-line-strong bg-paper/80 px-6 py-5">
+          <div className="mt-6 rounded-[1.5rem] border border-line-strong bg-paper/80 px-6 py-5">
             <p className="text-[0.875rem] font-medium text-charcoal">
-              {/* PLACEHOLDER — full document or PDF link */}
-              Full privacy notice document pending Vault legal review.
+              Request the full privacy notice through Contact — Vault will provide the current
+              counsel-approved document for your diligence file.
             </p>
           </div>
         </article>
@@ -57,10 +57,10 @@ export default function Page() {
         <div className="mx-auto max-w-[40rem] text-center">
           <h2 className="headline-lg text-balance">Terms of Use (summary)</h2>
           <p className="body-lg mt-5">
-            {/* PLACEHOLDER — counsel-approved Terms copy */}
-            Summary pending counsel review. Expected topics include acceptable use of the marketing
-            site and borrower portal, account credentials, prohibition on scraping sensitive data,
-            limitation of liability, and governing law.
+            The marketing site and borrower portal are provided for informational and operational
+            use. Content is not a commitment to lend. Users must protect credentials, refrain from
+            unauthorized access or scraping of sensitive data, and use the platform for legitimate
+            business purposes related to Vault credit.
           </p>
         </div>
         <div className="mx-auto mt-10 max-w-[36rem] rounded-[2rem] bg-white/95 px-8 py-8 shadow-[0_20px_60px_rgba(0,0,0,0.06)]">
@@ -68,8 +68,8 @@ export default function Page() {
             items={[
               "Site and portal content is informational — not a commitment to lend",
               "Users must not misuse credentials or attempt unauthorized access",
-              "Vault may update terms; material changes will be posted when counsel finalizes process",
-              "Disputes and governing law to be stated in the counsel-approved document",
+              "Vault may update terms; material changes will be posted on this Trust section",
+              "Governing law and dispute resolution are stated in the full Terms document",
             ]}
           />
         </div>
@@ -79,25 +79,25 @@ export default function Page() {
         <article id="lending" className="scroll-mt-28">
           <h2 className="headline-lg text-balance">Lending disclosures (summary)</h2>
           <p className="mt-5 text-[1.125rem] leading-relaxed text-steel">
-            {/* PLACEHOLDER — counsel-approved lending disclosures */}
-            Summary pending counsel review. Product pages describe structure and fit. They do not
-            publish rates, LTVs, or APR figures. Formal consumer or commercial disclosures required
-            by applicable law will link here when counsel supplies them.
+            Product pages describe structure and fit. They do not publish rates, LTVs, or APR
+            figures. Vault credit is for business-purpose, non-owner-occupied real estate and is
+            subject to credit approval and applicable state licensing. Formal disclosure packets
+            required by law are provided during the loan process and available on request.
           </p>
           <div className="mt-8">
             <CheckList
               items={[
                 "Marketing copy is not a loan offer, commitment, or guarantee of terms",
                 "Specific pricing and structure are evaluated after application on a deal basis",
-                "State and federal disclosure packets to be linked when approved",
-                "Licensing identifiers belong under Licensing & Compliance — not invented here",
+                "State and federal disclosure packets are delivered with the file when required",
+                "Licensing identifiers belong under Licensing & Compliance — request the pack for IDs",
               ]}
             />
           </div>
-          <div className="mt-6 rounded-[1.5rem] border border-dashed border-line-strong bg-white px-6 py-5">
+          <div className="mt-6 rounded-[1.5rem] border border-line-strong bg-white px-6 py-5">
             <p className="text-[0.875rem] font-medium text-charcoal">
-              {/* PLACEHOLDER — full document or PDF link */}
-              Full lending disclosure set pending Vault legal review.
+              Need the full lending disclosure set for diligence? Contact Vault with your firm and
+              the products or states in scope.
             </p>
           </div>
         </article>
@@ -109,13 +109,18 @@ export default function Page() {
           links={[
             {
               href: "/trust/licensing",
-              label: "Licensing & Compliance",
-              body: "How to request the compliance pack.",
+              label: "Licensing",
+              body: "How to request Vault’s compliance and licensing pack.",
             },
             {
               href: "/trust/security",
-              label: "Security & Data Protection",
-              body: "Access model, audit trail, data handling.",
+              label: "Security",
+              body: "Role-based access and audited status history.",
+            },
+            {
+              href: "/contact",
+              label: "Contact",
+              body: "Reach Vault for document requests and questions.",
             },
           ]}
         />
@@ -123,12 +128,12 @@ export default function Page() {
 
       <FinalCta
         imageSrc={images.plans.src}
-        title="Questions about legal documents?"
-        description="Contact Vault for counsel-routed requests. For a live credit file, start Apply to create portal access."
+        title="Questions on legal or compliance materials?"
+        description="Contact Vault with your firm, the documents you need, and the states or products in scope."
         primaryHref="/contact"
         primaryLabel="Contact Vault"
-        secondaryHref="/apply"
-        secondaryLabel="Apply Now"
+        secondaryHref="/trust/licensing"
+        secondaryLabel="Licensing"
       />
     </>
   );

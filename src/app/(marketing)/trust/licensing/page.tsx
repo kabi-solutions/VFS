@@ -32,9 +32,9 @@ export default function Page() {
           <div>
             <h2 className="headline-lg max-w-[16ch] text-balance">What Vault will publish</h2>
             <p className="body-lg mt-5">
-              {/* PLACEHOLDER — Vault licensing pack (NMLS, state licenses, disclosures) */}
-              When counsel and compliance finalize materials, this page will host the authoritative
-              schedule — not marketing claims scattered across product pages.
+              This page is the home for Vault’s authoritative licensing schedule — company and
+              individual identifiers when authorized for public display, state coverage notes, and
+              links to counsel-approved disclosures. Product pages never invent license IDs.
             </p>
             <div className="mt-6">
               <CheckList
@@ -48,20 +48,20 @@ export default function Page() {
             </div>
           </div>
           <div>
-            <h2 className="headline-lg max-w-[16ch] text-balance">What you will not see here yet</h2>
+            <h2 className="headline-lg max-w-[16ch] text-balance">How diligence works today</h2>
             <p className="body-lg mt-5">
-              No NMLS numbers, license IDs, or “licensed in every state” assertions appear on this
-              site until Vault supplies them. Location pages describe markets; they are not a
-              license roster.
+              We do not invent NMLS numbers or “licensed everywhere” claims for the marketing site.
+              Location pages describe priority markets; they are not a license roster. Counterparties
+              should request the compliance pack for license-level confirmation.
             </p>
             <div className="mt-8 rounded-[1.75rem] bg-paper px-7 py-7 ring-1 ring-black/[0.04]">
               <p className="text-[0.875rem] font-semibold tracking-[0.06em] text-green uppercase">
-                Interim posture
+                Request the pack
               </p>
               <p className="mt-3 text-[1.0625rem] leading-relaxed text-charcoal">
-                {/* PLACEHOLDER — replace with Vault-supplied licensing schedule */}
-                State-by-state licensing schedule and disclosure links await Vault compliance
-                materials. Ask Contact for the current diligence path on your transaction.
+                Contact Vault with your firm, the states and products in scope, and whether you need
+                a formal questionnaire response. Compliance will route licensing materials for your
+                diligence file.
               </p>
             </div>
           </div>

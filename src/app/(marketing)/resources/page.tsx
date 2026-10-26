@@ -52,7 +52,7 @@ export default function ResourcesPage() {
           <PhotoTile
             href="/resources/case-studies"
             title="Case Studies"
-            body="Anonymized, illustrative funded-deal shapes — pending Vault-owned stories."
+            body="Anonymized deal shapes that show how Vault structures investor credit."
             image={images.funded}
             cta="View examples"
           />

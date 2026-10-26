@@ -47,7 +47,6 @@ export function SiteFooter() {
       <div className="mx-auto max-w-[980px] px-6 py-16 lg:px-8">
         <div className="grid gap-12 lg:grid-cols-[minmax(0,1.1fr)_2fr]">
           <div>
-            {/* PLACEHOLDER — Vault to supply final logo assets */}
             <Image
               src="/brand/vault-logo-white.png"
               alt="Vault Financial Services LLC"
@@ -86,10 +85,11 @@ export function SiteFooter() {
 
         <div className="mt-14 flex flex-col gap-3 border-t border-white/10 pt-8 text-[0.75rem] leading-relaxed text-white/40 sm:flex-row sm:items-end sm:justify-between">
           <p>© {new Date().getFullYear()} Vault Financial Services LLC. All rights reserved.</p>
-          {/* PLACEHOLDER — Vault to supply real licensing / NMLS disclosures */}
           <p className="max-w-xl sm:text-right">
-            Lending products are subject to credit approval and applicable state licensing.
-            Placeholder disclosures pending Vault compliance review.
+            Lending products are for business-purpose, non-owner-occupied real estate and are subject
+            to credit approval and applicable state licensing. Terms vary by deal, collateral, and
+            borrower profile. For licensing details, see Trust → Licensing or request Vault’s
+            compliance pack.
           </p>
         </div>
       </div>
