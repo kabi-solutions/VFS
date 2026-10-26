@@ -11,7 +11,11 @@ export async function GET(request: Request) {
   if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   const type = new URL(request.url).searchParams.get("type") as OrgType | null;
   const supabase = await createClient();
-  let query = supabase.from("organizations").select("*").eq("status", "active").order("name");
+  let query = supabase.from("organizations").select("*").order("name");
+  // Non-vault roles only see active orgs (RLS also applies).
+  if (session.user.role !== "vault") {
+    query = query.eq("status", "active");
+  }
   if (type) query = query.eq("org_type", type);
   const { data, error } = await query;
   if (error) return NextResponse.json({ error: error.message }, { status: 500 });

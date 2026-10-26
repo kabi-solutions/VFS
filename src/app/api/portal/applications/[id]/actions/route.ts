@@ -1,9 +1,8 @@
 import { NextResponse } from "next/server";
 import { mapApplication, mapCondition, mapDocument } from "@/lib/data/mappers";
 import { getServerAppSession } from "@/lib/data/session-server";
-import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
-import { hasServiceRole, isSupabaseConfigured } from "@/lib/supabase/env";
+import { isSupabaseConfigured } from "@/lib/supabase/env";
 import type { ApplicationStatus, DocumentStatus } from "@/lib/types/database";
 
 export const runtime = "nodejs";
@@ -33,7 +32,8 @@ export async function POST(request: Request, { params }: Params) {
 
   const { id } = await params;
   const body = (await request.json()) as ActionBody;
-  const db = hasServiceRole() ? createAdminClient() : await createClient();
+  // User JWT only — RLS enforces assignment/borrower scope (A2).
+  const db = await createClient();
   const now = new Date().toISOString();
 
   const { data: appRow, error: loadError } = await db
@@ -48,13 +48,14 @@ export async function POST(request: Request, { params }: Params) {
   const app = mapApplication(appRow as Record<string, unknown>);
 
   async function pushStatus(toStatus: ApplicationStatus, note?: string | null) {
-    await db.from("status_events").insert({
+    const { error: eventError } = await db.from("status_events").insert({
       application_id: id,
       actor_id: session!.user.id,
       from_status: app.status,
       to_status: toStatus,
       note: note?.trim() || null,
     });
+    if (eventError) throw new Error(eventError.message || "Status event failed");
     const patch: Record<string, unknown> = {
       status: toStatus,
       updated_at: now,

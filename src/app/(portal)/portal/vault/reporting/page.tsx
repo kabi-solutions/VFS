@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState } from "react";
-import { listAllApplications } from "@/lib/mock/applications";
+import { listAllApplications } from "@/lib/data/applications";
 import { attributionSources } from "@/lib/mock/data";
 import { PortalPageHeader, PortalPanel, PortalStat } from "@/components/portal/PortalUi";
 import type { LoanApplication } from "@/lib/types/database";
@@ -18,7 +18,7 @@ export default function VaultReportingPage() {
   const [apps, setApps] = useState<LoanApplication[]>([]);
 
   useEffect(() => {
-    setApps(listAllApplications());
+    void listAllApplications().then(setApps);
   }, []);
 
   const volume = useMemo(

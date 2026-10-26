@@ -33,7 +33,7 @@ import {
   applicationStatusLabels,
   docTypeLabels,
   loanTypeLabels,
-} from "@/lib/mock/status-labels";
+} from "@/lib/labels/status-labels";
 import { PackageCompletenessPanel } from "@/components/portal/PackageCompletenessPanel";
 import { PackageContinuationForm } from "@/components/portal/PackageContinuationForm";
 import type {

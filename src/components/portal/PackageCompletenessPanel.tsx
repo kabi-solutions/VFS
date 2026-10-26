@@ -5,7 +5,7 @@ import {
   getPackageCompleteness,
   type ApplicationPackage,
 } from "@/lib/apply/package";
-import { docTypeLabels } from "@/lib/mock/status-labels";
+import { docTypeLabels } from "@/lib/labels/status-labels";
 import type { LoanApplication } from "@/lib/types/database";
 
 type Props = {

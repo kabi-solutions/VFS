@@ -6,7 +6,7 @@ import { Button } from "@/components/ui/Button";
 import { PortalPageHeader, PortalPanel, PortalSectionCard, PortalStat } from "@/components/portal/PortalUi";
 import { filterApplicationsForRole, listApplicationsForBorrower } from "@/lib/data/applications";
 import { demoUserForRole, getAppSession, setDemoSessionUserId } from "@/lib/data/session";
-import { applicationStatusLabels, loanTypeLabels } from "@/lib/mock/status-labels";
+import { applicationStatusLabels, loanTypeLabels } from "@/lib/labels/status-labels";
 import { navByRole, roleLabels } from "@/lib/portal/nav";
 import type { LoanApplication, UserRole } from "@/lib/types/database";
 

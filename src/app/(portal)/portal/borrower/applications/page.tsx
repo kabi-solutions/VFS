@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { listApplicationsForBorrower } from "@/lib/data/applications";
 import { getAppSession } from "@/lib/data/session";
-import { applicationStatusLabels, loanTypeLabels } from "@/lib/mock/status-labels";
+import { applicationStatusLabels, loanTypeLabels } from "@/lib/labels/status-labels";
 import type { LoanApplication } from "@/lib/types/database";
 
 function formatMoney(n: number): string {

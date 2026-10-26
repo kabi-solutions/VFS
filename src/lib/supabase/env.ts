@@ -31,7 +31,7 @@ export function hasServiceRole(): boolean {
   return Boolean(isSupabaseConfigured() && getSupabaseServiceRoleKey());
 }
 
+/** A6: demo role switcher only when explicitly enabled via env flag. */
 export function isDemoRoleSwitcherEnabled(): boolean {
-  if (!isSupabaseConfigured()) return true;
   return process.env.NEXT_PUBLIC_ENABLE_DEMO_ROLE_SWITCHER === "true";
 }

@@ -207,3 +207,8 @@ create index loan_applications_status_idx on public.loan_applications (status);
 create index loan_applications_borrower_id_idx on public.loan_applications (borrower_id);
 create index documents_application_id_idx on public.documents (application_id);
 create index messages_application_id_idx on public.messages (application_id);
+
+-- Additive (see migrations/20261026062000_hardening_rls_audit_drafts.sql):
+-- public.audit_events (append-only)
+-- public.apply_drafts
+-- RLS policies + triggers live in migrations, not duplicated here.

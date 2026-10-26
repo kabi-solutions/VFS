@@ -3,11 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { PortalPageHeader, PortalPanel } from "@/components/portal/PortalUi";
-import {
-  getDocumentsForApplication,
-  listApplicationsForBorrower,
-  resolveBorrowerId,
-} from "@/lib/mock/applications";
+import { getApplicationDetail, listApplicationsForBorrower } from "@/lib/data/applications";
 import type { Document, LoanApplication } from "@/lib/types/database";
 
 type DocRow = Document & { reference_code: string };
@@ -16,16 +12,17 @@ export default function BorrowerDocumentsPage() {
   const [rows, setRows] = useState<DocRow[]>([]);
 
   useEffect(() => {
-    const borrowerId = resolveBorrowerId();
-    const apps = listApplicationsForBorrower(borrowerId);
-    const byId = new Map(apps.map((a: LoanApplication) => [a.id, a]));
-    const docs: DocRow[] = apps.flatMap((app) =>
-      getDocumentsForApplication(app.id).map((doc) => ({
-        ...doc,
-        reference_code: byId.get(app.id)?.reference_code ?? app.reference_code,
-      })),
-    );
-    setRows(docs);
+    void (async () => {
+      const apps = await listApplicationsForBorrower();
+      const docs: DocRow[] = [];
+      for (const app of apps) {
+        const detail = await getApplicationDetail(app.id);
+        for (const doc of detail.documents) {
+          docs.push({ ...doc, reference_code: app.reference_code });
+        }
+      }
+      setRows(docs);
+    })();
   }, []);
 
   return (
@@ -38,14 +35,9 @@ export default function BorrowerDocumentsPage() {
       <PortalPanel className="mt-8 overflow-hidden">
         {rows.length === 0 ? (
           <div className="px-5 py-10 text-center">
-            <p className="text-[0.9375rem] text-steel">
-              No documents yet. Upload from an application workspace after you apply.
-            </p>
-            <Link
-              href="/portal/borrower/applications"
-              className="mt-3 inline-block text-[0.9375rem] font-medium text-green hover:text-green-hover"
-            >
-              View applications
+            <p className="text-[0.9375rem] text-steel">No documents uploaded yet.</p>
+            <Link href="/apply" className="mt-4 inline-block text-[0.9375rem] font-semibold text-green">
+              Start a file
             </Link>
           </div>
         ) : (
@@ -54,17 +46,15 @@ export default function BorrowerDocumentsPage() {
               <li key={doc.id}>
                 <Link
                   href={`/portal/borrower/applications/${doc.application_id}`}
-                  className="flex flex-wrap items-center justify-between gap-3 px-5 py-4 transition hover:bg-paper/80"
+                  className="flex flex-wrap items-center justify-between gap-3 px-5 py-4 hover:bg-black/[0.02]"
                 >
-                  <div className="min-w-0">
-                    <p className="truncate text-[0.9375rem] font-medium text-ink">{doc.file_name}</p>
+                  <div>
+                    <p className="text-[1rem] font-semibold text-ink">{doc.file_name}</p>
                     <p className="mt-1 text-[0.8125rem] text-steel">
-                      {doc.doc_type.replaceAll("_", " ")} · {doc.reference_code}
+                      {doc.reference_code} · {doc.doc_type}
                     </p>
                   </div>
-                  <span className="rounded-full bg-green-soft px-2.5 py-1 text-[0.75rem] font-semibold capitalize text-green">
-                    {doc.status}
-                  </span>
+                  <span className="text-[0.8125rem] text-steel">{doc.status}</span>
                 </Link>
               </li>
             ))}

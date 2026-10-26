@@ -48,3 +48,4 @@ next-env.d.ts
 !.cursor/rules/**
 _deploy_status.txt
 .next
+.env.local

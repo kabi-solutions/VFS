@@ -122,8 +122,43 @@ export const localApplyDraftStore: ApplyDraftStore = {
   },
 };
 
-/** Default store used by Apply — swap implementation for remote persistence later. */
-export const applyDraftStore: ApplyDraftStore = localApplyDraftStore;
+function syncDraftToSupabase(draft: ApplyDraft) {
+  if (typeof window === "undefined") return;
+  if (process.env.NEXT_PUBLIC_DATA_SOURCE === "mock") return;
+  if (!process.env.NEXT_PUBLIC_SUPABASE_URL) return;
+  const email = draft.package.borrower.email?.trim().toLowerCase() || undefined;
+  void fetch("/api/apply/drafts", {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({
+      id: draft.id,
+      owner_email: email,
+      location: draft.location,
+      loan_type: draft.loanType,
+      package: draft.package,
+      pending_docs: draft.pendingDocs,
+    }),
+  }).catch(() => {
+    /* non-blocking dual-write */
+  });
+}
+
+/** Local cache + dual-write to Supabase apply_drafts when configured (C2). */
+export const applyDraftStore: ApplyDraftStore = {
+  ...localApplyDraftStore,
+  save(draft) {
+    localApplyDraftStore.save(draft);
+    syncDraftToSupabase(draft);
+  },
+  remove(id) {
+    localApplyDraftStore.remove(id);
+    if (typeof window !== "undefined" && process.env.NEXT_PUBLIC_SUPABASE_URL) {
+      void fetch(`/api/apply/drafts?id=${encodeURIComponent(id)}`, { method: "DELETE" }).catch(
+        () => undefined,
+      );
+    }
+  },
+};
 
 export function draftSubjectLabel(draft: ApplyDraft): string {
   const address = draft.package.subject_property.address?.trim();

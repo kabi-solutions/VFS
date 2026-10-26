@@ -2,23 +2,49 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { listAllApplications, getUserById } from "@/lib/mock/applications";
-import { organizations } from "@/lib/mock/data";
-import { applicationStatusLabels } from "@/lib/mock/status-labels";
+import {
+  getUserById,
+  listAllApplications,
+  listOrganizationsLocalFallback,
+} from "@/lib/data/applications";
+import { usesSupabaseData } from "@/lib/data/source";
+import { applicationStatusLabels } from "@/lib/labels/status-labels";
 import { PortalPageHeader, PortalPanel } from "@/components/portal/PortalUi";
-import type { LoanApplication } from "@/lib/types/database";
-
-function orgName(id: string | null) {
-  if (!id) return "Unassigned";
-  return organizations.find((o) => o.id === id)?.name ?? id;
-}
+import type { LoanApplication, Organization, User } from "@/lib/types/database";
 
 export default function VaultAssignmentsPage() {
   const [apps, setApps] = useState<LoanApplication[]>([]);
+  const [orgs, setOrgs] = useState<Organization[]>([]);
+  const [users, setUsers] = useState<Record<string, User | undefined>>({});
 
   useEffect(() => {
-    setApps(listAllApplications());
+    void (async () => {
+      const list = await listAllApplications();
+      setApps(list);
+      if (usesSupabaseData()) {
+        const res = await fetch("/api/portal/organizations");
+        const body = await res.json().catch(() => ({}));
+        setOrgs(body.organizations ?? []);
+      } else {
+        setOrgs(listOrganizationsLocalFallback());
+      }
+      const map: Record<string, User | undefined> = {};
+      for (const app of list) {
+        if (app.assigned_processor_id && !(app.assigned_processor_id in map)) {
+          map[app.assigned_processor_id] = await getUserById(app.assigned_processor_id);
+        }
+        if (app.borrower_id && !(app.borrower_id in map)) {
+          map[app.borrower_id] = await getUserById(app.borrower_id);
+        }
+      }
+      setUsers(map);
+    })();
   }, []);
+
+  function orgName(id: string | null) {
+    if (!id) return "Unassigned";
+    return orgs.find((o) => o.id === id)?.name ?? id;
+  }
 
   return (
     <div>
@@ -41,23 +67,22 @@ export default function VaultAssignmentsPage() {
           </thead>
           <tbody className="divide-y divide-line">
             {apps.map((app) => (
-              <tr key={app.id} className="hover:bg-paper/80">
+              <tr key={app.id}>
                 <td className="px-4 py-3">
-                  <Link
-                    href={`/portal/vault/applications/${app.id}`}
-                    className="font-mono text-[0.8125rem] font-medium text-green"
-                  >
+                  <Link href={`/portal/vault/applications/${app.id}`} className="font-semibold text-green">
                     {app.reference_code}
                   </Link>
                 </td>
                 <td className="px-4 py-3 text-charcoal">
-                  {getUserById(app.borrower_id)?.full_name ?? "—"}
+                  {users[app.borrower_id]?.full_name ?? app.borrower_id.slice(0, 8)}
                 </td>
-                <td className="px-4 py-3 text-charcoal">{orgName(app.processor_org_id)}</td>
+                <td className="px-4 py-3 text-charcoal">
+                  {users[app.assigned_processor_id ?? ""]?.full_name ?? orgName(app.processor_org_id)}
+                </td>
                 <td className="px-4 py-3 text-charcoal">{orgName(app.lender_org_id)}</td>
                 <td className="px-4 py-3 text-charcoal">{orgName(app.escrow_org_id)}</td>
-                <td className="px-4 py-3 text-steel">
-                  {applicationStatusLabels[app.status].label}
+                <td className="px-4 py-3 text-charcoal">
+                  {applicationStatusLabels[app.status]?.label ?? app.status}
                 </td>
               </tr>
             ))}
