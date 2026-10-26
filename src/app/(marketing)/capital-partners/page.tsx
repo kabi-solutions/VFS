@@ -13,7 +13,7 @@ import { images } from "@/lib/marketing/images";
 export const metadata: Metadata = {
   title: "Why Partner With Vault",
   description:
-    "Capital partnership built around controlled underwriting gates, risk posture you can diligence, and an audit trail on every file.",
+    "Capital partnership built around gated, auditable underwriting, risk posture you can diligence, and an audit trail on every file.",
 };
 
 export default function Page() {
@@ -22,7 +22,7 @@ export default function Page() {
       <PageHero
         eyebrow="Capital partners"
         title="Why partner with Vault."
-        description="Deploy into a private-credit pipeline with published gates, assigned processors and escrow, and status history retained for diligence — not a black-box originations desk."
+        description="Deploy into a gated, auditable private-credit pipeline with published gates, assigned processors and escrow, and status history retained for diligence — not a black-box originations desk."
         image={images.capital}
         primaryCta={{
           href: "/capital-partners/apply",

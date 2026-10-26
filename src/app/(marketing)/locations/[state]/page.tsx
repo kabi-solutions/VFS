@@ -46,7 +46,7 @@ export default async function StateLocationPage({
         eyebrow={`${state.abbr} · Markets`}
         title={`${state.name} investor lending`}
         description={`${state.blurb} Vault evaluates files against product fit and market coverage — not a promise that every structure is available in every county.`}
-        primaryCta={{ href: "/apply", label: "Apply Now", shine: true }}
+        primaryCta={{ href: "/apply", label: "Start your file", shine: true }}
         secondaryCta={{ href: "/contact", label: "Contact Vault" }}
         image={images.funded}
       />

@@ -1,3 +1,4 @@
+import { QualificationBox } from "@/components/marketing/QualificationBox";
 import {
   CheckList,
   FinalCta,
@@ -7,6 +8,8 @@ import {
   SoftStage,
 } from "@/components/marketing/page";
 import { JsonLd } from "@/components/seo/JsonLd";
+import { CTA_PRIMARY, CTA_SECONDARY, CTA_TERTIARY } from "@/lib/config/ctas";
+import { fundingSpeedClaim } from "@/lib/config/claims";
 import { solutions, type SolutionSlug } from "@/lib/marketing/solutions";
 import { images } from "@/lib/marketing/images";
 import { SITE_NAME, SITE_URL } from "@/lib/seo/site";
@@ -45,12 +48,18 @@ export function SolutionPage({ slug }: { slug: SolutionSlug }) {
         eyebrow={s.eyebrow}
         title={s.headline}
         description={s.description}
+        primaryCta={{ href: CTA_PRIMARY.href, label: CTA_PRIMARY.label, shine: true }}
+        secondaryCta={{ href: CTA_SECONDARY.href, label: CTA_SECONDARY.label }}
         image={s.image}
-        primaryCta={{ href: "/apply", label: "Apply Now", shine: true }}
-        secondaryCta={{ href: "/contact", label: "Talk with Vault" }}
       />
 
       <Section>
+        <div className="mx-auto max-w-[40rem]">
+          <QualificationBox compact />
+        </div>
+      </Section>
+
+      <Section tone="paper">
         <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
           <div>
             <h2 className="headline-lg max-w-[14ch] text-balance">Who this product is for</h2>
@@ -59,10 +68,34 @@ export function SolutionPage({ slug }: { slug: SolutionSlug }) {
             </div>
           </div>
           <div>
+            <h2 className="headline-lg max-w-[14ch] text-balance">Who this is not for</h2>
+            <p className="body-lg mt-6">{s.whoNotFor}</p>
+            <p className="mt-6 text-[0.9375rem] leading-relaxed text-steel">
+              {fundingSpeedClaim()}
+            </p>
+          </div>
+        </div>
+      </Section>
+
+      <Section>
+        <div className="grid gap-12 lg:grid-cols-2 lg:gap-16">
+          <div>
             <h2 className="headline-lg max-w-[14ch] text-balance">How this structure differs</h2>
             <div className="mt-6">
               <CheckList items={s.differentiators} />
             </div>
+          </div>
+          <div>
+            <h2 className="headline-lg max-w-[14ch] text-balance">Prefer a conversation?</h2>
+            <p className="body-lg mt-6">
+              Talk to Vault when the deal needs context before a file — or check fit in four fields
+              first.
+            </p>
+            <p className="mt-4">
+              <a href={CTA_TERTIARY.href} className="font-medium text-green hover:text-green-hover">
+                {CTA_TERTIARY.label}
+              </a>
+            </p>
           </div>
         </div>
       </Section>
@@ -81,9 +114,9 @@ export function SolutionPage({ slug }: { slug: SolutionSlug }) {
         <div className="mx-auto max-w-[40rem]">
           <h2 className="headline-lg text-balance">Documents typically requested</h2>
           <p className="body-lg mt-5">
-            Exact checklists appear in the borrower portal after Apply. The list below reflects
-            materials commonly needed to move a {s.name.toLowerCase()} file through package and
-            underwriting.
+            Exact checklists appear in the borrower portal after you start a file. The list below
+            reflects materials commonly needed to move a {s.name.toLowerCase()} file through package
+            and underwriting.
           </p>
           <div className="mt-8">
             <CheckList items={s.documents} />
@@ -114,7 +147,12 @@ export function SolutionPage({ slug }: { slug: SolutionSlug }) {
         <RelatedLinks title="Related solutions" links={related} />
       </Section>
 
-      <FinalCta imageSrc={images.funded.src} />
+      <FinalCta
+        imageSrc={images.funded.src}
+        primaryLabel={CTA_PRIMARY.label}
+        secondaryHref={CTA_SECONDARY.href}
+        secondaryLabel={CTA_SECONDARY.label}
+      />
     </>
   );
 }

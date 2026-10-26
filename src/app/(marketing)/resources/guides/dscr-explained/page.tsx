@@ -22,7 +22,7 @@ export default function DscrExplainedPage() {
         eyebrow="Guide"
         title="DSCR explained"
         description="Debt service coverage ratio weighs property cash flow against debt service — a common lens for rental and non-QM investor credit."
-        primaryCta={{ href: "/apply", label: "Apply Now", shine: true }}
+        primaryCta={{ href: "/apply", label: "Start your file", shine: true }}
         secondaryCta={{ href: "/solutions/dscr-non-qm", label: "DSCR / Non-QM" }}
         image={images.dscr}
       />

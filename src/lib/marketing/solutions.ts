@@ -20,6 +20,8 @@ export type SolutionContent = {
   headline: string;
   description: string;
   whoFor: string[];
+  /** One clear line — every solution page must say who this is not for */
+  whoNotFor: string;
   differentiators: string[];
   processTitle: string;
   processBody: string;
@@ -42,8 +44,10 @@ export const solutions: Record<SolutionSlug, SolutionContent> = {
     whoFor: [
       "Investors who need acquisition speed outside bank templates",
       "Borrowers comparing structures before choosing rehab, bridge, ground-up, or DSCR",
-      "Capital partners diligence-testing Vault’s gated pipeline",
+      "Capital partners diligence-testing Vault’s gated, auditable pipeline",
     ],
+    whoNotFor:
+      "Not for owner-occupied consumer mortgages, MCA / small-business working capital, or files seeking guaranteed or no-doc approvals.",
     differentiators: [
       "Deal-first terms rather than product-only menus",
       "Same audited lifecycle and borrower portal as every Vault file",
@@ -97,6 +101,8 @@ export const solutions: Record<SolutionSlug, SolutionContent> = {
       "Investors who need purchase and rehab capital in one file",
       "Borrowers who want status and draw-related docs in one portal",
     ],
+    whoNotFor:
+      "Not for owner-occupied rehabs, consumer home-improvement loans, or flips without a defined exit.",
     differentiators: [
       "Funding framed around purchase plus renovation scope",
       "Document center tracks binders, contracts, and contractor packages",
@@ -150,6 +156,8 @@ export const solutions: Record<SolutionSlug, SolutionContent> = {
       "Owners bridging to refinance or sale",
       "Operators needing transitional capital without long bank timelines",
     ],
+    whoNotFor:
+      "Not for long-term consumer mortgages, primary residences, or speculative holds without a refinance or sale path.",
     differentiators: [
       "Structured for transitional hold, not permanent amortization narratives",
       "Processor and lender assignment tracked on every file",
@@ -203,6 +211,8 @@ export const solutions: Record<SolutionSlug, SolutionContent> = {
       "Projects that need milestone-based capital releases",
       "Teams that want draw history retained on the file",
     ],
+    whoNotFor:
+      "Not for speculative land banking without a build plan, or projects that need a single lump advance without milestones.",
     differentiators: [
       "Milestone-based draw framing, not a single lump narrative",
       "Progress verification tied to draw requests",
@@ -256,6 +266,8 @@ export const solutions: Record<SolutionSlug, SolutionContent> = {
       "Investors with non-traditional income documentation",
       "Borrowers closing in entity or personal name when the file supports it",
     ],
+    whoNotFor:
+      "Not for owner-occupied purchases, consumer QM mortgages, or assets without realistic rent support.",
     differentiators: [
       "Qualification emphasis on property cash flow",
       "Structured for investor rentals rather than consumer mortgage framing",

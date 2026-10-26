@@ -3,14 +3,15 @@ import { ApplyWizard } from "@/components/apply/ApplyWizard";
 import { ApplyFooterNote } from "@/components/apply/ApplyFooterNote";
 import { PageHero, Section } from "@/components/marketing/page";
 import { images } from "@/lib/marketing/images";
+import { parseApplyPrefill } from "@/lib/config/apply-prefill";
 
 export const metadata: Metadata = {
-  title: "Apply Now",
+  title: "Start your file",
   description:
     "Submit a Vault private capital application — property, borrower, loan details, and documents in one digital file.",
 };
 
-type ApplySearchParams = Promise<{ prior?: string | string[] }>;
+type ApplySearchParams = Promise<Record<string, string | string[] | undefined>>;
 
 export default async function ApplyPage({
   searchParams,
@@ -20,19 +21,20 @@ export default async function ApplyPage({
   const params = await searchParams;
   const priorRaw = params.prior;
   const priorApplicationId = Array.isArray(priorRaw) ? priorRaw[0] : priorRaw;
+  const prefill = parseApplyPrefill(params);
 
   return (
     <>
       <PageHero
         eyebrow="Apply"
         title="Start your file."
-        description="Submit your deal in about two minutes, then finish your package in the portal. We show what is still missing — terms are evaluated deal by deal."
+        description="Submit your deal in about two minutes, then finish your package in the portal. We show what is still missing — terms are evaluated deal by deal. Not a promise of approval."
         image={images.plans}
       />
 
       <Section tone="paper">
         <div className="mx-auto w-full max-w-[880px]">
-          <ApplyWizard priorApplicationId={priorApplicationId} />
+          <ApplyWizard priorApplicationId={priorApplicationId} prefill={prefill} />
         </div>
         <ApplyFooterNote />
       </Section>

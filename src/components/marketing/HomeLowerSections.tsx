@@ -4,6 +4,7 @@ import type { ReactNode } from "react";
 import { FaqAccordion } from "@/components/marketing/FaqAccordion";
 import { UpdatesSignup } from "@/components/marketing/UpdatesSignup";
 import { Button } from "@/components/ui/Button";
+import { CTA_PRIMARY, CTA_SECONDARY, CTA_TERTIARY } from "@/lib/config/ctas";
 import { images } from "@/lib/marketing/images";
 
 type FaqItem = { question: string; answer: string };
@@ -391,6 +392,7 @@ export function HomeLowerSections({ faqs }: { faqs: FaqItem[] }) {
                 {[
                   { href: "/resources", label: "Learning Center / Guides" },
                   { href: "/resources/glossary", label: "Glossary of lending terms" },
+                  { href: "/resources/tools", label: "Investor calculators" },
                   { href: "/resources/case-studies", label: "Case studies / funded deals" },
                 ].map((link) => (
                   <li key={link.href}>
@@ -440,8 +442,9 @@ export function HomeLowerSections({ faqs }: { faqs: FaqItem[] }) {
               <ul className="mt-6 space-y-3">
                 {[
                   { href: "/resources/faqs", label: "Expanded FAQs" },
-                  { href: "/apply", label: "Start an application" },
-                  { href: "/contact", label: "Talk with Vault" },
+                  { href: CTA_PRIMARY.href, label: CTA_PRIMARY.label },
+                  { href: CTA_SECONDARY.href, label: CTA_SECONDARY.label },
+                  { href: CTA_TERTIARY.href, label: CTA_TERTIARY.label },
                 ].map((link) => (
                   <li key={link.href}>
                     <Link
@@ -529,15 +532,18 @@ export function HomeLowerSections({ faqs }: { faqs: FaqItem[] }) {
               Ready when your contract is.
             </h2>
             <p className="mx-auto mt-5 max-w-[32rem] text-[1.125rem] leading-relaxed text-steel">
-              Apply creates your borrower portal so you can return, update documents, and track
-              status across the full funding lifecycle.
+              Start your file to open the borrower portal — return, update documents, and track
+              status across the full funding lifecycle. Not a promise of approval.
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
-              <Button href="/apply" shine>
-                Apply Now
+              <Button href={CTA_PRIMARY.href} shine>
+                {CTA_PRIMARY.label}
               </Button>
-              <Button href="/contact" variant="secondary">
-                Contact Vault
+              <Button href={CTA_SECONDARY.href} variant="secondary">
+                {CTA_SECONDARY.label}
+              </Button>
+              <Button href={CTA_TERTIARY.href} variant="ghost">
+                {CTA_TERTIARY.label}
               </Button>
             </div>
           </div>

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { BrandImage } from "@/components/marketing/BrandImage";
 import { Button } from "@/components/ui/Button";
+import { CTA_PRIMARY } from "@/lib/config/ctas";
 
 function CheckIcon() {
   return (
@@ -87,8 +88,8 @@ export function ProductFeatureSection({ feature }: { feature: ProductFeature }) 
         ))}
       </ul>
       <div className="mt-8 flex flex-wrap items-center gap-4">
-        <Button href={feature.applyHref ?? "/apply"} shine>
-          Apply Now
+        <Button href={feature.applyHref ?? CTA_PRIMARY.href} shine>
+          {CTA_PRIMARY.label}
         </Button>
         <Link
           href={feature.href}

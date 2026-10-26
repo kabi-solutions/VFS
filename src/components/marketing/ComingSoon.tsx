@@ -16,7 +16,7 @@ export function ComingSoon({
       <div className="mt-10 flex flex-wrap items-center justify-center gap-3">
         <Button href="/">Back to home</Button>
         <Button href="/apply" shine>
-          Apply Now
+          Start your file
         </Button>
       </div>
       <p className="mt-8 text-[0.9375rem] text-steel">

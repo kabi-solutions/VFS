@@ -1,13 +1,19 @@
 import Image from "next/image";
 import Link from "next/link";
 import { BrandImage } from "@/components/marketing/BrandImage";
+import { CtaGroup } from "@/components/marketing/CtaGroup";
 import { HomeLowerSections } from "@/components/marketing/HomeLowerSections";
 import { LifecycleFlow, type LifecycleStep } from "@/components/marketing/LifecycleFlow";
 import {
   ProductFeatureSection,
   type ProductFeature,
 } from "@/components/marketing/ProductFeatureSection";
+import { QualificationBox } from "@/components/marketing/QualificationBox";
+import { RecentFiles } from "@/components/marketing/RecentFiles";
+import { Testimonials } from "@/components/marketing/Testimonials";
 import { Button } from "@/components/ui/Button";
+import { fundingSpeedClaim } from "@/lib/config/claims";
+import { CTA_PRIMARY } from "@/lib/config/ctas";
 import { homepageFaqs as faqs } from "@/lib/marketing/faqs";
 import { images } from "@/lib/marketing/images";
 
@@ -129,6 +135,8 @@ const lifecycleSteps: LifecycleStep[] = [
 ];
 
 export function HomePage() {
+  const speed = fundingSpeedClaim();
+
   return (
     <>
       {/* Hero — benefit-forward, bright */}
@@ -136,7 +144,7 @@ export function HomePage() {
         <div className="mx-auto grid max-w-[1080px] items-center gap-10 px-6 pb-16 pt-14 lg:grid-cols-[1.05fr_0.95fr] lg:gap-12 lg:px-8 lg:pb-20 lg:pt-16">
           <div>
             <p className="inline-flex items-center gap-2 rounded-full bg-green-soft px-3 py-1 text-[0.8125rem] font-semibold text-green">
-              Investor credit · Multi-state coverage · Closings measured in days
+              Investor credit · Multi-state coverage · Diligence-first
             </p>
             <h1 className="headline-xl mt-5 max-w-[16ch] text-balance text-ink">
               Capital that moves as fast as your deal.
@@ -145,9 +153,10 @@ export function HomePage() {
               Private money for fix &amp; flip, bridge, ground-up, and DSCR investors — with a
               digital application, a durable borrower portal, and an audited path to funding.
             </p>
+            <p className="mt-4 max-w-[34rem] text-[1rem] font-medium text-charcoal">{speed}</p>
             <ul className="mt-6 space-y-3">
               {[
-                "Start your application in one sitting",
+                "Start your file in one sitting",
                 "Track status in plain language",
                 "Upload documents and return years later",
               ].map((item) => (
@@ -166,17 +175,15 @@ export function HomePage() {
                 </li>
               ))}
             </ul>
-            <div className="mt-8 flex flex-wrap items-center gap-4">
-              <Button href="/apply" shine>
-                Apply Now
-              </Button>
+            <CtaGroup className="mt-8" showDisclaimer />
+            <p className="mt-4">
               <Link
                 href="/capital-partners"
                 className="text-[1.0625rem] font-medium text-ink underline decoration-green/40 underline-offset-4 hover:decoration-green"
               >
                 Partner with Us
               </Link>
-            </div>
+            </p>
             <p className="mt-5 text-[0.8125rem] text-steel">
               Subject to credit approval and applicable state licensing. Terms vary by deal.
             </p>
@@ -191,12 +198,11 @@ export function HomePage() {
                 className="absolute inset-4 overflow-hidden rounded-[1.5rem] sm:inset-5"
                 sizes="(max-width: 1024px) 100vw, 520px"
               />
-              <div className="absolute bottom-8 left-8 right-8 z-10 rounded-2xl bg-white/95 p-4 shadow-[0_16px_40px_rgba(0,0,0,0.12)] backdrop-blur-sm sm:left-10 sm:right-auto sm:max-w-[15rem]">
-                <p className="text-[0.75rem] font-medium text-steel">Typical close window</p>
-                <p className="mt-1 text-[1.25rem] font-semibold tracking-[-0.02em] text-ink">
-                  Measured in days
+              <div className="absolute bottom-8 left-8 right-8 z-10 rounded-2xl bg-white/95 p-4 shadow-[0_16px_40px_rgba(0,0,0,0.12)] backdrop-blur-sm sm:left-10 sm:right-auto sm:max-w-[17rem]">
+                <p className="text-[0.75rem] font-medium text-steel">When the package is complete</p>
+                <p className="mt-1 text-[1.0625rem] font-semibold tracking-[-0.02em] text-ink">
+                  {speed}
                 </p>
-                <p className="mt-1 text-[0.8125rem] text-steel">When the package is complete</p>
               </div>
             </div>
           </div>
@@ -208,16 +214,16 @@ export function HomePage() {
         <div className="mx-auto grid max-w-[1080px] gap-8 px-6 py-12 sm:grid-cols-3 lg:px-8">
           {[
             {
-              title: "Apply online",
-              body: "Property, borrower, and loan details in a structured digital flow — no PDF upload loop.",
+              title: "Digital Apply",
+              body: "Property, borrower, and loan details in a structured flow — no PDF upload loop.",
             },
             {
-              title: "Know your status",
-              body: "Plain-language stages from review to funding, with a full audit trail behind every change.",
+              title: "Plain-language status",
+              body: "Published gates from review to funding, with a full audit trail behind every change.",
             },
             {
-              title: "Portal that lasts",
-              body: "Come back years later to update documents and start the next file from the same account.",
+              title: "Durable borrower portal",
+              body: "Return years later to update documents and start the next file from the same account.",
             },
           ].map((item) => (
             <div key={item.title} className="text-center sm:text-left">
@@ -238,13 +244,25 @@ export function HomePage() {
         </div>
       </section>
 
+      {/* Qualification */}
+      <section className="bg-white">
+        <div className="mx-auto max-w-[880px] px-6 py-[var(--spacing-section)] lg:px-8">
+          <QualificationBox />
+        </div>
+      </section>
+
       {/* Solutions intro */}
-      <section className="bg-white pt-16 lg:pt-20">
+      <section className="bg-paper pt-16 lg:pt-20">
         <div className="mx-auto max-w-[40rem] px-6 text-center lg:px-8">
           <h2 className="headline-lg text-balance">Solutions built for the deal you have.</h2>
           <p className="body-lg mt-5">
-            Private Money is the umbrella. Each structure below gets its own stage — benefits,
-            imagery, and a direct path to Apply.
+            Fix &amp; flip, bridge, ground-up, and DSCR structures — each with its own stage, imagery,
+            and a direct path to start a file.
+          </p>
+          <p className="mt-4">
+            <Link href="/strategies" className="font-medium text-green hover:text-green-hover">
+              Browse by strategy or experience
+            </Link>
           </p>
         </div>
       </section>
@@ -271,18 +289,19 @@ export function HomePage() {
             <h2 className="headline-lg text-balance">How funding moves through Vault.</h2>
             <p className="body-lg mt-5">
               Six clear gates from application to funding — the same audited path you track in the
-              borrower portal.
+              borrower portal. {speed}
             </p>
           </div>
 
           <LifecycleFlow steps={lifecycleSteps} />
-          <div className="mt-10 text-center">
-            <Button href="/apply" shine>
-              Apply Now
-            </Button>
+          <div className="mt-10 flex justify-center">
+            <CtaGroup align="center" />
           </div>
         </div>
       </section>
+
+      <RecentFiles className="bg-white py-[var(--spacing-section)]" />
+      <Testimonials className="bg-paper py-[var(--spacing-section)]" />
 
       {/* Dual audience */}
       <section className="bg-white">
@@ -306,8 +325,8 @@ export function HomePage() {
                 Submit once, track status, upload packages, and keep a durable portal record for the
                 next deal.
               </p>
-              <Button href="/apply" shine className="mt-6">
-                Start Application
+              <Button href={CTA_PRIMARY.href} shine className="mt-6">
+                {CTA_PRIMARY.label}
               </Button>
             </div>
           </div>
@@ -324,7 +343,7 @@ export function HomePage() {
             <div className="p-8">
               <p className="text-[0.875rem] font-semibold text-green">For capital partners</p>
               <h2 className="mt-2 text-[1.75rem] font-semibold tracking-[-0.03em] text-ink">
-                Lenders deploying into a controlled pipeline.
+                Lenders deploying into a gated, auditable pipeline.
               </h2>
               <p className="mt-3 text-[1.0625rem] leading-relaxed text-steel">
                 Evaluate process, risk posture, and reporting — then submit a partner application for

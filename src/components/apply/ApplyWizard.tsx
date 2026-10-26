@@ -50,6 +50,11 @@ import {
 } from "@/lib/apply/package";
 import { createApplication } from "@/lib/data/applications";
 import type { LoanType } from "@/lib/types/database";
+import {
+  isLoanType,
+  timelineToHoldMonths,
+  type ApplyPrefill,
+} from "@/lib/config/apply-prefill";
 
 type PendingDoc = {
   localId: string;
@@ -82,6 +87,33 @@ function formatSavedAt(iso: string | null): string {
   } catch {
     return "";
   }
+}
+
+function buildPrefillPackage(prefill?: ApplyPrefill): ApplicationPackage {
+  const base = emptyApplicationPackage();
+  if (!prefill) return base;
+  return {
+    ...base,
+    subject_property: {
+      ...base.subject_property,
+      address: prefill.address || base.subject_property.address,
+    },
+    loan_request: {
+      ...base.loan_request,
+      loan_amount: prefill.amount || base.loan_request.loan_amount,
+      purchase_price: prefill.purchasePrice || base.loan_request.purchase_price,
+      budget_amount: prefill.rehabBudget || base.loan_request.budget_amount,
+      estimated_arv: prefill.arv || base.loan_request.estimated_arv,
+    },
+    strategy: {
+      ...base.strategy,
+      anticipated_hold_months:
+        timelineToHoldMonths(prefill.timeline) || base.strategy.anticipated_hold_months,
+      exit_strategy_detail: prefill.timeline
+        ? `Screener timeline: ${prefill.timeline}`
+        : base.strategy.exit_strategy_detail,
+    },
+  };
 }
 
 function buildPhases(showBudget: boolean, showContractor: boolean): ApplyPhase[] {
@@ -153,7 +185,13 @@ function jumpTargetForItem(item: CompletenessItem): Location {
   return { phaseId: "profile", subStepId: "borrower" };
 }
 
-export function ApplyWizard({ priorApplicationId }: { priorApplicationId?: string }) {
+export function ApplyWizard({
+  priorApplicationId,
+  prefill,
+}: {
+  priorApplicationId?: string;
+  prefill?: ApplyPrefill;
+}) {
   const formTopRef = useRef<HTMLDivElement>(null);
   const [bootstrapped, setBootstrapped] = useState(false);
   const [resumePrompt, setResumePrompt] = useState<ApplyDraft | null>(null);
@@ -162,8 +200,10 @@ export function ApplyWizard({ priorApplicationId }: { priorApplicationId?: strin
     phaseId: "deal",
     subStepId: "property",
   });
-  const [pkg, setPkg] = useState<ApplicationPackage>(() => emptyApplicationPackage());
-  const [loanType, setLoanType] = useState<LoanType>("rehab_fix_flip");
+  const [pkg, setPkg] = useState<ApplicationPackage>(() => buildPrefillPackage(prefill));
+  const [loanType, setLoanType] = useState<LoanType>(() =>
+    isLoanType(prefill?.loanType) ? prefill.loanType : "rehab_fix_flip",
+  );
   const [loanTypeAutoNote, setLoanTypeAutoNote] = useState<string | null>(null);
   const [pendingDocs, setPendingDocs] = useState<PendingDoc[]>([]);
   const [dragOver, setDragOver] = useState(false);
@@ -181,6 +221,7 @@ export function ApplyWizard({ priorApplicationId }: { priorApplicationId?: strin
     missingLabels: string[];
     packageComplete: boolean;
   } | null>(null);
+
 
   const showContractor = needsContractorPackage(
     loanType,
@@ -220,15 +261,15 @@ export function ApplyWizard({ priorApplicationId }: { priorApplicationId?: strin
     setBootstrapped(true);
   }, []);
 
+  const forcedLoanType = resolveForcedGroundUpLoanType(loanType, pkg);
+  const loanTypeAutoNote = forcedLoanType ? groundUpForceReason(pkg) : null;
+
   useEffect(() => {
-    const forced = resolveForcedGroundUpLoanType(loanType, pkg);
-    if (!forced) {
-      setLoanTypeAutoNote(null);
-      return;
-    }
-    setLoanTypeAutoNote(groundUpForceReason(pkg));
-    if (forced !== loanType) setLoanType(forced);
-  }, [pkg, loanType]);
+    if (!forcedLoanType || forcedLoanType === loanType) return;
+    // Keep select in sync when package scope requires ground-up / new construction.
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- derived force from package scope
+    setLoanType(forcedLoanType);
+  }, [forcedLoanType, loanType]);
 
   function persistDraft(
     nextPkg = pkg,
@@ -514,8 +555,8 @@ export function ApplyWizard({ priorApplicationId }: { priorApplicationId?: strin
     if (resumePrompt) applyDraftStore.remove(resumePrompt.id);
     const id = applyDraftStore.createId();
     setDraftId(id);
-    setPkg(emptyApplicationPackage());
-    setLoanType("rehab_fix_flip");
+    setPkg(buildPrefillPackage(prefill));
+    setLoanType(isLoanType(prefill?.loanType) ? prefill.loanType : "rehab_fix_flip");
     setLocation({ phaseId: "deal", subStepId: "property" });
     setPendingDocs([]);
     setSavedAt(null);

@@ -22,7 +22,7 @@ export default function ContactPage() {
         eyebrow="Connect"
         title="Contact Vault"
         description="Reach the team for file questions, partnership diligence, media, or recruiting. Product applications start on Apply."
-        primaryCta={{ href: "/apply", label: "Apply Now", shine: true }}
+        primaryCta={{ href: "/apply", label: "Start your file", shine: true }}
         secondaryCta={{ href: "/company/about", label: "About Vault" }}
         image={images.plans}
       />

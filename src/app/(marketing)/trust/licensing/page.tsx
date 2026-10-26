@@ -23,7 +23,7 @@ export default function Page() {
       <PageHero
         eyebrow="Trust"
         title="Licensing & compliance."
-        description="Written for diligence. Licensing identifiers and state coverage are published only when Vault’s compliance pack is ready — never invented for the site."
+        description="Diligence pack on request. Licensing identifiers and state coverage are published only when Vault’s compliance pack is ready — never invented for the site."
         secondaryCta={{ href: "/contact", label: "Request compliance pack" }}
       />
 
@@ -141,7 +141,7 @@ export default function Page() {
         primaryHref="/contact"
         primaryLabel="Contact Vault"
         secondaryHref="/apply"
-        secondaryLabel="Apply Now"
+        secondaryLabel="Start your file"
       />
     </>
   );

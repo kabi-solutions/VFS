@@ -1,21 +1,29 @@
 import type { FaqItem } from "@/components/marketing/FaqAccordion";
+import { fundingSpeedClaim } from "@/lib/config/claims";
 
-/** Homepage FAQs — shared with Resources / FAQs expansion */
+/**
+ * FAQ pattern: lead with the direct answer, then the qualifier.
+ * Shared by homepage and Resources / FAQs.
+ */
 export const homepageFaqs: FaqItem[] = [
+  {
+    question: "How fast can funding happen?",
+    answer: `${fundingSpeedClaim()} Timeline depends on package completeness, diligence, and third parties — never a guaranteed close date.`,
+  },
   {
     question: "How fast can I start an application?",
     answer:
-      "Apply is built for one sitting: property, borrower, and loan intent in a structured digital flow. On submit, borrower portal access is created so you can return with documents and track the file without starting over.",
+      "You can start a file in one sitting: property, borrower, and loan intent in a structured digital flow. On submit, borrower portal access is created so you can return with documents without starting over.",
   },
   {
     question: "Will I know where my file stands?",
     answer:
-      "Yes. Every file moves through six published gates — application, review, package, underwriting, clear to close, and funding — with plain-language status and a retained history at each change.",
+      "Yes — every file moves through six published gates (application, review, package, underwriting, clear to close, and funding) with plain-language status and retained history. Qualifier: status language is operational, not a credit decision.",
   },
   {
     question: "What if information is missing?",
     answer:
-      "The Processor requests what’s needed. The file enters an info-requested state tagged to the stage it came from, then returns there once you resubmit — so you never lose your place in the lifecycle.",
+      "The Processor requests what’s needed and the file enters an info-requested state tagged to its stage, then returns there once you resubmit. You do not lose your place in the lifecycle.",
   },
   {
     question: "What loan products does Vault offer?",
@@ -25,12 +33,12 @@ export const homepageFaqs: FaqItem[] = [
   {
     question: "Who can apply?",
     answer:
-      "Real estate investors and entities using investment property as collateral. Primary-residence consumer mortgages are outside this product set. Entity borrowers, experienced flippers, and rental operators are typical applicants.",
+      "Real estate investors and entities using investment property as collateral. Primary-residence consumer mortgages and MCA / small-business working-capital products are outside this set.",
   },
   {
     question: "What documents will I need?",
     answer:
-      "Expect identity and entity paperwork, property details, purchase contract or payoff statement, rehab scope or rent roll when relevant, and liquidity evidence. Exact checklists appear in the borrower portal after you start an application.",
+      "Expect identity and entity paperwork, property details, purchase contract or payoff statement, rehab scope or rent roll when relevant, and liquidity evidence. Exact checklists appear in the borrower portal after you start a file.",
   },
   {
     question: "Do you publish rates and LTVs on the site?",
@@ -40,7 +48,7 @@ export const homepageFaqs: FaqItem[] = [
   {
     question: "Where does Vault lend?",
     answer:
-      "Vault uses a national operating model with priority markets listed under Locations. Formal licensing details live under Trust. A state landing page means Vault is prepared to discuss investor files there — request the compliance pack for license-level confirmation.",
+      "Vault uses a national operating model with priority markets listed under Locations. Formal licensing details live under Trust — request the compliance pack for license-level confirmation rather than assuming coverage from a marketing page.",
   },
   {
     question: "How does the borrower portal work?",
@@ -50,7 +58,7 @@ export const homepageFaqs: FaqItem[] = [
   {
     question: "How do capital partners get started?",
     answer:
-      "Review Why Partner With Vault and How Deployment Works, then submit a Partner Application. That opens a capital-partner organization record for diligence — a real intake for partnership review, not a disposable lead form.",
+      "Review Why Partner With Vault and How Deployment Works, then submit a Partner Application. That opens a capital-partner organization record for diligence on a gated, auditable pipeline — a real intake, not a disposable lead form.",
   },
   {
     question: "Can I work with a broker or correspondent?",
@@ -60,7 +68,7 @@ export const homepageFaqs: FaqItem[] = [
   {
     question: "How do I contact Vault before applying?",
     answer:
-      "Use the Contact page for general inquiries. When you have a live deal, Apply is the fastest path — it creates the portal record your team will use for follow-up.",
+      "Use Contact for general inquiries, or Check if your deal fits for a four-field preliminary read. When you have a live deal, Start your file is the fastest path to a portal record.",
   },
 ];
 
@@ -75,7 +83,7 @@ export const expandedFaqs: FaqItem[] = [
   {
     question: "How is DSCR different from personal income qualification?",
     answer:
-      "Debt service coverage ratio (DSCR) weighs property cash flow against debt service. Non-QM / DSCR programs may qualify on rents and expenses rather than full personal W-2 underwriting — subject to product guidelines and deal review.",
+      "Debt service coverage ratio (DSCR) weighs property cash flow against debt service. Non-QM / DSCR programs may qualify on rents and expenses rather than full personal W-2 underwriting — subject to product guidelines and deal review. Vault does not publish a minimum DSCR on marketing pages.",
   },
   {
     question: "Is Vault licensed in my state?",
