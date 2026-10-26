@@ -1,6 +1,7 @@
 import type { MetadataRoute } from "next";
 import { starterStates } from "@/lib/marketing/states";
 import { solutionList } from "@/lib/marketing/solutions";
+import { experienceList, strategyList } from "@/lib/config/strategies";
 import { SITE_URL } from "@/lib/seo/site";
 
 const staticRoutes = [
@@ -60,5 +61,20 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.65,
   }));
 
-  return [...staticEntries, ...solutionEntries, ...stateEntries];
+  const strategyEntries: MetadataRoute.Sitemap = [
+    ...strategyList.map((s) => ({
+      url: `${SITE_URL}/strategies/${s.slug}`,
+      lastModified: now,
+      changeFrequency: "monthly" as const,
+      priority: 0.6,
+    })),
+    ...experienceList.map((e) => ({
+      url: `${SITE_URL}/strategies/experience/${e.slug}`,
+      lastModified: now,
+      changeFrequency: "monthly" as const,
+      priority: 0.55,
+    })),
+  ];
+
+  return [...staticEntries, ...solutionEntries, ...stateEntries, ...strategyEntries];
 }

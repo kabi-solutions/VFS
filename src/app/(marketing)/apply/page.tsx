@@ -3,7 +3,6 @@ import { ApplyWizard } from "@/components/apply/ApplyWizard";
 import { PageHero, Section } from "@/components/marketing/page";
 import { images } from "@/lib/marketing/images";
 import { parseApplyPrefill } from "@/lib/config/apply-prefill";
-import { CTA_PRIMARY } from "@/lib/config/ctas";
 
 export const metadata: Metadata = {
   title: "Start your file",
@@ -21,24 +20,25 @@ export default async function ApplyPage({
   const params = await searchParams;
   const priorRaw = params.prior;
   const priorApplicationId = Array.isArray(priorRaw) ? priorRaw[0] : priorRaw;
+  const prefill = parseApplyPrefill(params);
 
   return (
     <>
       <PageHero
         eyebrow="Apply"
         title="Start your file."
-        description="Submit once with the hard essentials, then soft-collect the full package — property, strategy, track record, SREO, contractor, and documents. Missing items stay visible for follow-up. Terms are evaluated deal by deal."
+        description="Submit your deal in about two minutes, then finish your package in the portal. We show what is still missing — terms are evaluated deal by deal. Not a promise of approval."
         image={images.plans}
       />
 
       <Section tone="paper">
-        <div className="mx-auto max-w-[720px]">
-          <ApplyWizard priorApplicationId={priorApplicationId} />
+        <div className="mx-auto w-full max-w-[880px]">
+          <ApplyWizard priorApplicationId={priorApplicationId} prefill={prefill} />
         </div>
         <p className="mx-auto mt-8 max-w-[36rem] text-center text-[0.875rem] text-steel">
           {/* PLACEHOLDER — compliance disclosure / E-SIGN when live */}
-          Submitting creates an application record and portal access in this mock environment. No
-          rates or approvals are quoted on this form.
+          Submitting creates an application record and portal access. No rates or approvals are
+          quoted on this form.
         </p>
       </Section>
     </>

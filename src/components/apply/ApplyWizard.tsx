@@ -119,6 +119,34 @@ function isEmail(value: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
 }
 
+
+function buildPrefillPackage(prefill?: ApplyPrefill): ApplicationPackage {
+  const base = emptyApplicationPackage();
+  if (!prefill) return base;
+  return {
+    ...base,
+    subject_property: {
+      ...base.subject_property,
+      address: prefill.address || base.subject_property.address,
+    },
+    loan_request: {
+      ...base.loan_request,
+      loan_amount: prefill.amount || base.loan_request.loan_amount,
+      purchase_price: prefill.purchasePrice || base.loan_request.purchase_price,
+      budget_amount: prefill.rehabBudget || base.loan_request.budget_amount,
+      estimated_arv: prefill.arv || base.loan_request.estimated_arv,
+    },
+    strategy: {
+      ...base.strategy,
+      anticipated_hold_months:
+        timelineToHoldMonths(prefill.timeline) || base.strategy.anticipated_hold_months,
+      exit_strategy_detail: prefill.timeline
+        ? `Screener timeline: ${prefill.timeline}`
+        : base.strategy.exit_strategy_detail,
+    },
+  };
+}
+
 export function ApplyWizard({
   priorApplicationId,
   prefill,
@@ -127,54 +155,10 @@ export function ApplyWizard({
   prefill?: ApplyPrefill;
 }) {
   const [step, setStep] = useState<StepId>(1);
-  const [pkg, setPkg] = useState<ApplicationPackage>(() => emptyApplicationPackage());
-  const [loanType, setLoanType] = useState<LoanType>("rehab_fix_flip");
-  const [loanTypeAutoNote, setLoanTypeAutoNote] = useState<string | null>(null);
-
-  // Screener / calculator query-param prefill into early Apply fields (surgical).
-  const [prefillApplied, setPrefillApplied] = useState(false);
-  useEffect(() => {
-    if (prefillApplied || !prefill) return;
-    setPrefillApplied(true);
-    if (prefill.address) {
-      setPkg((prev) => ({
-        ...prev,
-        subject_property: { ...prev.subject_property, address: prefill.address || prev.subject_property.address },
-      }));
-    }
-    if (isLoanType(prefill.loanType)) setLoanType(prefill.loanType);
-    if (prefill.amount) {
-      setPkg((prev) => ({
-        ...prev,
-        loan_request: { ...prev.loan_request, loan_amount: prefill.amount || prev.loan_request.loan_amount },
-      }));
-    }
-    if (prefill.purchasePrice || prefill.rehabBudget || prefill.arv) {
-      setPkg((prev) => ({
-        ...prev,
-        loan_request: {
-          ...prev.loan_request,
-          purchase_price: prefill.purchasePrice || prev.loan_request.purchase_price,
-          budget_amount: prefill.rehabBudget || prev.loan_request.budget_amount,
-          estimated_arv: prefill.arv || prev.loan_request.estimated_arv,
-        },
-      }));
-    }
-    const hold = timelineToHoldMonths(prefill.timeline);
-    if (hold || prefill.timeline) {
-      setPkg((prev) => ({
-        ...prev,
-        strategy: {
-          ...prev.strategy,
-          anticipated_hold_months: hold || prev.strategy.anticipated_hold_months,
-          exit_strategy_detail: prefill.timeline
-            ? `Screener timeline: ${prefill.timeline}`
-            : prev.strategy.exit_strategy_detail,
-        },
-      }));
-    }
-  }, [prefill, prefillApplied]);
-
+  const [pkg, setPkg] = useState<ApplicationPackage>(() => buildPrefillPackage(prefill));
+  const [loanType, setLoanType] = useState<LoanType>(() =>
+    isLoanType(prefill?.loanType) ? prefill.loanType : "rehab_fix_flip",
+  );
   const [pendingDocs, setPendingDocs] = useState<PendingDoc[]>([]);
   const [dragOver, setDragOver] = useState(false);
   const [defaultDocType, setDefaultDocType] = useState<string>("other");
@@ -187,6 +171,7 @@ export function ApplyWizard({
     missingLabels: string[];
     packageComplete: boolean;
   } | null>(null);
+
 
   const showContractor = needsContractorPackage(
     loanType,
@@ -209,15 +194,15 @@ export function ApplyWizard({
     [showBudget, showContractor],
   );
 
+  const forcedLoanType = resolveForcedGroundUpLoanType(loanType, pkg);
+  const loanTypeAutoNote = forcedLoanType ? groundUpForceReason(pkg) : null;
+
   useEffect(() => {
-    const forced = resolveForcedGroundUpLoanType(loanType, pkg);
-    if (!forced) {
-      setLoanTypeAutoNote(null);
-      return;
-    }
-    setLoanTypeAutoNote(groundUpForceReason(pkg));
-    if (forced !== loanType) setLoanType(forced);
-  }, [pkg, loanType]);
+    if (!forcedLoanType || forcedLoanType === loanType) return;
+    // Keep select in sync when package scope requires ground-up / new construction.
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- derived force from package scope
+    setLoanType(forcedLoanType);
+  }, [forcedLoanType, loanType]);
 
   function patchPkg(updater: (prev: ApplicationPackage) => ApplicationPackage) {
     setPkg((prev) => applyGroundUpLoanRequestFlags(updater(prev)));

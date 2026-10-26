@@ -6,7 +6,7 @@ import {
   PhotoTile,
   Section,
 } from "@/components/marketing/page";
-import { CTA_PRIMARY, CTA_SECONDARY } from "@/lib/config/ctas";
+import { CTA_PRIMARY } from "@/lib/config/ctas";
 import { images } from "@/lib/marketing/images";
 
 export const metadata: Metadata = {
