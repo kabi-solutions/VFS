@@ -129,7 +129,15 @@ export function RolePipelinePage({
           </tbody>
         </table>
         {visible.length === 0 ? (
-          <p className="px-4 py-8 text-center text-steel">No applications in this view.</p>
+          <div className="px-4 py-10 text-center">
+            <p className="text-[0.9375rem] text-steel">No applications in this view yet.</p>
+            <Link
+              href={`/portal/${role}`}
+              className="mt-3 inline-block text-[0.9375rem] font-medium text-green hover:text-green-hover"
+            >
+              Back to overview
+            </Link>
+          </div>
         ) : null}
       </PortalPanel>
     </div>

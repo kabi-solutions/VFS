@@ -1422,12 +1422,15 @@ export function displayName(party: Pick<BorrowerParty, "first_name" | "middle_na
   return [party.first_name, party.middle_name, party.last_name].filter((p) => p.trim()).join(" ").trim();
 }
 
+// TODO(counsel): replace with Vault counsel-approved business-purpose attestation language.
 export const BUSINESS_PURPOSE_ATTESTATION =
-  "I confirm this is a non-owner-occupied, business-purpose transaction only. I do not intend to occupy the subject property as my primary residence. (Placeholder attestation — replace with Vault counsel-approved language.)";
+  "I confirm this is a non-owner-occupied, business-purpose transaction only. I do not intend to occupy the subject property as my primary residence.";
 
+// TODO(counsel): replace with Vault counsel-approved ECOA appraisal notice language.
 export const ECOA_APPRAISAL_ATTESTATION =
   "I acknowledge the ECOA notice of right to a copy of appraisal / valuation reports, and that I may waive the 3-business-day review period prior to closing.";
 
+// TODO(counsel): replace with Vault counsel-approved credit/background authorization language.
 export const CREDIT_AUTHORIZATION_ATTESTATION =
   "I authorize the lender to conduct a background and/or credit check and to disclose credit experience to necessary third parties for due diligence on this application.";
 

@@ -16,8 +16,42 @@
   --line-strong: rgba(0, 0, 0, 0.14);
   --focus: #00b85c;
 
+  /* Type scale */
+  --text-xs: 0.75rem;
+  --text-sm: 0.875rem;
+  --text-md: 1.0625rem;
+  --text-lg: 1.1875rem;
+  --text-xl: clamp(1.5rem, 2.2vw, 1.75rem);
+  --text-2xl: clamp(2rem, 3.5vw, 3rem);
+  --text-3xl: clamp(2.5rem, 5vw, 4.5rem);
+
+  /* Section spacing */
+  --space-section-tight: 3.5rem;
+  --space-section: 6.5rem;
+  --space-section-generous: 8.5rem;
+  --space-gutter: 1rem;
+
+  /* Unified cards */
+  --radius-card: 1rem;
+  --radius-panel: 1.75rem;
+  --shadow-card: 0 16px 50px rgba(0, 0, 0, 0.06);
+  --shadow-card-hover: 0 20px 60px rgba(0, 0, 0, 0.09);
+  --card-ring: rgba(0, 0, 0, 0.04);
+
   --background: var(--paper);
   --foreground: var(--charcoal);
+  --surface: var(--white);
+  --surface-muted: var(--paper);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --surface: #141414;
+    --surface-muted: #1a1a1a;
+    --card-ring: rgba(255, 255, 255, 0.08);
+    --shadow-card: 0 16px 50px rgba(0, 0, 0, 0.35);
+    --shadow-card-hover: 0 20px 60px rgba(0, 0, 0, 0.45);
+  }
 }
 
 @theme inline {
@@ -37,11 +71,11 @@
 
   --font-sans: var(--font-geist);
 
-  --spacing-section: 6.5rem;
-  --spacing-section-sm: 4rem;
+  --spacing-section: var(--space-section);
+  --spacing-section-sm: var(--space-section-tight);
+  --spacing-section-lg: var(--space-section-generous);
 
   --radius-control: 980px;
-  --radius-panel: 1.75rem;
 
   --shadow-focus: 0 0 0 3px rgba(0, 184, 92, 0.28);
 }
@@ -62,6 +96,7 @@
   }
 
   body {
+    overflow-x: clip;
     background: var(--background);
     color: var(--foreground);
     font-family: var(--font-geist), -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
@@ -96,6 +131,22 @@
     text-wrap: balance;
   }
 
+  .section-tight {
+    padding-block: var(--space-section-tight);
+  }
+
+  .section-default {
+    padding-block: var(--space-section);
+  }
+
+  .section-generous {
+    padding-block: var(--space-section-generous);
+  }
+
+  .page-gutter {
+    padding-inline: max(var(--space-gutter), 1rem);
+  }
+
   .measure {
     max-width: 38rem;
   }
@@ -105,21 +156,21 @@
   }
 
   .headline-xl {
-    font-size: clamp(2.5rem, 5vw, 4.5rem);
+    font-size: var(--text-3xl);
     font-weight: 600;
     letter-spacing: -0.035em;
     line-height: 1.05;
   }
 
   .headline-lg {
-    font-size: clamp(2rem, 3.5vw, 3rem);
+    font-size: var(--text-2xl);
     font-weight: 600;
     letter-spacing: -0.03em;
     line-height: 1.1;
   }
 
   .headline-md {
-    font-size: clamp(1.5rem, 2.2vw, 1.75rem);
+    font-size: var(--text-xl);
     font-weight: 600;
     letter-spacing: -0.022em;
     line-height: 1.15;

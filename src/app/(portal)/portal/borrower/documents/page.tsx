@@ -37,9 +37,17 @@ export default function BorrowerDocumentsPage() {
       />
       <PortalPanel className="mt-8 overflow-hidden">
         {rows.length === 0 ? (
-          <p className="px-5 py-10 text-center text-[0.9375rem] text-steel">
-            No documents yet. Upload from an application workspace after you apply.
-          </p>
+          <div className="px-5 py-10 text-center">
+            <p className="text-[0.9375rem] text-steel">
+              No documents yet. Upload from an application workspace after you apply.
+            </p>
+            <Link
+              href="/portal/borrower/applications"
+              className="mt-3 inline-block text-[0.9375rem] font-medium text-green hover:text-green-hover"
+            >
+              View applications
+            </Link>
+          </div>
         ) : (
           <ul className="divide-y divide-line">
             {rows.map((doc) => (
