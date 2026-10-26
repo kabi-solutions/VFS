@@ -204,7 +204,6 @@ export function ApplyWizard({
   const [loanType, setLoanType] = useState<LoanType>(() =>
     isLoanType(prefill?.loanType) ? prefill.loanType : "rehab_fix_flip",
   );
-  const [loanTypeAutoNote, setLoanTypeAutoNote] = useState<string | null>(null);
   const [pendingDocs, setPendingDocs] = useState<PendingDoc[]>([]);
   const [dragOver, setDragOver] = useState(false);
   const [defaultDocType, setDefaultDocType] = useState("other");
