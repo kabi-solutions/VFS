@@ -244,13 +244,6 @@ export function HomePage() {
         </div>
       </section>
 
-      {/* Qualification */}
-      <section className="bg-white">
-        <div className="mx-auto max-w-[880px] px-6 py-[var(--spacing-section)] lg:px-8">
-          <QualificationBox />
-        </div>
-      </section>
-
       {/* Solutions intro */}
       <section className="bg-paper pt-16 lg:pt-20">
         <div className="mx-auto max-w-[40rem] px-6 text-center lg:px-8">
@@ -357,8 +350,11 @@ export function HomePage() {
         </div>
       </section>
 
+      {/* Fit criteria — sits above capital deployment */}
+      <QualificationBox />
+
       {/* Capital partners deeper */}
-      <section className="bg-paper">
+      <section className="bg-white">
         <div className="mx-auto grid max-w-[1080px] items-center gap-10 px-6 py-[var(--spacing-section)] lg:grid-cols-2 lg:px-8">
           <BrandImage
             src={images.plans.src}
