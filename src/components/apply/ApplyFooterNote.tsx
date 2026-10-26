@@ -2,7 +2,7 @@
 
 /**
  * Production-safe disclosure under Apply.
- * Dev/mock banner is gated so placeholder "mock environment" copy never ships in production UI.
+ * Dev banner is gated so mock-only copy never ships in production UI.
  */
 export function ApplyFooterNote() {
   const showMock = process.env.NODE_ENV !== "production";
@@ -13,7 +13,7 @@ export function ApplyFooterNote() {
       No rates or approvals are quoted on this form.
       {showMock ? (
         <span className="mt-2 block text-[0.8125rem] text-steel/80">
-          {/* Dev-only: Submitting creates an application record and portal access in this mock environment. */}
+          {/* Dev-only note — not shown in production builds */}
           Dev preview — submissions persist in this browser.
         </span>
       ) : null}
