@@ -38,12 +38,16 @@ export async function createApplicationServer(
   const password =
     input.password?.trim() || `Vfs-${crypto.randomUUID().replace(/-/g, "").slice(0, 16)}!`;
 
-  let authUserId: string | null = null;
+  // public.users may already exist (prior Apply) or be created by the
+  // on_auth_user_created trigger when we call auth.admin.createUser — never
+  // double-insert against users_auth_user_id_key.
   const { data: existingProfile } = await admin.from("users").select("*").eq("email", email).maybeSingle();
 
-  if (existingProfile?.auth_user_id) {
-    authUserId = String(existingProfile.auth_user_id);
-  } else {
+  let authUserId: string | null = existingProfile?.auth_user_id
+    ? String(existingProfile.auth_user_id)
+    : null;
+
+  if (!authUserId) {
     const { data: created, error: createAuthError } = await admin.auth.admin.createUser({
       email,
       password,
@@ -55,22 +59,32 @@ export async function createApplicationServer(
       if (!(msg.includes("already") || msg.includes("registered") || msg.includes("exists"))) {
         throw new Error(createAuthError.message || "Failed to create auth user");
       }
+      const { data: listed } = await admin.auth.admin.listUsers({ page: 1, perPage: 200 });
+      const match = listed?.users?.find((u) => u.email?.toLowerCase() === email);
+      if (match) authUserId = match.id;
     } else if (created.user) {
       authUserId = created.user.id;
     }
   }
 
+  // Re-read after createUser — the auth trigger usually inserted the profile.
+  let { data: profile } = await admin.from("users").select("*").eq("email", email).maybeSingle();
+  if (!profile && authUserId) {
+    const byAuth = await admin.from("users").select("*").eq("auth_user_id", authUserId).maybeSingle();
+    profile = byAuth.data;
+  }
+
   let profileRow: Record<string, unknown>;
-  if (existingProfile) {
+  if (profile) {
     const { data: updated, error } = await admin
       .from("users")
       .update({
         full_name: fullName,
         phone,
-        auth_user_id: authUserId ?? existingProfile.auth_user_id,
+        auth_user_id: authUserId ?? profile.auth_user_id,
         updated_at: now,
       })
-      .eq("id", existingProfile.id)
+      .eq("id", profile.id)
       .select("*")
       .single();
     if (error || !updated) throw new Error(error?.message || "Failed to update user");
