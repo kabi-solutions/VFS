@@ -1,17 +1,47 @@
 "use client";
 
-import type { BorrowerParty } from "@/lib/apply/package";
+import type { ReactNode } from "react";
+import { FieldRequirementChip } from "@/components/apply/FieldRequirementChip";
 import { errorClass, fieldClass, labelClass } from "@/components/apply/fieldStyles";
+import type { BorrowerParty } from "@/lib/apply/package";
 
 type Props = {
   idPrefix: string;
   party: BorrowerParty;
   onChange: (next: BorrowerParty) => void;
+  /** Phase 1 contact: first/last/email/phone only. */
+  contactOnly?: boolean;
   hardRequired?: boolean;
   errors?: Partial<Record<"first_name" | "last_name" | "email" | "cell_phone", string>>;
+  onBlurValidate?: () => void;
 };
 
-export function PartyFields({ idPrefix, party, onChange, hardRequired, errors }: Props) {
+function Label({
+  htmlFor,
+  children,
+  chip,
+}: {
+  htmlFor: string;
+  children: ReactNode;
+  chip?: "required" | "helps";
+}) {
+  return (
+    <label htmlFor={htmlFor} className={labelClass}>
+      {children}
+      {chip ? <FieldRequirementChip kind={chip} /> : null}
+    </label>
+  );
+}
+
+export function PartyFields({
+  idPrefix,
+  party,
+  onChange,
+  contactOnly,
+  hardRequired,
+  errors,
+  onBlurValidate,
+}: Props) {
   function set<K extends keyof BorrowerParty>(key: K, value: BorrowerParty[K]) {
     onChange({ ...party, [key]: value });
   }
@@ -23,52 +53,97 @@ export function PartyFields({ idPrefix, party, onChange, hardRequired, errors }:
     onChange({ ...party, employment: { ...party.employment, [key]: value } });
   }
 
-  const soft = hardRequired ? "" : " (optional for submit)";
+  const reqChip = hardRequired ? ("required" as const) : ("helps" as const);
+  const softChip = "helps" as const;
 
-  return (
-    <div className="grid gap-6 sm:grid-cols-2">
+  const contactBlock = (
+    <>
       <div>
-        <label htmlFor={`${idPrefix}-first`} className={labelClass}>
-          First name{hardRequired ? "" : soft}
-        </label>
+        <Label htmlFor={`${idPrefix}-first`} chip={reqChip}>
+          First name
+        </Label>
         <input
           id={`${idPrefix}-first`}
           className={fieldClass}
           value={party.first_name}
           onChange={(e) => set("first_name", e.target.value)}
+          onBlur={onBlurValidate}
           autoComplete="given-name"
         />
         {errors?.first_name ? <p className={errorClass}>{errors.first_name}</p> : null}
       </div>
+      {!contactOnly ? (
+        <div>
+          <Label htmlFor={`${idPrefix}-middle`} chip={softChip}>
+            Middle name
+          </Label>
+          <input
+            id={`${idPrefix}-middle`}
+            className={fieldClass}
+            value={party.middle_name}
+            onChange={(e) => set("middle_name", e.target.value)}
+            autoComplete="additional-name"
+          />
+        </div>
+      ) : null}
       <div>
-        <label htmlFor={`${idPrefix}-middle`} className={labelClass}>
-          Middle name <span className="font-normal text-steel">(optional)</span>
-        </label>
-        <input
-          id={`${idPrefix}-middle`}
-          className={fieldClass}
-          value={party.middle_name}
-          onChange={(e) => set("middle_name", e.target.value)}
-          autoComplete="additional-name"
-        />
-      </div>
-      <div>
-        <label htmlFor={`${idPrefix}-last`} className={labelClass}>
-          Last name{hardRequired ? "" : soft}
-        </label>
+        <Label htmlFor={`${idPrefix}-last`} chip={reqChip}>
+          Last name
+        </Label>
         <input
           id={`${idPrefix}-last`}
           className={fieldClass}
           value={party.last_name}
           onChange={(e) => set("last_name", e.target.value)}
+          onBlur={onBlurValidate}
           autoComplete="family-name"
         />
         {errors?.last_name ? <p className={errorClass}>{errors.last_name}</p> : null}
       </div>
       <div>
-        <label htmlFor={`${idPrefix}-marital`} className={labelClass}>
-          Marital status{soft}
-        </label>
+        <Label htmlFor={`${idPrefix}-email`} chip={reqChip}>
+          Email
+        </Label>
+        <input
+          id={`${idPrefix}-email`}
+          type="email"
+          className={fieldClass}
+          value={party.email}
+          onChange={(e) => set("email", e.target.value)}
+          onBlur={onBlurValidate}
+          autoComplete="email"
+        />
+        {errors?.email ? <p className={errorClass}>{errors.email}</p> : null}
+      </div>
+      <div>
+        <Label htmlFor={`${idPrefix}-phone`} chip={reqChip}>
+          Cell phone
+        </Label>
+        <input
+          id={`${idPrefix}-phone`}
+          type="tel"
+          className={fieldClass}
+          value={party.cell_phone}
+          onChange={(e) => set("cell_phone", e.target.value)}
+          onBlur={onBlurValidate}
+          autoComplete="tel"
+        />
+        {errors?.cell_phone ? <p className={errorClass}>{errors.cell_phone}</p> : null}
+      </div>
+    </>
+  );
+
+  if (contactOnly) {
+    return <div className="grid gap-6 sm:grid-cols-2">{contactBlock}</div>;
+  }
+
+  return (
+    <div className="grid gap-6 sm:grid-cols-2">
+      {contactBlock}
+      <div>
+        <Label htmlFor={`${idPrefix}-marital`} chip={softChip}>
+          Marital status
+        </Label>
         <select
           id={`${idPrefix}-marital`}
           className={fieldClass}
@@ -82,37 +157,9 @@ export function PartyFields({ idPrefix, party, onChange, hardRequired, errors }:
         </select>
       </div>
       <div>
-        <label htmlFor={`${idPrefix}-email`} className={labelClass}>
-          Email{hardRequired ? "" : soft}
-        </label>
-        <input
-          id={`${idPrefix}-email`}
-          type="email"
-          className={fieldClass}
-          value={party.email}
-          onChange={(e) => set("email", e.target.value)}
-          autoComplete="email"
-        />
-        {errors?.email ? <p className={errorClass}>{errors.email}</p> : null}
-      </div>
-      <div>
-        <label htmlFor={`${idPrefix}-phone`} className={labelClass}>
-          Cell phone{hardRequired ? "" : soft}
-        </label>
-        <input
-          id={`${idPrefix}-phone`}
-          type="tel"
-          className={fieldClass}
-          value={party.cell_phone}
-          onChange={(e) => set("cell_phone", e.target.value)}
-          autoComplete="tel"
-        />
-        {errors?.cell_phone ? <p className={errorClass}>{errors.cell_phone}</p> : null}
-      </div>
-      <div>
-        <label htmlFor={`${idPrefix}-secondary-phone`} className={labelClass}>
-          Secondary phone{soft}
-        </label>
+        <Label htmlFor={`${idPrefix}-secondary-phone`} chip={softChip}>
+          Secondary phone
+        </Label>
         <input
           id={`${idPrefix}-secondary-phone`}
           type="tel"
@@ -122,9 +169,9 @@ export function PartyFields({ idPrefix, party, onChange, hardRequired, errors }:
         />
       </div>
       <div className="sm:col-span-2">
-        <label htmlFor={`${idPrefix}-primary`} className={labelClass}>
-          Primary residence address{soft}
-        </label>
+        <Label htmlFor={`${idPrefix}-primary`} chip={softChip}>
+          Primary residence address
+        </Label>
         <input
           id={`${idPrefix}-primary`}
           className={fieldClass}
@@ -133,13 +180,19 @@ export function PartyFields({ idPrefix, party, onChange, hardRequired, errors }:
         />
       </div>
       <div>
-        <label htmlFor={`${idPrefix}-owns`} className={labelClass}>
-          Owns primary residence?{soft}
-        </label>
+        <Label htmlFor={`${idPrefix}-owns`} chip={softChip}>
+          Owns primary residence?
+        </Label>
         <select
           id={`${idPrefix}-owns`}
           className={fieldClass}
-          value={party.owns_primary_residence === null ? "" : party.owns_primary_residence ? "yes" : "no"}
+          value={
+            party.owns_primary_residence === null
+              ? ""
+              : party.owns_primary_residence
+                ? "yes"
+                : "no"
+          }
           onChange={(e) =>
             set(
               "owns_primary_residence",
@@ -153,9 +206,9 @@ export function PartyFields({ idPrefix, party, onChange, hardRequired, errors }:
         </select>
       </div>
       <div>
-        <label htmlFor={`${idPrefix}-years`} className={labelClass}>
-          Years at primary residence{soft}
-        </label>
+        <Label htmlFor={`${idPrefix}-years`} chip={softChip}>
+          Years at primary residence
+        </Label>
         <input
           id={`${idPrefix}-years`}
           className={fieldClass}
@@ -167,7 +220,7 @@ export function PartyFields({ idPrefix, party, onChange, hardRequired, errors }:
         <label className="flex items-start gap-3 text-[0.9375rem] text-charcoal">
           <input
             type="checkbox"
-            className="mt-1"
+            className="mt-1 min-h-[1.25rem] min-w-[1.25rem]"
             checked={party.mailing_same_as_primary}
             onChange={(e) => set("mailing_same_as_primary", e.target.checked)}
           />
@@ -176,9 +229,9 @@ export function PartyFields({ idPrefix, party, onChange, hardRequired, errors }:
       </div>
       {!party.mailing_same_as_primary ? (
         <div className="sm:col-span-2">
-          <label htmlFor={`${idPrefix}-mailing`} className={labelClass}>
-            Mailing address{soft}
-          </label>
+          <Label htmlFor={`${idPrefix}-mailing`} chip={softChip}>
+            Mailing address
+          </Label>
           <input
             id={`${idPrefix}-mailing`}
             className={fieldClass}
@@ -188,9 +241,9 @@ export function PartyFields({ idPrefix, party, onChange, hardRequired, errors }:
         </div>
       ) : null}
       <div>
-        <label htmlFor={`${idPrefix}-credit`} className={labelClass}>
-          Estimated credit score{soft}
-        </label>
+        <Label htmlFor={`${idPrefix}-credit`} chip={softChip}>
+          Estimated credit score
+        </Label>
         <input
           id={`${idPrefix}-credit`}
           className={fieldClass}
@@ -199,9 +252,9 @@ export function PartyFields({ idPrefix, party, onChange, hardRequired, errors }:
         />
       </div>
       <div>
-        <label htmlFor={`${idPrefix}-income`} className={labelClass}>
-          Estimated annual income{soft}
-        </label>
+        <Label htmlFor={`${idPrefix}-income`} chip={softChip}>
+          Estimated annual income
+        </Label>
         <input
           id={`${idPrefix}-income`}
           className={fieldClass}
@@ -210,9 +263,9 @@ export function PartyFields({ idPrefix, party, onChange, hardRequired, errors }:
         />
       </div>
       <div>
-        <label htmlFor={`${idPrefix}-assets`} className={labelClass}>
-          Estimated liquid assets{soft}
-        </label>
+        <Label htmlFor={`${idPrefix}-assets`} chip={softChip}>
+          Estimated liquid assets
+        </Label>
         <input
           id={`${idPrefix}-assets`}
           className={fieldClass}
@@ -221,9 +274,9 @@ export function PartyFields({ idPrefix, party, onChange, hardRequired, errors }:
         />
       </div>
       <div>
-        <label htmlFor={`${idPrefix}-self`} className={labelClass}>
-          Self-employed?{soft}
-        </label>
+        <Label htmlFor={`${idPrefix}-self`} chip={softChip}>
+          Self-employed?
+        </Label>
         <select
           id={`${idPrefix}-self`}
           className={fieldClass}
@@ -244,9 +297,9 @@ export function PartyFields({ idPrefix, party, onChange, hardRequired, errors }:
         </select>
       </div>
       <div>
-        <label htmlFor={`${idPrefix}-employer`} className={labelClass}>
-          Employer name{soft}
-        </label>
+        <Label htmlFor={`${idPrefix}-employer`} chip={softChip}>
+          Employer name
+        </Label>
         <input
           id={`${idPrefix}-employer`}
           className={fieldClass}
@@ -255,9 +308,9 @@ export function PartyFields({ idPrefix, party, onChange, hardRequired, errors }:
         />
       </div>
       <div>
-        <label htmlFor={`${idPrefix}-title`} className={labelClass}>
-          Position / title{soft}
-        </label>
+        <Label htmlFor={`${idPrefix}-title`} chip={softChip}>
+          Position / title
+        </Label>
         <input
           id={`${idPrefix}-title`}
           className={fieldClass}
@@ -266,9 +319,9 @@ export function PartyFields({ idPrefix, party, onChange, hardRequired, errors }:
         />
       </div>
       <div>
-        <label htmlFor={`${idPrefix}-emp-phone`} className={labelClass}>
-          Employer phone{soft}
-        </label>
+        <Label htmlFor={`${idPrefix}-emp-phone`} chip={softChip}>
+          Employer phone
+        </Label>
         <input
           id={`${idPrefix}-emp-phone`}
           className={fieldClass}
@@ -277,9 +330,9 @@ export function PartyFields({ idPrefix, party, onChange, hardRequired, errors }:
         />
       </div>
       <div className="sm:col-span-2">
-        <label htmlFor={`${idPrefix}-emp-addr`} className={labelClass}>
-          Employer address{soft}
-        </label>
+        <Label htmlFor={`${idPrefix}-emp-addr`} chip={softChip}>
+          Employer address
+        </Label>
         <input
           id={`${idPrefix}-emp-addr`}
           className={fieldClass}

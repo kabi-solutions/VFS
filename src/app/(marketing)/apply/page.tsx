@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { ApplyWizard } from "@/components/apply/ApplyWizard";
+import { ApplyFooterNote } from "@/components/apply/ApplyFooterNote";
 import { PageHero, Section } from "@/components/marketing/page";
 import { images } from "@/lib/marketing/images";
 
@@ -25,19 +26,15 @@ export default async function ApplyPage({
       <PageHero
         eyebrow="Apply"
         title="Start your file."
-        description="Submit once with the hard essentials, then soft-collect the full package — property, strategy, track record, SREO, contractor, and documents. Missing items stay visible for follow-up. Terms are evaluated deal by deal."
+        description="Submit your deal in about two minutes, then finish your package in the portal. We show what is still missing — terms are evaluated deal by deal."
         image={images.plans}
       />
 
       <Section tone="paper">
-        <div className="mx-auto max-w-[720px]">
+        <div className="mx-auto w-full max-w-[880px]">
           <ApplyWizard priorApplicationId={priorApplicationId} />
         </div>
-        <p className="mx-auto mt-8 max-w-[36rem] text-center text-[0.875rem] text-steel">
-          {/* PLACEHOLDER — compliance disclosure / E-SIGN when live */}
-          Submitting creates an application record and portal access in this mock environment. No
-          rates or approvals are quoted on this form.
-        </p>
+        <ApplyFooterNote />
       </Section>
     </>
   );
