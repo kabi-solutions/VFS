@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState, type DragEvent } from "react";
+import { useEffect, useMemo, useState, type DragEvent } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
 import { ContactFields } from "@/components/apply/ContactFields";
@@ -21,13 +21,16 @@ import {
   BUSINESS_PURPOSE_ATTESTATION,
   CREDIT_AUTHORIZATION_ATTESTATION,
   ECOA_APPRAISAL_ATTESTATION,
+  applyGroundUpLoanRequestFlags,
   displayName,
   emptyApplicationPackage,
   emptyBorrowerParty,
   emptyConstructionBudget,
   emptyContractor,
   getPackageCompleteness,
+  groundUpForceReason,
   needsConstructionBudgetPackage,
+  resolveForcedGroundUpLoanType,
   type ApplicationPackage,
   type LoanRequestInfo,
   type StrategyInfo,
@@ -90,7 +93,7 @@ type HardErrors = Partial<
     | "loan_type"
     | "loan_amount"
     | "business_purpose"
-    | "expand_50",
+    | "ground_up_force",
     string
   >
 >;
@@ -111,21 +114,11 @@ function isEmail(value: string): boolean {
   return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value.trim());
 }
 
-function applyGroundUpFromExpansion(pkg: ApplicationPackage): ApplicationPackage {
-  if (pkg.strategy.expands_structure_50_percent !== true) return pkg;
-  return {
-    ...pkg,
-    loan_request: {
-      ...pkg.loan_request,
-      requesting_ground_up: true,
-    },
-  };
-}
-
 export function ApplyWizard({ priorApplicationId }: { priorApplicationId?: string }) {
   const [step, setStep] = useState<StepId>(1);
   const [pkg, setPkg] = useState<ApplicationPackage>(() => emptyApplicationPackage());
   const [loanType, setLoanType] = useState<LoanType>("rehab_fix_flip");
+  const [loanTypeAutoNote, setLoanTypeAutoNote] = useState<string | null>(null);
   const [pendingDocs, setPendingDocs] = useState<PendingDoc[]>([]);
   const [dragOver, setDragOver] = useState(false);
   const [defaultDocType, setDefaultDocType] = useState<string>("other");
@@ -160,8 +153,18 @@ export function ApplyWizard({ priorApplicationId }: { priorApplicationId?: strin
     [showBudget, showContractor],
   );
 
+  useEffect(() => {
+    const forced = resolveForcedGroundUpLoanType(loanType, pkg);
+    if (!forced) {
+      setLoanTypeAutoNote(null);
+      return;
+    }
+    setLoanTypeAutoNote(groundUpForceReason(pkg));
+    if (forced !== loanType) setLoanType(forced);
+  }, [pkg, loanType]);
+
   function patchPkg(updater: (prev: ApplicationPackage) => ApplicationPackage) {
-    setPkg((prev) => applyGroundUpFromExpansion(updater(prev)));
+    setPkg((prev) => applyGroundUpLoanRequestFlags(updater(prev)));
   }
 
   function patchSubject(patch: Partial<SubjectPropertyInfo>) {
@@ -186,24 +189,11 @@ export function ApplyWizard({ priorApplicationId }: { priorApplicationId?: strin
   }
 
   function patchStrategy(patch: Partial<StrategyInfo>) {
-    if (patch.expands_structure_50_percent === true) {
-      setLoanType((prev) =>
-        prev === "new_construction" || prev === "ground_up" ? prev : "ground_up",
-      );
-    }
-    patchPkg((prev) => {
-      const nextStrategy = { ...prev.strategy, ...patch };
-      const nextLoanRequest =
-        patch.expands_structure_50_percent === true
-          ? { ...prev.loan_request, requesting_ground_up: true }
-          : prev.loan_request;
-      return {
-        ...prev,
-        strategy: nextStrategy,
-        loan_request: nextLoanRequest,
-        contractor: prev.contractor ?? emptyContractor(),
-      };
-    });
+    patchPkg((prev) => ({
+      ...prev,
+      strategy: { ...prev.strategy, ...patch },
+      contractor: prev.contractor ?? emptyContractor(),
+    }));
   }
 
   function validateHard(forStep: StepId): HardErrors {
@@ -230,13 +220,11 @@ export function ApplyWizard({ priorApplicationId }: { priorApplicationId?: strin
       if (!loanType) next.loan_type = "Select a loan type.";
       const amount = parseMoney(pkg.loan_request.loan_amount);
       if (amount == null || amount <= 0) next.loan_amount = "Enter a valid loan amount.";
-      if (
-        pkg.strategy.expands_structure_50_percent === true &&
-        loanType !== "ground_up" &&
-        loanType !== "new_construction"
-      ) {
-        next.expand_50 =
-          "50%+ structure expansion is treated as ground up — select Ground-Up Construction or New Construction.";
+      const forced = resolveForcedGroundUpLoanType(loanType, pkg);
+      if (forced && loanType !== "ground_up" && loanType !== "new_construction") {
+        next.ground_up_force =
+          groundUpForceReason(pkg) ??
+          "Select Ground-Up Construction or New Construction for this scope.";
       }
     }
     return next;
@@ -301,7 +289,7 @@ export function ApplyWizard({ priorApplicationId }: { priorApplicationId?: strin
     setSubmitting(true);
     try {
       const validDocs = pendingDocs.filter((d) => !d.error);
-      const finalPkg: ApplicationPackage = applyGroundUpFromExpansion({
+      const finalPkg: ApplicationPackage = applyGroundUpLoanRequestFlags({
         ...pkg,
         construction_budget: showBudget
           ? pkg.construction_budget ?? emptyConstructionBudget()
@@ -309,6 +297,8 @@ export function ApplyWizard({ priorApplicationId }: { priorApplicationId?: strin
         contractor: showContractor ? pkg.contractor ?? emptyContractor() : null,
         co_borrower: pkg.has_co_borrower ? pkg.co_borrower ?? emptyBorrowerParty() : null,
       });
+      const finalLoanType =
+        resolveForcedGroundUpLoanType(loanType, finalPkg) ?? loanType;
       const fullName = displayName(finalPkg.borrower);
       const purchase = parseMoney(finalPkg.loan_request.purchase_price);
       const arv =
@@ -328,7 +318,7 @@ export function ApplyWizard({ priorApplicationId }: { priorApplicationId?: strin
           finalPkg.vesting.vesting_in === "entity"
             ? finalPkg.vesting.entity_name || undefined
             : undefined,
-        loan_type: loanType,
+        loan_type: finalLoanType,
         loan_amount: parseMoney(finalPkg.loan_request.loan_amount) ?? 0,
         purchase_price: purchase,
         estimated_arv: arv,
@@ -763,10 +753,17 @@ export function ApplyWizard({ priorApplicationId }: { priorApplicationId?: strin
                     ))}
                   </select>
                   {errors.loan_type ? <p className={errorClass}>{errors.loan_type}</p> : null}
-                  {errors.expand_50 ? <p className={errorClass}>{errors.expand_50}</p> : null}
-                  <p className={hintClass}>
-                    New Construction is separate from Ground-Up Construction.
-                  </p>
+                  {errors.ground_up_force ? (
+                    <p className={errorClass}>{errors.ground_up_force}</p>
+                  ) : null}
+                  {loanTypeAutoNote ? (
+                    <p className={`${hintClass} text-green`}>{loanTypeAutoNote}</p>
+                  ) : (
+                    <p className={hintClass}>
+                      New Construction is separate from Ground-Up Construction. Level 5 /
+                      ground-up scope auto-switches loan type when needed.
+                    </p>
+                  )}
                 </div>
                 <div>
                   <label className={labelClass}>Transaction type</label>
@@ -1182,8 +1179,8 @@ export function ApplyWizard({ priorApplicationId }: { priorApplicationId?: strin
                     </select>
                     {pkg.strategy.expands_structure_50_percent ? (
                       <p className={`${hintClass} text-green`}>
-                        50%+ expansion is treated as ground up. Loan type may be updated to
-                        Ground-Up Construction.
+                        50%+ expansion is treated as ground up. Loan type auto-switches to
+                        Ground-Up Construction (New Construction kept if already selected).
                       </p>
                     ) : null}
                   </div>

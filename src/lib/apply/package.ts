@@ -55,6 +55,8 @@ export type BorrowerParty = {
   secondary_phone: string;
   email: string;
   employment: EmploymentInfo;
+  // TODO(apply-later): collect borrower/co-borrower SSN + DOB in Apply when
+  // compliance-ready; not collected in the public Apply UI yet.
 };
 
 /** Loan Submission Package declarations / questionnaire. */
@@ -969,6 +971,72 @@ export function getPackageCompleteness(
   const percent = Math.round((completeCount / totalCount) * 100);
 
   return { missing, completeCount, totalCount, percent };
+}
+
+/**
+ * Ground-up-class loan type forcing.
+ *
+ * Triggers (any):
+ * - Owner-Builder Level 5 on F-008 (`planned_project_levels` includes "5")
+ * - Construction Budget Level 5 (`construction_level === "5"`)
+ * - 50%+ structure expansion (`expands_structure_50_percent`)
+ * - Explicit ground-up request (`requesting_ground_up`)
+ *
+ * Product mapping: if already on `new_construction` (true new-build product
+ * language), keep it; otherwise force `ground_up`. Returns null when no
+ * trigger applies.
+ */
+export function resolveForcedGroundUpLoanType(
+  current: LoanType,
+  pkg: Pick<
+    ApplicationPackage,
+    "strategy" | "loan_request" | "construction_budget" | "contractor"
+  >,
+): LoanType | null {
+  const level5 =
+    pkg.construction_budget?.construction_level === "5" ||
+    (pkg.contractor?.planned_project_levels.includes("5") ?? false);
+  const expandOrGu =
+    pkg.strategy.expands_structure_50_percent === true ||
+    pkg.loan_request.requesting_ground_up === true;
+  if (!level5 && !expandOrGu) return null;
+  if (current === "new_construction" || current === "ground_up") return current;
+  return "ground_up";
+}
+
+/** Sync `requesting_ground_up` when Level 5 or 50%+ expansion implies ground-up. */
+export function applyGroundUpLoanRequestFlags(pkg: ApplicationPackage): ApplicationPackage {
+  const level5 =
+    pkg.construction_budget?.construction_level === "5" ||
+    (pkg.contractor?.planned_project_levels.includes("5") ?? false);
+  const expand = pkg.strategy.expands_structure_50_percent === true;
+  if (!level5 && !expand) return pkg;
+  if (pkg.loan_request.requesting_ground_up === true) return pkg;
+  return {
+    ...pkg,
+    loan_request: { ...pkg.loan_request, requesting_ground_up: true },
+  };
+}
+
+export function groundUpForceReason(
+  pkg: Pick<
+    ApplicationPackage,
+    "strategy" | "loan_request" | "construction_budget" | "contractor"
+  >,
+): string | null {
+  if (pkg.contractor?.planned_project_levels.includes("5")) {
+    return "Owner-Builder Level 5 (ground-up) requires Ground-Up Construction or New Construction.";
+  }
+  if (pkg.construction_budget?.construction_level === "5") {
+    return "Construction Budget Level 5 (ground-up) requires Ground-Up Construction or New Construction.";
+  }
+  if (pkg.strategy.expands_structure_50_percent === true) {
+    return "50%+ structure expansion is treated as ground up — loan type set to Ground-Up Construction (or keep New Construction).";
+  }
+  if (pkg.loan_request.requesting_ground_up === true) {
+    return "Ground-up financing selected — loan type set to Ground-Up Construction (or keep New Construction).";
+  }
+  return null;
 }
 
 export function needsContractorPackage(

@@ -96,6 +96,12 @@ export function ContractorFields({ contractor, onChange }: Props) {
                 </label>
               ))}
             </div>
+            {contractor.planned_project_levels.includes("5") ? (
+              <p className={`${hintClass} text-green`}>
+                Level 5 is ground-up construction. Loan type auto-switches to Ground-Up
+                Construction (New Construction kept if already selected).
+              </p>
+            ) : null}
           </div>
         </div>
       ) : null}

@@ -108,6 +108,12 @@ export function ConstructionBudgetEditor({ budget, onChange }: Props) {
               </option>
             ))}
           </select>
+          {budget.construction_level === "5" ? (
+            <p className={`${hintClass} text-green`}>
+              Level 5 is ground-up construction. Loan type auto-switches to Ground-Up
+              Construction (New Construction kept if already selected).
+            </p>
+          ) : null}
         </div>
         <div>
           <label className={labelClass}>Finish level</label>
