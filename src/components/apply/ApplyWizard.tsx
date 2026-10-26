@@ -38,7 +38,7 @@ import {
   type VestingInfo,
 } from "@/lib/apply/package";
 import { starterStates } from "@/lib/marketing/states";
-import { createApplication, type MockDocumentInput } from "@/lib/mock/applications";
+import { createApplication, type MockDocumentInput } from "@/lib/data/applications";
 import { docTypeLabels, loanTypeLabels } from "@/lib/mock/status-labels";
 import type { LoanType } from "@/lib/types/database";
 
@@ -124,6 +124,8 @@ export function ApplyWizard({ priorApplicationId }: { priorApplicationId?: strin
   const [defaultDocType, setDefaultDocType] = useState<string>("other");
   const [errors, setErrors] = useState<HardErrors>({});
   const [submitting, setSubmitting] = useState(false);
+  const [portalPassword, setPortalPassword] = useState("");
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const [result, setResult] = useState<{
     referenceCode: string;
     applicationId: string;
@@ -268,7 +270,7 @@ export function ApplyWizard({ priorApplicationId }: { priorApplicationId?: strin
     if (e.dataTransfer.files?.length) addFiles(e.dataTransfer.files);
   }
 
-  function submit() {
+  async function submit() {
     const hard = {
       ...validateHard(1),
       ...validateHard(2),
@@ -305,7 +307,8 @@ export function ApplyWizard({ priorApplicationId }: { priorApplicationId?: strin
         parseMoney(finalPkg.loan_request.estimated_arv) ??
         parseMoney(finalPkg.strategy.estimated_arv);
 
-      const { application, user } = createApplication({
+      setSubmitError(null);
+      const { application, user, sessionEstablished } = await createApplication({
         property_address: finalPkg.subject_property.address,
         property_city: finalPkg.subject_property.city || "—",
         property_state: finalPkg.subject_property.state || "NV",
@@ -332,6 +335,8 @@ export function ApplyWizard({ priorApplicationId }: { priorApplicationId?: strin
           mime_type,
         })),
         package: finalPkg,
+        password: portalPassword.trim() || undefined,
+        establishSession: Boolean(portalPassword.trim()),
       });
 
       const completeness = getPackageCompleteness(
@@ -347,6 +352,8 @@ export function ApplyWizard({ priorApplicationId }: { priorApplicationId?: strin
         missingLabels: completeness.missing.map((m) => m.label),
         packageComplete: application.package_complete,
       });
+    } catch (err) {
+      setSubmitError(err instanceof Error ? err.message : "Submission failed");
     } finally {
       setSubmitting(false);
     }
@@ -400,7 +407,7 @@ export function ApplyWizard({ priorApplicationId }: { priorApplicationId?: strin
           </Button>
         </div>
         <p className="mt-6 text-[0.875rem] text-steel">
-          Mock layer only — submissions persist in this browser via localStorage.
+          When Supabase env is set, this file is stored in Postgres. Otherwise local demo storage is used.
         </p>
       </div>
     );

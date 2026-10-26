@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { mapUser } from "@/lib/data/mappers";
-import { getServerAppSession } from "@/lib/data/session";
+import { getServerAppSession } from "@/lib/data/session-server";
 import { createClient } from "@/lib/supabase/server";
 import { isSupabaseConfigured } from "@/lib/supabase/env";
 import type { UserRole } from "@/lib/types/database";

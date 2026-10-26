@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { getPackageCompleteness, type ApplicationPackage } from "@/lib/apply/package";
 import { mapApplication } from "@/lib/data/mappers";
-import { getServerAppSession } from "@/lib/data/session";
+import { getServerAppSession } from "@/lib/data/session-server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import { createClient } from "@/lib/supabase/server";
 import { hasServiceRole, isSupabaseConfigured } from "@/lib/supabase/env";
