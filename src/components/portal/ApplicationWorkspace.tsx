@@ -39,6 +39,7 @@ import {
   loanTypeLabels,
 } from "@/lib/mock/status-labels";
 import { PackageCompletenessPanel } from "@/components/portal/PackageCompletenessPanel";
+import { PackageContinuationForm } from "@/components/portal/PackageContinuationForm";
 import type {
   ApplicationStatus,
   Condition,
@@ -217,7 +218,18 @@ export function ApplicationWorkspace({ role }: { role: WorkspaceRole }) {
 
       <PackageCompletenessPanel app={app} docTypes={docs.map((d) => d.doc_type)} />
 
-      <section className="mt-10 rounded-2xl bg-white p-5 ring-1 ring-black/[0.04] sm:p-6">
+      {role === "borrower" ? (
+        <PackageContinuationForm
+          app={app}
+          docTypes={docs.map((d) => d.doc_type)}
+          onSaved={(next) => {
+            setApp(next);
+            setMessage("Package updated.");
+          }}
+        />
+      ) : null}
+
+      <section className="mt-10 rounded-[var(--radius-panel)] bg-white p-5 shadow-[var(--shadow-card)] ring-1 ring-[var(--card-ring)] sm:p-6">
         <h2 className="text-[1.125rem] font-semibold tracking-[-0.02em] text-ink">Actions</h2>
         <div className="mt-4 flex flex-wrap gap-3">
           {role === "vault" ? (
