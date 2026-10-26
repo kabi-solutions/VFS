@@ -16,7 +16,10 @@ export function getSupabaseAnonKey(): string | undefined {
 }
 
 export function getSupabaseServiceRoleKey(): string | undefined {
-  const key = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
+  // Prefer the canonical name; also accept SUPABASE_SERVICE_KEY (common Vercel typo).
+  const key =
+    process.env.SUPABASE_SERVICE_ROLE_KEY?.trim() ||
+    process.env.SUPABASE_SERVICE_KEY?.trim();
   return key || undefined;
 }
 
