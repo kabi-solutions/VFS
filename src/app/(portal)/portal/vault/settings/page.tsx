@@ -2,36 +2,34 @@
 
 import { useEffect, useState } from "react";
 import { PortalPlaceholderPage } from "@/components/portal/PortalPlaceholderPage";
-import { getSession } from "@/lib/mock/data";
+import { getAppSession } from "@/lib/data/session";
 
 export default function VaultSettingsPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
 
   useEffect(() => {
-    const session = getSession();
-    setName(session.user.full_name);
-    setEmail(session.user.email);
+    void getAppSession().then((session) => {
+      if (!session) return;
+      setName(session.user.full_name);
+      setEmail(session.user.email);
+    });
   }, []);
 
   return (
     <PortalPlaceholderPage
       role="vault"
       title="Settings"
-      description="Profile from the current mock session."
+      description="Profile details from your signed-in account."
     >
-      <dl className="space-y-4 text-[0.9375rem]">
-        <div>
-          <dt className="text-[0.75rem] font-semibold uppercase tracking-[0.06em] text-steel">
-            Name
-          </dt>
-          <dd className="mt-1 font-medium text-ink">{name || "—"}</dd>
+      <dl className="mt-6 space-y-3 text-[0.9375rem]">
+        <div className="flex justify-between gap-4 border-b border-line pb-3">
+          <dt className="text-steel">Name</dt>
+          <dd className="font-medium text-ink">{name || "…"}</dd>
         </div>
-        <div>
-          <dt className="text-[0.75rem] font-semibold uppercase tracking-[0.06em] text-steel">
-            Email
-          </dt>
-          <dd className="mt-1 font-medium text-ink">{email || "—"}</dd>
+        <div className="flex justify-between gap-4 border-b border-line pb-3">
+          <dt className="text-steel">Email</dt>
+          <dd className="font-medium text-ink">{email || "…"}</dd>
         </div>
       </dl>
     </PortalPlaceholderPage>

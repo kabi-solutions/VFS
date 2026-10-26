@@ -2,7 +2,8 @@
 
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { getSession } from "@/lib/mock/data";
+import { getAppSession } from "@/lib/data/session";
+import { usesSupabaseData } from "@/lib/data/source";
 import { hydrateMockApplicationsFromStorage } from "@/lib/mock/applications";
 import { firstNavHref } from "@/lib/portal/nav";
 
@@ -10,9 +11,15 @@ export default function PortalHubPage() {
   const router = useRouter();
 
   useEffect(() => {
-    hydrateMockApplicationsFromStorage();
-    const session = getSession();
-    router.replace(firstNavHref(session.user.role));
+    void (async () => {
+      if (!usesSupabaseData()) hydrateMockApplicationsFromStorage();
+      const session = await getAppSession();
+      if (!session) {
+        router.replace("/login");
+        return;
+      }
+      router.replace(firstNavHref(session.user.role));
+    })();
   }, [router]);
 
   return (

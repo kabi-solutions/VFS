@@ -5,12 +5,13 @@ import {
   users as mockUsers,
 } from "@/lib/mock/data";
 import { hydrateMockApplicationsFromStorage } from "@/lib/mock/applications";
-import { isDemoRoleSwitcherEnabled, isSupabaseConfigured } from "@/lib/supabase/env";
+import { usesSupabaseData } from "@/lib/data/source";
+import { isDemoRoleSwitcherEnabled } from "@/lib/supabase/env";
 import { mapOrganization, mapUser } from "@/lib/data/mappers";
 import type { SessionUser, UserRole } from "@/lib/types/database";
 
 export async function getAppSession(): Promise<SessionUser | null> {
-  if (!isSupabaseConfigured()) {
+  if (!usesSupabaseData()) {
     hydrateMockApplicationsFromStorage();
     return getMockSession();
   }

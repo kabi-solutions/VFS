@@ -29,7 +29,7 @@ import {
   type VestingInfo,
 } from "@/lib/apply/package";
 import { starterStates } from "@/lib/marketing/states";
-import { docTypeLabels, loanTypeLabels } from "@/lib/mock/status-labels";
+import { docTypeLabels, loanTypeLabels } from "@/lib/labels/status-labels";
 import type { LoanType } from "@/lib/types/database";
 
 export type HardErrors = Partial<

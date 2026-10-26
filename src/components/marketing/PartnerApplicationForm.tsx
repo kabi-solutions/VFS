@@ -6,6 +6,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import Link from "next/link";
 import { Button } from "@/components/ui/Button";
+import { usesSupabaseData } from "@/lib/data/source";
 import { submitCapitalPartnerApplication } from "@/lib/mock/capital-partner-applications";
 
 const partnerApplicationSchema = z.object({
@@ -50,7 +51,23 @@ export function PartnerApplicationForm() {
     },
   });
 
-  const onSubmit = handleSubmit((values) => {
+  const onSubmit = handleSubmit(async (values) => {
+    if (usesSupabaseData()) {
+      const res = await fetch("/api/partners/apply", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(values),
+      });
+      const body = await res.json().catch(() => ({}));
+      if (!res.ok) throw new Error(body.error || "Submit failed");
+      const org = body.organization as { id: string; name: string; status: string };
+      setResult({
+        organizationId: org.id,
+        firmName: org.name,
+        status: "pending_review",
+      });
+      return;
+    }
     const { organization } = submitCapitalPartnerApplication({
       firmName: values.firmName,
       contactName: values.contactName,
@@ -59,7 +76,6 @@ export function PartnerApplicationForm() {
       deployableCapital: values.deployableCapital,
       notes: values.notes,
     });
-
     setResult({
       organizationId: organization.id,
       firmName: organization.name,

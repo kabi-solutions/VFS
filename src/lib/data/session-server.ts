@@ -1,11 +1,11 @@
 import { mapOrganization, mapUser } from "@/lib/data/mappers";
+import { usesSupabaseData } from "@/lib/data/source";
 import { getSession as getMockSession } from "@/lib/mock/data";
-import { isSupabaseConfigured } from "@/lib/supabase/env";
 import { createClient } from "@/lib/supabase/server";
 import type { SessionUser } from "@/lib/types/database";
 
 export async function getServerAppSession(): Promise<SessionUser | null> {
-  if (!isSupabaseConfigured()) return getMockSession();
+  if (!usesSupabaseData()) return getMockSession();
   try {
     const supabase = await createClient();
     const { data: { user: authUser } } = await supabase.auth.getUser();

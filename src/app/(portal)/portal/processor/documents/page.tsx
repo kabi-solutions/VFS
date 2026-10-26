@@ -3,8 +3,7 @@
 import Link from "next/link";
 import { useEffect, useState } from "react";
 import { PortalPageHeader, PortalPanel } from "@/components/portal/PortalUi";
-import { filterApplicationsForRole } from "@/lib/mock/actions";
-import { getDocumentsForApplication } from "@/lib/mock/applications";
+import { filterApplicationsForRole, getApplicationDetail } from "@/lib/data/applications";
 import type { Document } from "@/lib/types/database";
 
 type DocRow = Document & { reference_code: string };
@@ -13,14 +12,17 @@ export default function ProcessorDocumentsPage() {
   const [rows, setRows] = useState<DocRow[]>([]);
 
   useEffect(() => {
-    const apps = filterApplicationsForRole("processor");
-    const docs: DocRow[] = apps.flatMap((app) =>
-      getDocumentsForApplication(app.id).map((doc) => ({
-        ...doc,
-        reference_code: app.reference_code,
-      })),
-    );
-    setRows(docs);
+    void (async () => {
+      const apps = await filterApplicationsForRole("processor");
+      const docs: DocRow[] = [];
+      for (const app of apps) {
+        const detail = await getApplicationDetail(app.id);
+        for (const doc of detail.documents) {
+          docs.push({ ...doc, reference_code: app.reference_code });
+        }
+      }
+      setRows(docs);
+    })();
   }, []);
 
   return (
@@ -28,12 +30,12 @@ export default function ProcessorDocumentsPage() {
       <PortalPageHeader
         eyebrow="Processor"
         title="Documents"
-        description="Documents across files in your processor workqueue. Open a row to manage the file workspace."
+        description="Documents across files assigned to your processor organization."
       />
       <PortalPanel className="mt-8 overflow-hidden">
         {rows.length === 0 ? (
           <p className="px-5 py-10 text-center text-[0.9375rem] text-steel">
-            No documents in the current processor filter.
+            No documents on assigned files.
           </p>
         ) : (
           <ul className="divide-y divide-line">
@@ -41,17 +43,15 @@ export default function ProcessorDocumentsPage() {
               <li key={doc.id}>
                 <Link
                   href={`/portal/processor/applications/${doc.application_id}`}
-                  className="flex flex-wrap items-center justify-between gap-3 px-5 py-4 transition hover:bg-paper/80"
+                  className="flex flex-wrap items-center justify-between gap-3 px-5 py-4 hover:bg-black/[0.02]"
                 >
-                  <div className="min-w-0">
-                    <p className="truncate text-[0.9375rem] font-medium text-ink">{doc.file_name}</p>
+                  <div>
+                    <p className="text-[1rem] font-semibold text-ink">{doc.file_name}</p>
                     <p className="mt-1 text-[0.8125rem] text-steel">
-                      {doc.doc_type.replaceAll("_", " ")} · {doc.reference_code}
+                      {doc.reference_code} · {doc.doc_type}
                     </p>
                   </div>
-                  <span className="rounded-full bg-green-soft px-2.5 py-1 text-[0.75rem] font-semibold capitalize text-green">
-                    {doc.status}
-                  </span>
+                  <span className="text-[0.8125rem] text-steel">{doc.status}</span>
                 </Link>
               </li>
             ))}

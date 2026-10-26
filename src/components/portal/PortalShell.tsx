@@ -67,29 +67,34 @@ export function PortalShell({ children }: { children: React.ReactNode }) {
   const [email, setEmail] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
   const [ready, setReady] = useState(false);
-  const [demoSwitcher, setDemoSwitcher] = useState(true);
+  const [demoSwitcher, setDemoSwitcher] = useState(false);
   const [live, setLive] = useState(false);
 
   useEffect(() => {
     let cancelled = false;
     (async () => {
-      hydrateMockApplicationsFromStorage();
       const meta = await fetch("/api/auth/session")
         .then((r) => r.json())
-        .catch(() => ({ configured: false, demoRoleSwitcher: true }));
+        .catch(() => ({ configured: false, demoRoleSwitcher: false }));
       if (cancelled) return;
+      const demoOn = meta.demoRoleSwitcher === true;
       setLive(Boolean(meta.configured));
-      setDemoSwitcher(meta.demoRoleSwitcher !== false);
+      setDemoSwitcher(demoOn);
+      if (!meta.configured) hydrateMockApplicationsFromStorage();
 
       const nextRole = roleFromPath(pathname) ?? "borrower";
-      if (meta.demoRoleSwitcher !== false) {
+      if (demoOn) {
         const demo = demoUserForRole(nextRole);
         setDemoSessionUserId(demo.id);
       }
       const session = await getAppSession();
       if (cancelled) return;
+      if (!session && !demoOn) {
+        router.push("/login");
+        return;
+      }
       const user = session?.user ?? demoUserForRole(nextRole);
-      setRole(nextRole);
+      setRole(session?.user.role ?? nextRole);
       setName(user.full_name);
       setEmail(user.email);
       setMobileOpen(false);
@@ -98,7 +103,7 @@ export function PortalShell({ children }: { children: React.ReactNode }) {
     return () => {
       cancelled = true;
     };
-  }, [pathname]);
+  }, [pathname, router]);
 
   async function logout() {
     clearAppSessionLocal();

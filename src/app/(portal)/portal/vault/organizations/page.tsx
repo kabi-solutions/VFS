@@ -1,15 +1,31 @@
 "use client";
 
-import { organizations } from "@/lib/mock/data";
+import { useEffect, useState } from "react";
 import { PortalPageHeader, PortalPanel } from "@/components/portal/PortalUi";
+import { usesSupabaseData } from "@/lib/data/source";
+import { organizations as mockOrganizations } from "@/lib/mock/data";
+import type { Organization } from "@/lib/types/database";
 
 export default function VaultOrganizationsPage() {
+  const [organizations, setOrganizations] = useState<Organization[]>([]);
+
+  useEffect(() => {
+    if (!usesSupabaseData()) {
+      setOrganizations(mockOrganizations);
+      return;
+    }
+    fetch("/api/portal/organizations")
+      .then((r) => r.json())
+      .then((body) => setOrganizations(body.organizations ?? []))
+      .catch(() => setOrganizations([]));
+  }, []);
+
   return (
     <div>
       <PortalPageHeader
         eyebrow="Vault ops"
         title="Organizations"
-        description="Processors, lenders, escrow firms, and pending capital partners in the mock network."
+        description="Processors, lenders, escrow firms, and pending capital partners."
       />
       <PortalPanel className="mt-8 overflow-hidden">
         <ul className="divide-y divide-line">

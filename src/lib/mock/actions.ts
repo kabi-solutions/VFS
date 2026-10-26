@@ -244,16 +244,6 @@ export function addMockDocument(appId: string, input: MockDocumentInput) {
   return doc;
 }
 
-const UW_PLUS: ApplicationStatus[] = [
-  "underwriting",
-  "clear_to_close",
-  "closing_prep",
-  "signing_funding",
-  "funded",
-];
-
-const PACKAGE_STAGES: ApplicationStatus[] = ["package_submission", "info_requested", "loi_issued"];
-
 function sortForRole(apps: LoanApplication[], role: UserRole): LoanApplication[] {
   const priority = (status: ApplicationStatus): number => {
     if (role === "vault") {
@@ -298,7 +288,7 @@ function sortForRole(apps: LoanApplication[], role: UserRole): LoanApplication[]
   });
 }
 
-/** Role pipeline filter — falls back to full list if the filter would empty the demo. */
+/** Role pipeline filter — assigned-only (mirrors live RLS). */
 export function filterApplicationsForRole(role: UserRole): LoanApplication[] {
   const all = listAllApplications();
   const session = getSession();
@@ -311,30 +301,14 @@ export function filterApplicationsForRole(role: UserRole): LoanApplication[] {
     filtered = all;
   } else if (role === "processor") {
     filtered = all.filter(
-      (a) =>
-        a.processor_org_id === orgId ||
-        a.assigned_processor_id === userId ||
-        (!a.assigned_processor_id && PACKAGE_STAGES.includes(a.status)),
+      (a) => a.assigned_processor_id === userId || (orgId != null && a.processor_org_id === orgId),
     );
   } else if (role === "lender") {
-    // Match assigned org, or show all underwriting+ for demo coverage
-    filtered = all.filter(
-      (a) => a.lender_org_id === orgId || UW_PLUS.includes(a.status),
-    );
+    filtered = all.filter((a) => orgId != null && a.lender_org_id === orgId);
   } else if (role === "escrow") {
-    filtered = all.filter(
-      (a) =>
-        a.escrow_org_id === orgId ||
-        a.status === "closing_prep" ||
-        a.status === "signing_funding" ||
-        a.status === "clear_to_close",
-    );
+    filtered = all.filter((a) => orgId != null && a.escrow_org_id === orgId);
   } else if (role === "borrower") {
     filtered = all.filter((a) => a.borrower_id === userId);
-  }
-
-  if (filtered.length === 0 && role !== "borrower") {
-    filtered = all;
   }
 
   return sortForRole(filtered, role);

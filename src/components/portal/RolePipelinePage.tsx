@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { filterApplicationsForRole, getUserById } from "@/lib/data/applications";
-import { applicationStatusLabels, loanTypeLabels } from "@/lib/mock/status-labels";
+import { applicationStatusLabels, loanTypeLabels } from "@/lib/labels/status-labels";
 import { PortalPageHeader, PortalPanel } from "@/components/portal/PortalUi";
 import { roleLabels } from "@/lib/portal/nav";
 import type { ApplicationStatus, LoanApplication, UserRole } from "@/lib/types/database";

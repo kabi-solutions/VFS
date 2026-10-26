@@ -30,7 +30,7 @@ import {
   type SubjectPropertyInfo,
   type VestingInfo,
 } from "@/lib/apply/package";
-import { updateApplicationPackage } from "@/lib/mock/applications";
+import { updateApplicationPackage } from "@/lib/data/applications";
 import type { LoanApplication, LoanType } from "@/lib/types/database";
 
 type SectionId =
@@ -127,10 +127,10 @@ export function PackageContinuationForm({ app, docTypes = [], onSaved }: Props) 
       contractor: prev.contractor ?? emptyContractor(),
     }));
   }
-  function save() {
+  async function save() {
     setSaving(true);
     try {
-      const next = updateApplicationPackage(app.id, pkg);
+      const next = await updateApplicationPackage(app.id, pkg);
       setMessage("Package saved.");
       onSaved?.(next);
     } catch (err) {

@@ -13,7 +13,7 @@ import {
   buildApplyHref,
   isLoanType,
 } from "@/lib/config/apply-prefill";
-import { loanTypeLabels } from "@/lib/mock/status-labels";
+import { loanTypeLabels } from "@/lib/labels/status-labels";
 import type { LoanType } from "@/lib/types/database";
 
 type FitResult = "likely" | "edge" | "unclear";
