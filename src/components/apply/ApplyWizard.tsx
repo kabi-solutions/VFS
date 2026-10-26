@@ -46,10 +46,17 @@ import {
   type SubjectPropertyInfo,
   type VestingInfo,
 } from "@/lib/apply/package";
-import { createApplication, type MockDocumentInput } from "@/lib/mock/applications";
+import { createApplication } from "@/lib/mock/applications";
 import type { LoanType } from "@/lib/types/database";
 
-type PendingDoc = MockDocumentInput & { localId: string; error?: string };
+type PendingDoc = {
+  localId: string;
+  file_name: string;
+  doc_type: string;
+  file_size_bytes: number;
+  mime_type: string | null;
+  error?: string;
+};
 type PhaseId = "deal" | "profile" | "package";
 type Location = { phaseId: PhaseId; subStepId: string };
 
@@ -245,7 +252,7 @@ export function ApplyWizard({ priorApplicationId }: { priorApplicationId?: strin
         file_name,
         doc_type,
         file_size_bytes,
-        mime_type,
+        mime_type: mime_type ?? null,
       })),
     };
     applyDraftStore.save(draft);
@@ -472,7 +479,7 @@ export function ApplyWizard({ priorApplicationId }: { priorApplicationId?: strin
           file_name,
           doc_type,
           file_size_bytes,
-          mime_type,
+          mime_type: mime_type ?? null,
         })),
         package: finalPkg,
       });
