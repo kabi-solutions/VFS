@@ -23,7 +23,7 @@ export default function LocationsPage() {
         eyebrow="Markets"
         title="States we serve"
         description="A national operating model with state-specific coverage. These starter markets power dynamic landings — licensing is not implied solely by presence on this list."
-        primaryCta={{ href: "/apply", label: "Start your file", shine: true }}
+        primaryCta={{ href: "/apply", label: "Apply Now", shine: true }}
         secondaryCta={{ href: "/contact", label: "Contact Vault" }}
         image={images.community}
       />

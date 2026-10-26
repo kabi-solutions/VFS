@@ -156,7 +156,7 @@ export function HomePage() {
             <p className="mt-4 max-w-[34rem] text-[1rem] font-medium text-charcoal">{speed}</p>
             <ul className="mt-6 space-y-3">
               {[
-                "Start your file in one sitting",
+                "Apply in one sitting",
                 "Track status in plain language",
                 "Upload documents and return years later",
               ].map((item) => (

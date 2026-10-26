@@ -3,9 +3,9 @@ import { Button } from "@/components/ui/Button";
 
 export function FinalCta({
   title = "Ready to submit a file?",
-  description = "Start your file to open the borrower portal — return, update documents, and track status across the lifecycle. Not a promise of approval.",
+  description = "Apply now to open the borrower portal — return, update documents, and track status across the lifecycle. Not a promise of approval.",
   primaryHref = "/apply",
-  primaryLabel = "Start your file",
+  primaryLabel = "Apply Now",
   secondaryHref = "/screener",
   secondaryLabel = "Check if your deal fits",
   /** Shine reserved for borrower Apply CTAs by default */

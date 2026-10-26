@@ -66,7 +66,7 @@ export default function ToolsIndexPage() {
       <FinalCta
         imageSrc={images.funded.src}
         title="Ready to put numbers on a live file?"
-        description="Start your file to open the borrower portal. Calculators never replace underwriting."
+        description="Apply now to open the borrower portal. Calculators never replace underwriting."
         primaryLabel={CTA_PRIMARY.label}
         secondaryHref={CTA_SECONDARY.href}
         secondaryLabel={CTA_SECONDARY.label}

@@ -532,7 +532,7 @@ export function HomeLowerSections({ faqs }: { faqs: FaqItem[] }) {
               Ready when your contract is.
             </h2>
             <p className="mx-auto mt-5 max-w-[32rem] text-[1.125rem] leading-relaxed text-steel">
-              Start your file to open the borrower portal — return, update documents, and track
+              Apply now to open the borrower portal — return, update documents, and track
               status across the full funding lifecycle. Not a promise of approval.
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">

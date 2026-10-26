@@ -68,7 +68,7 @@ export const homepageFaqs: FaqItem[] = [
   {
     question: "How do I contact Vault before applying?",
     answer:
-      "Use Contact for general inquiries, or Check if your deal fits for a four-field preliminary read. When you have a live deal, Start your file is the fastest path to a portal record.",
+      "Use Contact for general inquiries, or Check if your deal fits for a four-field preliminary read. When you have a live deal, Apply Now is the fastest path to a portal record.",
   },
 ];
 

@@ -77,7 +77,7 @@ export function DscrCalculator() {
       }
       cta={
         <Button href={applyHref} shine>
-          Start your file
+          Apply Now
         </Button>
       }
     >

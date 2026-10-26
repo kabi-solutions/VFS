@@ -22,7 +22,7 @@ export default function HowHardMoneyWorksPage() {
         eyebrow="Guide"
         title="How hard money works"
         description="Hard money is asset-based private credit. Collateral, exit, and experience usually matter more than a traditional consumer mortgage scorecard."
-        primaryCta={{ href: "/apply", label: "Start your file", shine: true }}
+        primaryCta={{ href: "/apply", label: "Apply Now", shine: true }}
         secondaryCta={{ href: "/solutions/private-money", label: "Private Money" }}
         image={images.privateMoney}
       />

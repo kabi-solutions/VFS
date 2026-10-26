@@ -17,7 +17,7 @@ export default function GlossaryPage() {
         title="Lending glossary"
         description="Short definitions for terms you will see in applications, term sheets, and underwriting — written for operators, not jargon for its own sake."
         primaryCta={{ href: "/resources", label: "Learning Center" }}
-        secondaryCta={{ href: "/apply", label: "Start your file", shine: true }}
+        secondaryCta={{ href: "/apply", label: "Apply Now", shine: true }}
       />
 
       <Section narrow>

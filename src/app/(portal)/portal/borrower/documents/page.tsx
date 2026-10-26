@@ -37,7 +37,7 @@ export default function BorrowerDocumentsPage() {
           <div className="px-5 py-10 text-center">
             <p className="text-[0.9375rem] text-steel">No documents uploaded yet.</p>
             <Link href="/apply" className="mt-4 inline-block text-[0.9375rem] font-semibold text-green">
-              Start a file
+              Apply Now
             </Link>
           </div>
         ) : (

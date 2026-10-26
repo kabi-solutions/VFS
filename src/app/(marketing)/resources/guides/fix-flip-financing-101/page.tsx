@@ -22,7 +22,7 @@ export default function FixFlipFinancingPage() {
         eyebrow="Guide"
         title="Fix & flip financing 101"
         description="Acquisition plus renovation capital for investors who plan to improve a property and exit through sale or refinance within a defined hold."
-        primaryCta={{ href: "/apply", label: "Start your file", shine: true }}
+        primaryCta={{ href: "/apply", label: "Apply Now", shine: true }}
         secondaryCta={{ href: "/solutions/rehab-fix-flip", label: "Rehab / Fix & Flip" }}
         image={images.rehab}
       />

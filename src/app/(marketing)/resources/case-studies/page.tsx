@@ -44,7 +44,7 @@ export default function CaseStudiesPage() {
         <div className="mx-auto max-w-[40rem] text-center">
           <h2 className="headline-lg text-balance">Your file will tell a clearer story</h2>
           <p className="body-lg mt-5">
-            Start your file to open the portal, or check fit in four fields first. Terms are
+            Apply now to open the portal, or check fit in four fields first. Terms are
             evaluated deal by deal.
           </p>
         </div>

@@ -35,7 +35,7 @@ Lending products are for business-purpose, non-owner-occupied real estate and ar
 
 ## Key links
 - Home: ${SITE_URL}/
-- Start your file (Apply): ${SITE_URL}/apply
+- Apply Now: ${SITE_URL}/apply
 - Deal screener: ${SITE_URL}/screener
 - Investor tools: ${SITE_URL}/resources/tools
 - Capital partners: ${SITE_URL}/capital-partners
