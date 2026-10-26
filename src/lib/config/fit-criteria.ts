@@ -24,7 +24,7 @@ export const FIT_PROPERTY_TYPES = [
  * Keep qualitative until counsel/ops approve numeric bounds for marketing.
  */
 export const FIT_LOAN_SIZE_MIN = 100_000;
-export const FIT_LOAN_SIZE_MAX = 5_000_000;
+export const FIT_LOAN_SIZE_MAX = 50_000_000;
 export const FIT_LOAN_SIZE_LABEL = `Typically $${FIT_LOAN_SIZE_MIN.toLocaleString("en-US")}–$${FIT_LOAN_SIZE_MAX.toLocaleString("en-US")} (deal-dependent)`;
 
 /** TODO (Vault): Confirm entity / vesting expectations. */

@@ -161,12 +161,29 @@ export async function createApplicationServer(
     createdDocs.push(mapDocument(docRow as Record<string, unknown>));
   }
 
+  // Always attempt to open a borrower session after Apply so "Open my portal" works.
   let sessionEstablished = false;
-  if (input.establishSession !== false && input.password?.trim()) {
+  if (input.establishSession !== false) {
     try {
       const supabase = await createServerClient();
       const { error } = await supabase.auth.signInWithPassword({ email, password });
-      sessionEstablished = !error;
+      if (error) {
+        // Existing auth users may not share the generated password — try admin-generated session.
+        const { data: link, error: linkError } = await admin.auth.admin.generateLink({
+          type: "magiclink",
+          email,
+        });
+        if (!linkError && link?.properties?.hashed_token) {
+          const { error: otpError } = await supabase.auth.verifyOtp({
+            email,
+            token_hash: link.properties.hashed_token,
+            type: "magiclink",
+          });
+          sessionEstablished = !otpError;
+        }
+      } else {
+        sessionEstablished = true;
+      }
     } catch {
       sessionEstablished = false;
     }

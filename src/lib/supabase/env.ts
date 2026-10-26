@@ -15,12 +15,21 @@ export function getSupabaseAnonKey(): string | undefined {
   return key || undefined;
 }
 
+function looksLikeJwt(value: string | undefined): value is string {
+  if (!value) return false;
+  // Reject misconfigured placeholders like the literal "SUPABASE_SERVICE_KEY".
+  if (!value.includes(".") || value.length < 40) return false;
+  if (value === "SUPABASE_SERVICE_KEY" || value === "SUPABASE_SERVICE_ROLE_KEY") return false;
+  return true;
+}
+
 export function getSupabaseServiceRoleKey(): string | undefined {
-  // Prefer the canonical name; also accept SUPABASE_SERVICE_KEY (common Vercel typo).
-  const key =
-    process.env.SUPABASE_SERVICE_ROLE_KEY?.trim() ||
-    process.env.SUPABASE_SERVICE_KEY?.trim();
-  return key || undefined;
+  // Prefer a valid JWT from either name (ROLE_KEY has been mis-set to a literal alias before).
+  const primary = process.env.SUPABASE_SERVICE_ROLE_KEY?.trim();
+  const alias = process.env.SUPABASE_SERVICE_KEY?.trim();
+  if (looksLikeJwt(primary)) return primary;
+  if (looksLikeJwt(alias)) return alias;
+  return undefined;
 }
 
 export function isSupabaseConfigured(): boolean {

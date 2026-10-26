@@ -515,7 +515,8 @@ export function ApplyWizard({
         })),
         package: finalPkg,
         password: portalPassword.trim() || undefined,
-        establishSession: Boolean(portalPassword.trim()),
+        // Always establish a portal session after submit (server generates a password if needed).
+        establishSession: true,
       });
 
       const completeness = getPackageCompleteness(
