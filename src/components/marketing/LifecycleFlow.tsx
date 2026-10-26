@@ -18,13 +18,15 @@ export function LifecycleFlow({ steps }: { steps: LifecycleStep[] }) {
   return (
     <div className="mt-12">
       <div className="hidden overflow-hidden rounded-[2rem] bg-white shadow-[0_24px_70px_rgba(0,0,0,0.08)] ring-1 ring-black/[0.04] lg:block">
-        <div className="grid min-h-[28rem] grid-cols-[1.05fr_0.95fr]">
-          <div className="relative min-h-[28rem]">
+        <div className="grid min-h-[28rem] grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
+          <div className="relative isolate min-h-[28rem] min-w-0 overflow-hidden">
             {steps.map((step, index) => (
               <div
                 key={step.id}
-                className={`absolute inset-0 transition-opacity duration-500 ease-out ${
-                  index === active ? "opacity-100" : "opacity-0"
+                className={`absolute inset-0 overflow-hidden transition-opacity duration-500 ease-out ${
+                  index === active
+                    ? "z-[1] opacity-100"
+                    : "pointer-events-none z-0 opacity-0"
                 }`}
                 aria-hidden={index !== active}
               >
@@ -37,11 +39,11 @@ export function LifecycleFlow({ steps }: { steps: LifecycleStep[] }) {
                   priority={index === 0}
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-ink/70 via-ink/15 to-transparent" />
-                <div className="absolute inset-x-0 bottom-0 p-8">
+                <div className="absolute inset-x-0 bottom-0 p-8 pr-6">
                   <p className="text-[0.8125rem] font-semibold uppercase tracking-[0.08em] text-green">
                     {step.title}
                   </p>
-                  <p className="mt-2 max-w-[28rem] text-[1.125rem] font-medium leading-relaxed text-white">
+                  <p className="mt-2 max-w-full text-[1.125rem] font-medium leading-relaxed text-white">
                     {step.body}
                   </p>
                 </div>
@@ -49,7 +51,7 @@ export function LifecycleFlow({ steps }: { steps: LifecycleStep[] }) {
             ))}
           </div>
 
-          <div className="flex flex-col justify-center bg-paper px-8 py-10 xl:px-10">
+          <div className="relative z-10 flex min-w-0 flex-col justify-center bg-paper px-8 py-10 xl:px-10">
             <p className="text-[0.875rem] font-semibold text-green">Your file, end to end</p>
             <h3 className="mt-2 text-[1.75rem] font-semibold tracking-[-0.03em] text-ink">
               Six gates. One audited path.
