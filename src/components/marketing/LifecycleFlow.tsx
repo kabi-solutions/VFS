@@ -20,29 +20,40 @@ export function LifecycleFlow({ steps }: { steps: LifecycleStep[] }) {
   return (
     <div className="mt-12">
       <div className="overflow-hidden rounded-[var(--radius-panel)] bg-white shadow-[var(--shadow-card)] ring-1 ring-[var(--card-ring)]">
-        <div className="grid lg:min-h-[28rem] lg:grid-cols-[1.05fr_0.95fr]">
-          <div className="relative aspect-[16/10] lg:aspect-auto lg:min-h-[28rem]">
-            <Image
-              key={current.id}
-              src={current.image.src}
-              alt={current.image.alt}
-              fill
-              className="object-cover"
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 560px"
-              priority={active === 0}
-            />
-            <div className="absolute inset-0 bg-gradient-to-t from-ink/70 via-ink/15 to-transparent" />
-            <div className="absolute inset-x-0 bottom-0 p-5 sm:p-8">
-              <p className="text-[0.8125rem] font-semibold uppercase tracking-[0.08em] text-green">
-                {current.title}
-              </p>
-              <p className="mt-2 max-w-[28rem] text-[1.0625rem] font-medium leading-relaxed text-white sm:text-[1.125rem]">
-                {current.body}
-              </p>
-            </div>
+        <div className="grid lg:min-h-[28rem] lg:grid-cols-[minmax(0,1.05fr)_minmax(0,0.95fr)]">
+          <div className="relative isolate aspect-[16/10] min-w-0 overflow-hidden lg:aspect-auto lg:min-h-[28rem]">
+            {steps.map((step, index) => (
+              <div
+                key={step.id}
+                className={`absolute inset-0 overflow-hidden transition-opacity duration-500 ease-out ${
+                  index === active
+                    ? "z-[1] opacity-100"
+                    : "pointer-events-none z-0 opacity-0"
+                }`}
+                aria-hidden={index !== active}
+              >
+                <Image
+                  src={step.image.src}
+                  alt={step.image.alt}
+                  fill
+                  className="object-cover"
+                  sizes="(max-width: 640px) 100vw, (max-width: 1024px) 100vw, 560px"
+                  priority={index === 0}
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-ink/70 via-ink/15 to-transparent" />
+                <div className="absolute inset-x-0 bottom-0 p-5 sm:p-8">
+                  <p className="text-[0.8125rem] font-semibold uppercase tracking-[0.08em] text-green">
+                    {step.title}
+                  </p>
+                  <p className="mt-2 max-w-[28rem] text-[1.0625rem] font-medium leading-relaxed text-white sm:text-[1.125rem]">
+                    {step.body}
+                  </p>
+                </div>
+              </div>
+            ))}
           </div>
 
-          <div className="flex flex-col justify-center bg-paper px-5 py-8 sm:px-8 xl:px-10">
+          <div className="relative z-10 flex min-w-0 flex-col justify-center bg-paper px-5 py-8 sm:px-8 xl:px-10">
             <p className="text-[0.875rem] font-semibold text-green">Your file, end to end</p>
             <h3 className="mt-2 text-[1.5rem] font-semibold tracking-[-0.03em] text-ink sm:text-[1.75rem]">
               Six gates. One audited path.
