@@ -4,7 +4,12 @@ import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { usePathname, useRouter } from "next/navigation";
-import { clearMockSession, getSession, setMockSessionUserId, users } from "@/lib/mock/data";
+import {
+  clearAppSessionLocal,
+  demoUserForRole,
+  getAppSession,
+  setDemoSessionUserId,
+} from "@/lib/data/session";
 import {
   hydrateMockApplicationsFromStorage,
   MOCK_APPLICATIONS_STORAGE_KEY,
@@ -62,28 +67,52 @@ export function PortalShell({ children }: { children: React.ReactNode }) {
   const [email, setEmail] = useState("");
   const [mobileOpen, setMobileOpen] = useState(false);
   const [ready, setReady] = useState(false);
+  const [demoSwitcher, setDemoSwitcher] = useState(true);
+  const [live, setLive] = useState(false);
 
   useEffect(() => {
-    hydrateMockApplicationsFromStorage();
-    const nextRole = roleFromPath(pathname) ?? getSession().user.role;
-    const user = users.find((u) => u.role === nextRole) ?? getSession().user;
-    setMockSessionUserId(user.id);
-    setRole(nextRole);
-    setName(user.full_name);
-    setEmail(user.email);
-    setMobileOpen(false);
-    setReady(true);
+    let cancelled = false;
+    (async () => {
+      hydrateMockApplicationsFromStorage();
+      const meta = await fetch("/api/auth/session")
+        .then((r) => r.json())
+        .catch(() => ({ configured: false, demoRoleSwitcher: true }));
+      if (cancelled) return;
+      setLive(Boolean(meta.configured));
+      setDemoSwitcher(meta.demoRoleSwitcher !== false);
+
+      const nextRole = roleFromPath(pathname) ?? "borrower";
+      if (meta.demoRoleSwitcher !== false) {
+        const demo = demoUserForRole(nextRole);
+        setDemoSessionUserId(demo.id);
+      }
+      const session = await getAppSession();
+      if (cancelled) return;
+      const user = session?.user ?? demoUserForRole(nextRole);
+      setRole(nextRole);
+      setName(user.full_name);
+      setEmail(user.email);
+      setMobileOpen(false);
+      setReady(true);
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, [pathname]);
 
-  function logout() {
-    clearMockSession();
+  async function logout() {
+    clearAppSessionLocal();
+    try {
+      await fetch("/api/auth/logout", { method: "POST" });
+    } catch {
+      /* ignore */
+    }
     router.push("/login");
   }
 
   function switchDemoRole(next: UserRole) {
-    const user = users.find((u) => u.role === next);
-    if (!user) return;
-    setMockSessionUserId(user.id);
+    const user = demoUserForRole(next);
+    setDemoSessionUserId(user.id);
     setRole(next);
     setName(user.full_name);
     setEmail(user.email);
@@ -150,31 +179,35 @@ export function PortalShell({ children }: { children: React.ReactNode }) {
       </nav>
 
       <div className="space-y-3 border-t border-line p-4">
-        <label className="block text-[0.6875rem] font-semibold uppercase tracking-[0.06em] text-steel">
-          Demo role
-          <select
-            value={displayRole}
-            onChange={(e) => switchDemoRole(e.target.value as UserRole)}
-            className="mt-1.5 w-full rounded-xl border border-line-strong bg-white px-3 py-2 text-[0.8125rem] text-ink"
-            aria-label="Switch demo role"
+        {demoSwitcher ? (
+          <label className="block text-[0.6875rem] font-semibold uppercase tracking-[0.06em] text-steel">
+            Demo role
+            <select
+              value={displayRole}
+              onChange={(e) => switchDemoRole(e.target.value as UserRole)}
+              className="mt-1.5 w-full rounded-xl border border-line-strong bg-white px-3 py-2 text-[0.8125rem] text-ink"
+              aria-label="Switch demo role"
+            >
+              {(Object.keys(roleLabels) as UserRole[]).map((id) => (
+                <option key={id} value={id}>
+                  {roleLabels[id]}
+                </option>
+              ))}
+            </select>
+          </label>
+        ) : null}
+        {!live ? (
+          <button
+            type="button"
+            onClick={resetDemo}
+            className="w-full rounded-xl px-3 py-2 text-left text-[0.8125rem] font-medium text-steel hover:bg-black/[0.04] hover:text-ink"
           >
-            {(Object.keys(roleLabels) as UserRole[]).map((id) => (
-              <option key={id} value={id}>
-                {roleLabels[id]}
-              </option>
-            ))}
-          </select>
-        </label>
+            Reset demo data
+          </button>
+        ) : null}
         <button
           type="button"
-          onClick={resetDemo}
-          className="w-full rounded-xl px-3 py-2 text-left text-[0.8125rem] font-medium text-steel hover:bg-black/[0.04] hover:text-ink"
-        >
-          Reset demo data
-        </button>
-        <button
-          type="button"
-          onClick={logout}
+          onClick={() => void logout()}
           className="w-full rounded-xl px-3 py-2 text-left text-[0.8125rem] font-medium text-steel hover:bg-black/[0.04] hover:text-ink"
         >
           Log out
@@ -242,7 +275,7 @@ export function PortalShell({ children }: { children: React.ReactNode }) {
               Notifications
             </Link>
             <span className="hidden rounded-full bg-green-soft px-2.5 py-1 text-[0.6875rem] font-semibold text-green sm:inline">
-              Demo
+              {live ? "Live" : "Demo"}
             </span>
           </div>
         </header>
