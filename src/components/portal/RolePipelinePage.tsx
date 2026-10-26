@@ -2,8 +2,7 @@
 
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
-import { filterApplicationsForRole } from "@/lib/mock/actions";
-import { getUserById } from "@/lib/mock/applications";
+import { filterApplicationsForRole, getUserById } from "@/lib/data/applications";
 import { applicationStatusLabels, loanTypeLabels } from "@/lib/mock/status-labels";
 import { PortalPageHeader, PortalPanel } from "@/components/portal/PortalUi";
 import { roleLabels } from "@/lib/portal/nav";
@@ -51,10 +50,27 @@ export function RolePipelinePage({
   statusFilter?: ApplicationStatus[];
 }) {
   const [apps, setApps] = useState<LoanApplication[]>([]);
+  const [borrowerNames, setBorrowerNames] = useState<Record<string, string>>({});
   const copy = defaults[role];
 
   useEffect(() => {
-    setApps(filterApplicationsForRole(role));
+    let cancelled = false;
+    (async () => {
+      const list = await filterApplicationsForRole(role);
+      if (cancelled) return;
+      setApps(list);
+      const ids = [...new Set(list.map((a) => a.borrower_id))];
+      const entries = await Promise.all(
+        ids.map(async (id) => {
+          const user = await getUserById(id);
+          return [id, user?.full_name ?? "—"] as const;
+        }),
+      );
+      if (!cancelled) setBorrowerNames(Object.fromEntries(entries));
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, [role]);
 
   const visible = useMemo(() => {
@@ -84,7 +100,6 @@ export function RolePipelinePage({
           </thead>
           <tbody className="divide-y divide-line">
             {visible.map((app) => {
-              const borrower = getUserById(app.borrower_id);
               return (
                 <tr key={app.id} className="hover:bg-paper/80">
                   <td className="px-4 py-3 font-mono text-[0.8125rem]">
@@ -98,7 +113,9 @@ export function RolePipelinePage({
                   <td className="px-4 py-3 text-charcoal">
                     {app.property_city}, {app.property_state}
                   </td>
-                  <td className="px-4 py-3 text-charcoal">{borrower?.full_name ?? "—"}</td>
+                  <td className="px-4 py-3 text-charcoal">
+                    {borrowerNames[app.borrower_id] ?? "—"}
+                  </td>
                   <td className="px-4 py-3 text-charcoal">{loanTypeLabels[app.loan_type]}</td>
                   <td className="px-4 py-3 text-charcoal">{formatMoney(app.loan_amount)}</td>
                   <td className="px-4 py-3">

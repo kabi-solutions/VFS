@@ -5,7 +5,6 @@ import { useCallback, useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { Button } from "@/components/ui/Button";
 import {
-  addMockDocument,
   assignEscrow,
   assignLender,
   assignProcessor,
@@ -13,8 +12,6 @@ import {
   denyApplication,
   generateLoi,
   issueConditions,
-  listOrgsByType,
-  listProcessorUsers,
   markClosingPrep,
   markDocumentStatus,
   markFunded,
@@ -24,15 +21,14 @@ import {
   startInitialReview,
   submitPackageToLender,
   transitionStatus,
-} from "@/lib/mock/actions";
+} from "@/lib/data/actions";
 import {
-  getApplicationById,
-  getConditionsForApplication,
-  getDocumentsForApplication,
-  getStatusEventsForApplication,
-  getUserById,
-} from "@/lib/mock/applications";
-import { organizations } from "@/lib/mock/data";
+  getApplicationDetail,
+  listOrgsByType,
+  listOrganizationsLocalFallback,
+  listProcessorUsers,
+  uploadApplicationDocument,
+} from "@/lib/data/applications";
 import {
   applicationStatusLabels,
   docTypeLabels,
@@ -75,9 +71,9 @@ function formatDate(iso: string): string {
   }).format(new Date(iso));
 }
 
-function orgName(id: string | null): string {
+function orgName(id: string | null, orgs: Organization[]): string {
   if (!id) return "Unassigned";
-  return organizations.find((o) => o.id === id)?.name ?? id;
+  return orgs.find((o) => o.id === id)?.name ?? id;
 }
 
 const pipelineHref: Record<UserRole, string> = {
@@ -114,37 +110,46 @@ export function ApplicationWorkspace({ role }: { role: WorkspaceRole }) {
   const [infoNote, setInfoNote] = useState("Please provide the outstanding package items.");
   const [message, setMessage] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
+  const [allOrgs, setAllOrgs] = useState<Organization[]>(() => listOrganizationsLocalFallback());
 
-  const refresh = useCallback(() => {
-    const found = getApplicationById(id);
-    setApp(found ?? null);
-    if (!found) return;
-    setEvents(getStatusEventsForApplication(found.id));
-    setDocs(getDocumentsForApplication(found.id));
-    setConds(getConditionsForApplication(found.id));
-    setBorrower(getUserById(found.borrower_id) ?? null);
-    const procs = listProcessorUsers();
+  const refresh = useCallback(async () => {
+    const detail = await getApplicationDetail(id);
+    setApp(detail.application);
+    setEvents(detail.events);
+    setDocs(detail.documents);
+    setConds(detail.conditions);
+    setBorrower(detail.borrower);
+    if (!detail.application) return;
+
+    const [procs, lenders, escrows] = await Promise.all([
+      listProcessorUsers(),
+      listOrgsByType("lender"),
+      listOrgsByType("escrow"),
+    ]);
     setProcessors(procs);
-    setLenderOrgs(listOrgsByType("lender"));
-    setEscrowOrgs(listOrgsByType("escrow"));
+    setLenderOrgs(lenders);
+    setEscrowOrgs(escrows);
+    setAllOrgs([...listOrganizationsLocalFallback(), ...lenders, ...escrows]);
     setSelectedProcessor((prev) => prev || procs[0]?.id || "");
-    setSelectedLender((prev) => prev || found.lender_org_id || listOrgsByType("lender")[0]?.id || "");
-    setSelectedEscrow((prev) => prev || found.escrow_org_id || listOrgsByType("escrow")[0]?.id || "");
+    setSelectedLender((prev) => prev || detail.application!.lender_org_id || lenders[0]?.id || "");
+    setSelectedEscrow((prev) => prev || detail.application!.escrow_org_id || escrows[0]?.id || "");
   }, [id]);
 
   useEffect(() => {
-    refresh();
+    void refresh();
   }, [refresh]);
 
-  function run(action: () => void, success?: string) {
-    try {
-      setError(null);
-      action();
-      refresh();
-      setMessage(success ?? "Updated.");
-    } catch (e) {
-      setError(e instanceof Error ? e.message : "Action failed.");
-    }
+  function run(action: () => void | Promise<unknown>, success?: string) {
+    void (async () => {
+      try {
+        setError(null);
+        await action();
+        await refresh();
+        setMessage(success ?? "Updated.");
+      } catch (e) {
+        setError(e instanceof Error ? e.message : "Action failed.");
+      }
+    })();
   }
 
   if (!app) {
@@ -211,7 +216,7 @@ export function ApplicationWorkspace({ role }: { role: WorkspaceRole }) {
         />
         <MetaCard
           label="Assignments"
-          value={`${orgName(app.processor_org_id)} · ${orgName(app.lender_org_id)} · ${orgName(app.escrow_org_id)}`}
+          value={`${orgName(app.processor_org_id, allOrgs)} · ${orgName(app.lender_org_id, allOrgs)} · ${orgName(app.escrow_org_id, allOrgs)}`}
         />
       </div>
 
@@ -260,24 +265,24 @@ export function ApplicationWorkspace({ role }: { role: WorkspaceRole }) {
               <Button href={`/apply?prior=${encodeURIComponent(app.id)}`} shine>
                 Start new application
               </Button>
-              <Button
-                type="button"
-                variant="secondary"
-                onClick={() =>
-                  run(
-                    () =>
-                      addMockDocument(app.id, {
-                        file_name: `upload-${Date.now()}.pdf`,
-                        doc_type: "other",
-                        file_size_bytes: 128000,
-                        mime_type: "application/pdf",
-                      }),
-                    "Mock document uploaded (pending).",
-                  )
-                }
-              >
-                Upload document
-              </Button>
+              <label className="inline-flex cursor-pointer">
+                <span className="inline-flex items-center justify-center rounded-[var(--radius-control)] bg-paper px-5 py-2.5 text-[0.9375rem] font-medium text-charcoal shadow-[inset_0_0_0_1px_var(--line-strong)]">
+                  Upload document
+                </span>
+                <input
+                  type="file"
+                  className="sr-only"
+                  onChange={(e) => {
+                    const file = e.target.files?.[0];
+                    e.target.value = "";
+                    if (!file) return;
+                    run(
+                      () => uploadApplicationDocument(app.id, file, "other"),
+                      "Document uploaded (pending).",
+                    );
+                  }}
+                />
+              </label>
             </>
           ) : null}
         </div>
@@ -334,7 +339,7 @@ export function ApplicationWorkspace({ role }: { role: WorkspaceRole }) {
                         type="button"
                         disabled={doc.status === s}
                         onClick={() =>
-                          run(() => markDocumentStatus(doc.id, s), `Document marked ${s}.`)
+                          run(() => markDocumentStatus(doc.id, s, app.id), `Document marked ${s}.`)
                         }
                         className="rounded-full px-2.5 py-1 text-[0.75rem] font-medium text-steel ring-1 ring-line hover:bg-paper disabled:opacity-40"
                       >

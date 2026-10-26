@@ -4,13 +4,8 @@ import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 import { Button } from "@/components/ui/Button";
 import { PortalPageHeader, PortalPanel, PortalSectionCard, PortalStat } from "@/components/portal/PortalUi";
-import { filterApplicationsForRole } from "@/lib/mock/actions";
-import {
-  listApplicationsForBorrower,
-  resolveBorrowerId,
-  getUserById,
-} from "@/lib/mock/applications";
-import { getSession, setMockSessionUserId, users } from "@/lib/mock/data";
+import { filterApplicationsForRole, listApplicationsForBorrower } from "@/lib/data/applications";
+import { demoUserForRole, getAppSession, setDemoSessionUserId } from "@/lib/data/session";
 import { applicationStatusLabels, loanTypeLabels } from "@/lib/mock/status-labels";
 import { navByRole, roleLabels } from "@/lib/portal/nav";
 import type { LoanApplication, UserRole } from "@/lib/types/database";
@@ -39,19 +34,23 @@ export function PortalOverview({ role }: { role: UserRole }) {
   const detailBase =
     role === "borrower" ? "/portal/borrower/applications" : `/portal/${role}/applications`;
 
-  // Ensure mock session matches this overview role before reading pipeline data
   useEffect(() => {
-    const user = users.find((u) => u.role === role);
-    if (user) setMockSessionUserId(user.id);
-    const session = getSession();
-    setName(session.user.full_name);
-    if (role === "borrower") {
-      const id = resolveBorrowerId();
-      setApps(listApplicationsForBorrower(id));
-      setName(getUserById(id)?.full_name ?? session.user.full_name);
-    } else {
-      setApps(filterApplicationsForRole(role));
-    }
+    let cancelled = false;
+    (async () => {
+      const demo = demoUserForRole(role);
+      setDemoSessionUserId(demo.id);
+      const session = await getAppSession();
+      if (cancelled) return;
+      setName(session?.user.full_name ?? demo.full_name);
+      const list =
+        role === "borrower"
+          ? await listApplicationsForBorrower(session?.user.id)
+          : await filterApplicationsForRole(role);
+      if (!cancelled) setApps(list);
+    })();
+    return () => {
+      cancelled = true;
+    };
   }, [role]);
 
   const stats = useMemo(() => {
