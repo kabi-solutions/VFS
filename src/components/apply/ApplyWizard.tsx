@@ -753,7 +753,7 @@ export function ApplyWizard({ priorApplicationId }: { priorApplicationId?: strin
 
         <div className={stickyFooterClass}>
           {submitError ? (
-            <p className="mb-3 text-[0.9375rem] text-terracotta" role="alert">
+            <p className="mb-3 text-[0.9375rem] font-medium text-red-700" role="alert">
               {submitError}
             </p>
           ) : null}
