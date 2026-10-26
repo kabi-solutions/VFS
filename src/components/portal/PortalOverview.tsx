@@ -98,9 +98,18 @@ export function PortalOverview({ role }: { role: UserRole }) {
           </h2>
           <PortalPanel className="mt-4 overflow-hidden">
             {recentApps(apps).length === 0 ? (
-              <p className="px-5 py-8 text-center text-[0.9375rem] text-steel">
-                No files in this workspace yet.
-              </p>
+              <div className="px-5 py-10 text-center">
+                <p className="text-[0.9375rem] text-steel">No files in this workspace yet.</p>
+                {role === "borrower" ? (
+                  <Button href="/apply" shine className="mt-4">
+                    Start an application
+                  </Button>
+                ) : (
+                  <Button href={`/portal/${role}/pipeline`} variant="secondary" className="mt-4">
+                    Open pipeline
+                  </Button>
+                )}
+              </div>
             ) : (
               <ul className="divide-y divide-line">
                 {recentApps(apps).map((app) => (

@@ -21,7 +21,7 @@ export function Section({
   return (
     <section className={`${tones[tone]} ${className}`}>
       <div
-        className={`mx-auto px-6 py-[var(--spacing-section)] lg:px-8 ${
+        className={`mx-auto px-4 py-[var(--spacing-section)] sm:px-6 lg:px-8 ${
           narrow ? "max-w-[880px]" : "max-w-[1080px]"
         }`}
       >

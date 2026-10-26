@@ -218,8 +218,24 @@ export function SiteHeader() {
       </div>
 
       {mobileOpen && (
-        <div id="mobile-nav" className="border-t border-line bg-white lg:hidden">
-          <div className="mx-auto flex max-w-[980px] flex-col gap-6 px-6 py-6">
+        <div id="mobile-nav" className="max-h-[min(100dvh-3rem,40rem)] overflow-y-auto border-t border-line bg-white lg:hidden">
+          <div className="mx-auto flex max-w-[980px] flex-col gap-6 px-4 py-4 sm:px-6">
+            <div className="sticky top-0 z-10 -mx-4 flex gap-2 border-b border-line bg-white px-4 pb-3 pt-1 sm:-mx-6 sm:px-6">
+              <Link
+                href="/login"
+                className="flex-1 rounded-full px-4 py-3 text-center text-[0.9375rem] font-medium text-charcoal ring-1 ring-line"
+                onClick={() => setMobileOpen(false)}
+              >
+                Client Login
+              </Link>
+              <Link
+                href="/apply"
+                className="btn-shine flex-1 rounded-full bg-green px-4 py-3 text-center text-[0.9375rem] font-medium text-white"
+                onClick={() => setMobileOpen(false)}
+              >
+                <span>Apply Now</span>
+              </Link>
+            </div>
             {[
               { title: "Solutions", items: solutions },
               { title: "Company", items: company },
@@ -247,18 +263,6 @@ export function SiteHeader() {
             <Link href="/locations" className="text-charcoal" onClick={() => setMobileOpen(false)}>
               Locations
             </Link>
-            <div className="flex flex-col gap-2 border-t border-line pt-4">
-              <Link href="/login" className="py-2 text-charcoal" onClick={() => setMobileOpen(false)}>
-                Client Login
-              </Link>
-              <Link
-                href="/apply"
-                className="btn-shine rounded-full bg-green px-4 py-3 text-center font-medium text-white"
-                onClick={() => setMobileOpen(false)}
-              >
-                <span>Apply Now</span>
-              </Link>
-            </div>
           </div>
         </div>
       )}
