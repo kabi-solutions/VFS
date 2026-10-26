@@ -141,7 +141,7 @@ export default function Page() {
         primaryHref="/contact"
         primaryLabel="Contact Vault"
         secondaryHref="/apply"
-        secondaryLabel="Start your file"
+        secondaryLabel="Apply Now"
       />
     </>
   );

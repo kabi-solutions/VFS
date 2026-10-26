@@ -36,7 +36,7 @@ export default function FaqsPage() {
         eyebrow="Resources"
         title="Vault FAQs"
         description="Clear answers on how Vault funds investor deals — from Apply through signing — without invented rate tables or license IDs on the page."
-        primaryCta={{ href: "/apply", label: "Start your file", shine: true }}
+        primaryCta={{ href: "/apply", label: "Apply Now", shine: true }}
         secondaryCta={{ href: "/contact", label: "Contact Vault" }}
       />
 

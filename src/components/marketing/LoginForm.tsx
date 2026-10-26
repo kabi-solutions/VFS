@@ -208,7 +208,7 @@ export function LoginForm() {
           {submitting ? "Working…" : mode === "magic" ? "Email magic link" : "Sign in"}
         </Button>
         <Button href="/apply" variant="secondary">
-          Start a file
+          Apply Now
         </Button>
       </div>
       <p className="mt-6 text-[0.8125rem] text-steel">

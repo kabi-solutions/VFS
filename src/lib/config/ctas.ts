@@ -2,7 +2,7 @@
  * Shared CTA labels — lower commitment, never promise approval.
  */
 export const CTA_PRIMARY = {
-  label: "Start your file",
+  label: "Apply Now",
   href: "/apply",
 } as const;
 

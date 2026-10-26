@@ -72,7 +72,7 @@ export function BridgeCashToCloseCalculator() {
       }
       cta={
         <Button href={applyHref} shine>
-          Start your file
+          Apply Now
         </Button>
       }
     >

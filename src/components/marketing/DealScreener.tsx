@@ -30,7 +30,7 @@ function evaluateFit(amount: number | null, loanType: string): FitResult {
 const fitCopy: Record<FitResult, { title: string; body: string }> = {
   likely: {
     title: "This looks like a conversation Vault can take.",
-    body: "Based on loan size and product shape alone — not credit, collateral, or licensing. Start a file so the team can review the full package.",
+    body: "Based on loan size and product shape alone — not credit, collateral, or licensing. Apply so the team can review the full package.",
   },
   edge: {
     title: "Possible edge case — still worth a file or a call.",
@@ -161,7 +161,7 @@ export function DealScreener() {
         <div className="mt-6 flex flex-wrap gap-3">
           <Button type="submit">Check fit</Button>
           <Button type="button" variant="secondary" onClick={onStartFile}>
-            Start your file
+            Apply Now
           </Button>
         </div>
         <p className="mt-4 text-[0.8125rem] leading-relaxed text-steel">{FIT_CAPTION}</p>
@@ -177,7 +177,7 @@ export function DealScreener() {
         {submitted ? (
           <div className="mt-6">
             <Button type="button" shine onClick={onStartFile}>
-              Start your file with these details
+              Apply now with these details
             </Button>
             <p className="mt-3 text-[0.8125rem] text-steel">
               Never a promise of approval. Terms are evaluated deal by deal.

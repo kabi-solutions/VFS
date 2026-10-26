@@ -23,7 +23,7 @@ export default function AboutPage() {
         eyebrow="Company"
         title="Our story"
         description="Vault Financial Services originates private real estate credit for investors who need certainty of close, disciplined underwriting, and a process that holds through funding."
-        primaryCta={{ href: "/apply", label: "Start your file", shine: true }}
+        primaryCta={{ href: "/apply", label: "Apply Now", shine: true }}
         secondaryCta={{ href: "/company/leadership", label: "Leadership" }}
         image={images.capital}
       />

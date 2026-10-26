@@ -6,7 +6,7 @@ import { images } from "@/lib/marketing/images";
 import { parseApplyPrefill } from "@/lib/config/apply-prefill";
 
 export const metadata: Metadata = {
-  title: "Start your file",
+  title: "Apply Now",
   description:
     "Submit a Vault private capital application — property, borrower, loan details, and documents in one digital file.",
 };
@@ -27,7 +27,7 @@ export default async function ApplyPage({
     <>
       <PageHero
         eyebrow="Apply"
-        title="Start your file."
+        title="Apply now."
         description="Submit your deal in about two minutes, then finish your package in the portal. We show what is still missing — terms are evaluated deal by deal. Not a promise of approval."
         image={images.plans}
       />

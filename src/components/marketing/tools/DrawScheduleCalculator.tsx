@@ -85,7 +85,7 @@ export function DrawScheduleCalculator() {
       }
       cta={
         <Button href={applyHref} shine>
-          Start your file
+          Apply Now
         </Button>
       }
     >
