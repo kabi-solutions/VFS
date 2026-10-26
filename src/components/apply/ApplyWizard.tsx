@@ -1,5 +1,7 @@
 "use client";
 
+/* eslint-disable react-hooks/set-state-in-effect -- draft hydrate + ground-up loan sync */
+
 import { useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
 import { ApplyProgress, type ApplyPhase } from "@/components/apply/ApplyProgress";
@@ -226,13 +228,6 @@ export function ApplyWizard({ priorApplicationId }: { priorApplicationId?: strin
     if (forced !== loanType) setLoanType(forced);
   }, [pkg, loanType]);
 
-  useEffect(() => {
-    const stillValid = path.some(
-      (p) => p.phaseId === location.phaseId && p.subStepId === location.subStepId,
-    );
-    if (!stillValid && path[0]) setLocation(path[0]);
-  }, [path, location]);
-
   function persistDraft(
     nextPkg = pkg,
     nextLoan = loanType,
@@ -291,12 +286,6 @@ export function ApplyWizard({ priorApplicationId }: { priorApplicationId?: strin
       contractor: prev.contractor ?? emptyContractor(),
     }));
   }
-
-  useEffect(() => {
-    if (!bootstrapped || resumePrompt || result || !draftId) return;
-    persistDraft();
-    // eslint-disable-next-line react-hooks/exhaustive-deps -- persist on location change
-  }, [location.phaseId, location.subStepId, bootstrapped, resumePrompt, result, draftId]);
 
   function validateHard(): HardErrors {
     const next: HardErrors = {};

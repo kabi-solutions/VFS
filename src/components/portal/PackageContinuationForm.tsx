@@ -150,7 +150,7 @@ export function PackageContinuationForm({ app, docTypes = [], onSaved }: Props) 
     patchLoan,
     patchVesting,
     patchStrategy,
-    setLoanType: (_t: LoanType) => undefined,
+    setLoanType: () => undefined,
   };
 
   return (
