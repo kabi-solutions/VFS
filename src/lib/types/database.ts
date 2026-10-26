@@ -1,5 +1,7 @@
 /** Types mirroring supabase/schema.sql — swap mock layer for live queries later. */
 
+import type { ApplicationPackage } from "@/lib/apply/package";
+
 export type UserRole = "borrower" | "vault" | "processor" | "lender" | "escrow";
 
 export type OrgType =
@@ -16,6 +18,7 @@ export type LoanType =
   | "rehab_fix_flip"
   | "bridge"
   | "ground_up"
+  | "new_construction"
   | "dscr_non_qm";
 
 export type ApplicationStatus =
@@ -93,6 +96,9 @@ export interface LoanApplication {
   assigned_processor_id: string | null;
   attribution_source_id: AttributionSourceId | null;
   commission_rate: number | null;
+  /** Full borrower package (soft-required fields + schedules). */
+  package: ApplicationPackage | null;
+  package_complete: boolean;
   created_at: string;
   updated_at: string;
   funded_at: string | null;

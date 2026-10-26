@@ -25,7 +25,7 @@ export default async function ApplyPage({
       <PageHero
         eyebrow="Apply"
         title="Start your file."
-        description="Four short steps create a durable borrower portal — property, borrower, loan intent, and optional documents. Terms are evaluated deal by deal."
+        description="Submit once with the hard essentials, then soft-collect the full package — property, strategy, track record, SREO, contractor, and documents. Missing items stay visible for follow-up. Terms are evaluated deal by deal."
         image={images.plans}
       />
 
