@@ -13,8 +13,8 @@ export const images = {
     alt: "Bright modern living space with natural light",
   },
   rehab: {
-    src: "https://images.unsplash.com/photo-1581858726788-75bc0f6a952d?auto=format&fit=crop&w=1200&q=80",
-    alt: "Daylight residential renovation work in progress",
+    src: "https://images.unsplash.com/photo-1503387762-592deb58ef4e?auto=format&fit=crop&w=1200&q=80",
+    alt: "Residential renovation in progress with framing and remodel materials",
   },
   bridge: {
     src: "https://images.unsplash.com/photo-1600047509807-ba8f99d2cdde?auto=format&fit=crop&w=1200&q=80",

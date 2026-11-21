@@ -22,19 +22,13 @@ const company = [
   { href: "/company/community-impact", label: "Community Impact" },
 ];
 
-const capital = [
-  { href: "/capital-partners", label: "Why Partner With Vault" },
-  { href: "/capital-partners/deployment", label: "How Deployment Works" },
-  { href: "/capital-partners/apply", label: "Partner Application" },
-];
-
 const resources = [
   { href: "/resources", label: "Learning Center" },
   { href: "/resources/tools", label: "Investor Tools" },
   { href: "/resources/glossary", label: "Glossary" },
   { href: "/resources/faqs", label: "FAQs" },
   { href: "/resources/case-studies", label: "Case Studies" },
-  { href: "/screener", label: "Deal screener" },
+  { href: "/screener", label: "2-minute pre-approval" },
 ];
 
 const trust = [
@@ -43,7 +37,7 @@ const trust = [
   { href: "/trust/legal", label: "Legal" },
 ];
 
-type MegaKey = "solutions" | "company" | "capital" | "resources" | "trust" | null;
+type MegaKey = "solutions" | "company" | "resources" | "trust" | null;
 
 function MegaPanel({
   items,
@@ -126,7 +120,6 @@ export function SiteHeader() {
     >
       <div className="mx-auto flex h-12 max-w-[980px] items-center justify-between gap-6 px-6 lg:px-8">
         <Link href="/" className="relative flex shrink-0 items-center" aria-label="Vault Financial Services home">
-          {/* PLACEHOLDER — Vault to supply final logo assets; using existing mark */}
           <Image
             src="/brand/vault-logo.png"
             alt="Vault Financial Services LLC"
@@ -140,7 +133,6 @@ export function SiteHeader() {
         <nav className="hidden items-center gap-0.5 lg:flex" aria-label="Primary">
           {navButton("solutions", "Solutions")}
           {navButton("company", "Company")}
-          {navButton("capital", "Capital Partners")}
           {navButton("resources", "Resources")}
           {navButton("trust", "Trust")}
           <Link
@@ -194,15 +186,8 @@ export function SiteHeader() {
         {open === "company" && (
           <MegaPanel
             title="Company"
-            description="Institutional process, accountable capital, and a platform built for the full loan lifecycle."
+            description="Institutional process, accountable capital, and Vector by Vault for the full loan lifecycle."
             items={company}
-          />
-        )}
-        {open === "capital" && (
-          <MegaPanel
-            title="Capital Partners"
-            description="Deploy capital into Vault-originated real estate credit with clear underwriting and reporting."
-            items={capital}
           />
         )}
         {open === "resources" && (
@@ -243,7 +228,6 @@ export function SiteHeader() {
             {[
               { title: "Solutions", items: solutions },
               { title: "Company", items: company },
-              { title: "Capital Partners", items: capital },
               { title: "Resources", items: resources },
               { title: "Trust", items: trust },
             ].map((group) => (

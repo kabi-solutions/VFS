@@ -13,14 +13,6 @@ const columns = [
     ],
   },
   {
-    title: "Capital",
-    links: [
-      { href: "/capital-partners", label: "Why Partner" },
-      { href: "/capital-partners/deployment", label: "Deployment" },
-      { href: "/capital-partners/apply", label: "Partner Application" },
-    ],
-  },
-  {
     title: "Company",
     links: [
       { href: "/company/about", label: "About" },
@@ -28,7 +20,7 @@ const columns = [
       { href: "/resources", label: "Learning Center" },
       { href: "/resources/tools", label: "Investor Tools" },
       { href: "/strategies", label: "Strategies" },
-      { href: "/screener", label: "Deal screener" },
+      { href: "/screener", label: "2-minute pre-approval" },
       { href: "/locations", label: "States We Serve" },
       { href: "/contact", label: "Contact" },
     ],
@@ -58,12 +50,12 @@ export function SiteFooter() {
               className="h-8 w-auto opacity-90"
             />
             <p className="mt-5 max-w-sm text-[0.9375rem] leading-relaxed text-white/55">
-              Private real estate credit for investors who need certainty of close, disciplined
-              underwriting, and a process that holds through funding.
+              Private real estate credit for investors — apply, track, and fund through Vector by
+              Vault.
             </p>
           </div>
 
-          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-4">
+          <div className="grid gap-8 sm:grid-cols-2 lg:grid-cols-3">
             {columns.map((col) => (
               <div key={col.title}>
                 <p className="text-[0.8125rem] font-semibold tracking-[-0.01em] text-white">

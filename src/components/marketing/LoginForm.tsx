@@ -212,7 +212,7 @@ export function LoginForm() {
         </Button>
       </div>
       <p className="mt-6 text-[0.8125rem] text-steel">
-        Need an account? <Link href="/apply">Apply</Link> creates your borrower portal.
+        Need an account? <Link href="/apply">Apply</Link> creates your Vector by Vault login.
       </p>
     </form>
   );

@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/Button";
 
 export function FinalCta({
   title = "Ready to submit a file?",
-  description = "Apply now to open the borrower portal — return, update documents, and track status across the lifecycle. Not a promise of approval.",
+  description = "Apply now to open Vector by Vault — return, update documents, and track status across the lifecycle. Not a promise of approval.",
   primaryHref = "/apply",
   primaryLabel = "Apply Now",
   secondaryHref = "/screener",

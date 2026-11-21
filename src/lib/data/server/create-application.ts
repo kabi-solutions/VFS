@@ -25,7 +25,7 @@ async function nextReferenceCode(admin: ReturnType<typeof createAdminClient>): P
 
 export async function createApplicationServer(
   input: CreateOptions,
-): Promise<CreateApplicationResult & { sessionEstablished: boolean }> {
+): Promise<CreateApplicationResult & { sessionEstablished: boolean; portalPassword: string }> {
   if (!hasServiceRole()) {
     throw new Error("SUPABASE_SERVICE_ROLE_KEY is required to create applications from Apply.");
   }
@@ -65,6 +65,16 @@ export async function createApplicationServer(
     } else if (created.user) {
       authUserId = created.user.id;
     }
+  }
+
+  // Password login is the simple path — always sync the password we will hand to the borrower
+  // so Client Login works without magic-link email delivery.
+  if (authUserId) {
+    const { error: pwError } = await admin.auth.admin.updateUserById(authUserId, {
+      password,
+      email_confirm: true,
+    });
+    if (pwError) throw new Error(pwError.message || "Failed to set portal password");
   }
 
   // Re-read after createUser — the auth trigger usually inserted the profile.
@@ -203,5 +213,12 @@ export async function createApplicationServer(
     }
   }
 
-  return { user, application, statusEvent, documents: createdDocs, sessionEstablished };
+  return {
+    user,
+    application,
+    statusEvent,
+    documents: createdDocs,
+    sessionEstablished,
+    portalPassword: password,
+  };
 }

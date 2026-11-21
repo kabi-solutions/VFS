@@ -21,6 +21,8 @@ function CheckIcon() {
 export type ProductFeature = {
   href: string;
   title: string;
+  /** Larger product-name treatment for hero product blocks. */
+  titleSize?: "md" | "lg";
   headline: string;
   bullets: string[];
   image: { src: string; alt: string };
@@ -77,8 +79,16 @@ export function ProductFeatureSection({ feature }: { feature: ProductFeature }) 
 
   const copy = (
     <div className={feature.reverse ? "lg:pr-4" : "lg:pl-4"}>
-      <p className="text-[0.875rem] font-semibold text-green">{feature.title}</p>
-      <h2 className="headline-lg mt-3 max-w-[16ch] text-balance text-ink">{feature.headline}</h2>
+      <p
+        className={`font-semibold text-green ${
+          feature.titleSize === "lg"
+            ? "text-[1.375rem] tracking-[-0.03em] sm:text-[1.625rem]"
+            : "text-[0.875rem]"
+        }`}
+      >
+        {feature.title}
+      </p>
+      <h2 className="headline-lg mt-3 max-w-[20ch] text-balance text-ink">{feature.headline}</h2>
       <ul className="mt-6 space-y-3">
         {feature.bullets.map((bullet) => (
           <li key={bullet} className="flex gap-3 text-[1.0625rem] leading-snug text-charcoal">

@@ -117,13 +117,13 @@ export function QualificationBox({
         aria-labelledby="fit-criteria-heading"
       >
         <p className="text-[0.8125rem] font-semibold tracking-[0.06em] text-green uppercase">
-          Do you fit?
+          Fit criteria
         </p>
         <h2
           id="fit-criteria-heading"
           className="mt-2 text-[1.25rem] font-semibold tracking-[-0.02em] text-ink"
         >
-          Fit criteria for investor files
+          Is Vault the right fit for your project?
         </h2>
         <ol className="mt-6 divide-y divide-line">
           {criteria.map((item, i) => (
@@ -156,10 +156,10 @@ export function QualificationBox({
         <div className="grid items-end gap-8 border-b border-line pb-10 lg:grid-cols-[1.1fr_0.9fr]">
           <div>
             <p className="text-[0.8125rem] font-semibold tracking-[0.08em] text-green uppercase">
-              Do you fit?
+              Fit criteria
             </p>
-            <h2 id="fit-criteria-heading" className="headline-lg mt-3 max-w-[14ch] text-balance">
-              Fit criteria for investor files
+            <h2 id="fit-criteria-heading" className="headline-lg mt-3 max-w-[18ch] text-balance">
+              Is Vault the right fit for your project?
             </h2>
           </div>
           <p className="body-lg max-w-[32rem] lg:justify-self-end lg:text-right">

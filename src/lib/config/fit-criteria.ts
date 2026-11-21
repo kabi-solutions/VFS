@@ -10,7 +10,11 @@ export const FIT_CAPTION =
 
 /** TODO (Vault): Confirm property-use framing. */
 export const FIT_PROPERTY_USE =
-  "Business-purpose, non-owner-occupied investment real estate";
+  "Investment real estate and second homes — not primary-residence consumer mortgages";
+
+/** TODO (Vault): Confirm entity / borrower framing. */
+export const FIT_WHO_CAN_APPLY =
+  "Real estate investors, entities using investment property as collateral, and consumers purchasing a second home";
 
 /** TODO (Vault): Confirm property types Vault will discuss. */
 export const FIT_PROPERTY_TYPES = [

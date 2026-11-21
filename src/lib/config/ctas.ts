@@ -7,7 +7,7 @@ export const CTA_PRIMARY = {
 } as const;
 
 export const CTA_SECONDARY = {
-  label: "Check if your deal fits",
+  label: "Get a 2-minute pre-approval",
   href: "/screener",
 } as const;
 

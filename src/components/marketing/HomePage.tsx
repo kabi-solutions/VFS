@@ -8,12 +8,10 @@ import {
   ProductFeatureSection,
   type ProductFeature,
 } from "@/components/marketing/ProductFeatureSection";
-import { QualificationBox } from "@/components/marketing/QualificationBox";
 import { RecentFiles } from "@/components/marketing/RecentFiles";
 import { Testimonials } from "@/components/marketing/Testimonials";
-import { Button } from "@/components/ui/Button";
-import { fundingSpeedClaim } from "@/lib/config/claims";
-import { CTA_PRIMARY } from "@/lib/config/ctas";
+import { fundingSpeedClaimShort } from "@/lib/config/claims";
+import { CTA_PRIMARY, CTA_SECONDARY } from "@/lib/config/ctas";
 import { homepageFaqs as faqs } from "@/lib/marketing/faqs";
 import { images } from "@/lib/marketing/images";
 
@@ -21,11 +19,12 @@ const productFeatures: ProductFeature[] = [
   {
     href: "/solutions/private-money",
     title: "Private Money",
-    headline: "Structure that flexes when the deal won't wait.",
+    titleSize: "lg",
+    headline: "Flexible, fast-approvals, at the best interest rates - no one does private money better than us.",
     bullets: [
-      "First and second trust deed options evaluated case by case",
+      "First and second trust deed options",
       "Leverage built for acquisition speed — not bank templates",
-      "Clear path from application to LOI when the file fits",
+      "Guided application process provides you with a pre-approval in minutes and your funding in days – not weeks.",
     ],
     image: images.privateMoney,
     cardLabel: "Structure",
@@ -36,11 +35,12 @@ const productFeatures: ProductFeature[] = [
   {
     href: "/solutions/rehab-fix-flip",
     title: "Rehab / Fix & Flip",
-    headline: "Buy, renovate, and exit without funding friction.",
+    titleSize: "lg",
+    headline: "Buy, renovate, and exit quickly.",
     bullets: [
-      "Capital sized for purchase plus rehab scope",
-      "Built for investors who move between contracts quickly",
-      "Document center and status tracking in one borrower portal",
+      "Funding to cover the purchase and the rehab",
+      "Designed for the investor who moves quickly between projects",
+      "Online portal allows you to apply and track projects in one place. Reuse common data between projects to eliminate redundant data entry.",
     ],
     image: images.rehab,
     cardLabel: "For investors",
@@ -51,7 +51,8 @@ const productFeatures: ProductFeature[] = [
   {
     href: "/solutions/bridge-loans",
     title: "Bridge Loans",
-    headline: "Bridge the gap. Keep the close on your calendar.",
+    titleSize: "lg",
+    headline: "Bridge the gap and keep the close on your schedule.",
     bullets: [
       "Bridge acquisition, refinance, or hold periods",
       "Designed for clean exits into permanent or DSCR financing",
@@ -99,7 +100,7 @@ const lifecycleSteps: LifecycleStep[] = [
   {
     id: "application",
     title: "Application",
-    body: "Submit property, borrower, and loan details in minutes. Your borrower portal opens so you can return and update the file anytime.",
+    body: "Submit property, borrower, and loan details in minutes. Vector by Vault opens so you can return and update the file anytime.",
     image: images.lifecycleApply,
   },
   {
@@ -135,7 +136,7 @@ const lifecycleSteps: LifecycleStep[] = [
 ];
 
 export function HomePage() {
-  const speed = fundingSpeedClaim();
+  const speed = fundingSpeedClaimShort();
 
   return (
     <>
@@ -147,19 +148,17 @@ export function HomePage() {
               Investor credit · Multi-state coverage · Diligence-first
             </p>
             <h1 className="headline-xl mt-5 max-w-[16ch] text-balance text-ink">
-              Capital that moves as fast as your deal.
+              Capital that moves as fast as you.
             </h1>
             <p className="body-lg mt-5 max-w-[34rem]">
-              Private money for fix &amp; flip, bridge, ground-up, and DSCR investors — with a
-              digital application, a durable borrower portal, and an audited path to funding.
+              Private money for fix &amp; flip, bridge, ground-up, and DSCR investors.
             </p>
             <p className="mt-4 max-w-[34rem] text-[1rem] font-medium text-charcoal">{speed}</p>
+            <p className="mt-3 max-w-[34rem] text-[1.0625rem] font-semibold text-ink">
+              Give us 2 minutes and we&apos;ll give you a pre-approval.
+            </p>
             <ul className="mt-6 space-y-3">
-              {[
-                "Apply in one sitting",
-                "Track status in plain language",
-                "Upload documents and return years later",
-              ].map((item) => (
+              {["Apply in one sitting", "Track status in real-time"].map((item) => (
                 <li key={item} className="flex items-center gap-3 text-[1.0625rem] text-charcoal">
                   <span className="flex h-5 w-5 items-center justify-center rounded-full bg-green-soft text-green">
                     <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" fill="none" aria-hidden>
@@ -176,14 +175,6 @@ export function HomePage() {
               ))}
             </ul>
             <CtaGroup className="mt-8" showDisclaimer />
-            <p className="mt-4">
-              <Link
-                href="/capital-partners"
-                className="text-[1.0625rem] font-medium text-ink underline decoration-green/40 underline-offset-4 hover:decoration-green"
-              >
-                Partner with Us
-              </Link>
-            </p>
             <p className="mt-5 text-[0.8125rem] text-steel">
               Subject to credit approval and applicable state licensing. Terms vary by deal.
             </p>
@@ -198,12 +189,6 @@ export function HomePage() {
                 className="absolute inset-4 overflow-hidden rounded-[1.5rem] sm:inset-5"
                 sizes="(max-width: 1024px) 100vw, 520px"
               />
-              <div className="absolute bottom-8 left-8 right-8 z-10 rounded-2xl bg-white/95 p-4 shadow-[0_16px_40px_rgba(0,0,0,0.12)] backdrop-blur-sm sm:left-10 sm:right-auto sm:max-w-[17rem]">
-                <p className="text-[0.75rem] font-medium text-steel">When the package is complete</p>
-                <p className="mt-1 text-[1.0625rem] font-semibold tracking-[-0.02em] text-ink">
-                  {speed}
-                </p>
-              </div>
             </div>
           </div>
         </div>
@@ -214,16 +199,16 @@ export function HomePage() {
         <div className="mx-auto grid max-w-[1080px] gap-8 px-6 py-12 sm:grid-cols-3 lg:px-8">
           {[
             {
-              title: "Digital Apply",
-              body: "Property, borrower, and loan details in a structured flow — no PDF upload loop.",
+              title: "Quickly apply for your loan in one location. No endless emailing back-and-forth.",
+              body: "Quickly apply for funding in one location. No uploading documents to outside applications or endless emails.",
             },
             {
-              title: "Plain-language status",
-              body: "Published gates from review to funding, with a full audit trail behind every change.",
+              title: "Track your application in real-time",
+              body: "Published gates from review to funding — visible in Vector by Vault as your file moves.",
             },
             {
-              title: "Durable borrower portal",
-              body: "Return years later to update documents and start the next file from the same account.",
+              title: "Online Portal Access",
+              body: "Stay organized with a secure portal that stores your information and projects. No re-entering data for every new project.",
             },
           ].map((item) => (
             <div key={item.title} className="text-center sm:text-left">
@@ -247,10 +232,10 @@ export function HomePage() {
       {/* Solutions intro */}
       <section className="bg-paper pt-16 lg:pt-20">
         <div className="mx-auto max-w-[40rem] px-6 text-center lg:px-8">
-          <h2 className="headline-lg text-balance">Solutions built for the deal you have.</h2>
+          <h2 className="headline-lg text-balance">The right solution for you.</h2>
           <p className="body-lg mt-5">
-            Fix &amp; flip, bridge, ground-up, and DSCR structures — each with its own stage, imagery,
-            and a direct path to start a file.
+            Whether it&apos;s a fix &amp; flip, bridge, ground-up, or DSCR, we specialize in finding
+            the right lending solution for your specific needs.
           </p>
           <p className="mt-4">
             <Link href="/strategies" className="font-medium text-green hover:text-green-hover">
@@ -265,7 +250,7 @@ export function HomePage() {
         <ProductFeatureSection key={feature.href} feature={feature} />
       ))}
 
-      {/* How it works — interactive image-led lifecycle */}
+      {/* How it works — Vector by Vault */}
       <section className="relative overflow-hidden bg-green-mist">
         <div className="pointer-events-none absolute inset-0" aria-hidden>
           <Image
@@ -278,12 +263,12 @@ export function HomePage() {
           <div className="absolute inset-0 bg-gradient-to-b from-green-mist/90 via-green-mist/95 to-paper" />
         </div>
         <div className="relative mx-auto max-w-[1080px] px-6 py-[var(--spacing-section)] lg:px-8">
-          <div className="mx-auto max-w-[36rem] text-center">
-            <h2 className="headline-lg text-balance">How funding moves through Vault.</h2>
-            <p className="body-lg mt-5">
-              Six clear gates from application to funding — the same audited path you track in the
-              borrower portal. {speed}
-            </p>
+          <div className="mx-auto max-w-[40rem] text-center">
+            <h2 className="headline-lg text-balance">
+              Vector by Vault allows you to apply, review, and track all your loans in one place. No
+              more endless back-and-forth emails or wondering where you are in the process.
+            </h2>
+            <p className="body-lg mt-5">Get your project funded in six easy steps. {speed}</p>
           </div>
 
           <LifecycleFlow steps={lifecycleSteps} />
@@ -293,101 +278,51 @@ export function HomePage() {
         </div>
       </section>
 
+      {/* Borrower-focused CTA band (capital partners removed from home) */}
+      <section className="bg-white">
+        <div className="mx-auto max-w-[1080px] px-6 py-[var(--spacing-section)] lg:px-8">
+          <div className="overflow-hidden rounded-[2rem] bg-green-mist">
+            <div className="grid items-center gap-0 lg:grid-cols-2">
+              <div className="relative aspect-[16/10] lg:aspect-auto lg:min-h-[22rem]">
+                <BrandImage
+                  src={images.investor.src}
+                  alt={images.investor.alt}
+                  greenAccent="corner"
+                  className="absolute inset-0"
+                  sizes="(max-width: 1024px) 100vw, 50vw"
+                />
+              </div>
+              <div className="p-8 lg:p-12">
+                <p className="text-[0.875rem] font-semibold text-green">For borrowers</p>
+                <h2 className="mt-2 text-[1.75rem] font-semibold tracking-[-0.03em] text-ink">
+                  Get started now with Vault.
+                </h2>
+                <p className="mt-3 text-[1.0625rem] leading-relaxed text-steel">
+                  Quickly apply for funding, track your application in real-time, and stay organized
+                  in Vector by Vault.
+                </p>
+                <div className="mt-6 flex flex-wrap gap-3">
+                  <a
+                    href={CTA_PRIMARY.href}
+                    className="btn-shine inline-flex items-center justify-center rounded-full bg-green px-5 py-2.5 text-[0.9375rem] font-medium text-white hover:bg-green-hover"
+                  >
+                    {CTA_PRIMARY.label}
+                  </a>
+                  <a
+                    href={CTA_SECONDARY.href}
+                    className="inline-flex items-center justify-center rounded-full px-5 py-2.5 text-[0.9375rem] font-medium text-ink ring-1 ring-line hover:bg-white"
+                  >
+                    {CTA_SECONDARY.label}
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
       <RecentFiles className="bg-white py-[var(--spacing-section)]" />
       <Testimonials className="bg-paper py-[var(--spacing-section)]" />
-
-      {/* Dual audience */}
-      <section className="bg-white">
-        <div className="mx-auto grid max-w-[1080px] gap-6 px-6 py-[var(--spacing-section)] lg:grid-cols-2 lg:px-8">
-          <div className="overflow-hidden rounded-[2rem] bg-green-mist">
-            <div className="relative aspect-[16/10]">
-              <BrandImage
-                src={images.investor.src}
-                alt={images.investor.alt}
-                greenAccent="corner"
-                className="absolute inset-0"
-                sizes="(max-width: 1024px) 100vw, 50vw"
-              />
-            </div>
-            <div className="p-8">
-              <p className="text-[0.875rem] font-semibold text-green">For borrowers</p>
-              <h2 className="mt-2 text-[1.75rem] font-semibold tracking-[-0.03em] text-ink">
-                Investors who need certainty of close.
-              </h2>
-              <p className="mt-3 text-[1.0625rem] leading-relaxed text-steel">
-                Submit once, track status, upload packages, and keep a durable portal record for the
-                next deal.
-              </p>
-              <Button href={CTA_PRIMARY.href} shine className="mt-6">
-                {CTA_PRIMARY.label}
-              </Button>
-            </div>
-          </div>
-          <div className="overflow-hidden rounded-[2rem] bg-paper">
-            <div className="relative aspect-[16/10]">
-              <BrandImage
-                src={images.capital.src}
-                alt={images.capital.alt}
-                greenAccent="corner"
-                className="absolute inset-0"
-                sizes="(max-width: 1024px) 100vw, 50vw"
-              />
-            </div>
-            <div className="p-8">
-              <p className="text-[0.875rem] font-semibold text-green">For capital partners</p>
-              <h2 className="mt-2 text-[1.75rem] font-semibold tracking-[-0.03em] text-ink">
-                Lenders deploying into a gated, auditable pipeline.
-              </h2>
-              <p className="mt-3 text-[1.0625rem] leading-relaxed text-steel">
-                Evaluate process, risk posture, and reporting — then submit a partner application for
-                diligence.
-              </p>
-              <Button href="/capital-partners" className="mt-6">
-                Why Partner With Vault
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Fit criteria — sits above capital deployment */}
-      <QualificationBox />
-
-      {/* Capital partners deeper */}
-      <section className="bg-white">
-        <div className="mx-auto grid max-w-[1080px] items-center gap-10 px-6 py-[var(--spacing-section)] lg:grid-cols-2 lg:px-8">
-          <BrandImage
-            src={images.plans.src}
-            alt={images.plans.alt}
-            greenAccent="edge"
-            className="aspect-[4/3] rounded-[2rem]"
-            sizes="(max-width: 1024px) 100vw, 520px"
-          />
-          <div>
-            <h2 className="headline-lg text-balance">Capital deployment with an audit trail.</h2>
-            <ul className="mt-6 space-y-3">
-              {[
-                "Underwriting gates you can diligence",
-                "Processor and escrow assignment per file",
-                "Attribution history for funded loans",
-              ].map((b) => (
-                <li key={b} className="flex gap-3 text-[1.0625rem] text-charcoal">
-                  <span className="mt-0.5 text-green" aria-hidden>
-                    ✓
-                  </span>
-                  {b}
-                </li>
-              ))}
-            </ul>
-            <div className="mt-8 flex flex-wrap gap-3">
-              <Button href="/capital-partners/deployment">How Deployment Works</Button>
-              <Button href="/capital-partners/apply" variant="secondary">
-                Partner Application
-              </Button>
-            </div>
-          </div>
-        </div>
-      </section>
 
       <HomeLowerSections faqs={faqs} />
     </>

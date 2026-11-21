@@ -31,194 +31,35 @@ function SoftBanner({
   );
 }
 
-function PortalMock() {
-  return (
-    <div className="relative mx-auto w-full max-w-[320px]">
-      <div className="overflow-hidden rounded-[2rem] border border-black/5 bg-ink shadow-[0_30px_80px_rgba(0,0,0,0.18)]">
-        <div className="flex items-center gap-1.5 border-b border-white/10 px-4 py-3">
-          <span className="h-2 w-2 rounded-full bg-white/25" />
-          <span className="h-2 w-2 rounded-full bg-white/25" />
-          <span className="h-2 w-2 rounded-full bg-white/25" />
-          <span className="ml-2 text-[0.6875rem] text-white/45">Borrower portal</span>
-        </div>
-        <div className="space-y-4 bg-gradient-to-b from-[#121212] to-[#0a0a0a] px-5 py-6">
-          <div>
-            <p className="text-[0.6875rem] font-medium text-white/45">File VFS-1001</p>
-            <p className="mt-1 text-[1.125rem] font-semibold tracking-[-0.02em] text-white">
-              Package in review
-            </p>
-          </div>
-          <div className="rounded-2xl bg-white/5 p-4">
-            <div className="mb-3 flex justify-between text-[0.6875rem] text-white/50">
-              <span>Lifecycle</span>
-              <span className="text-green">Step 3 of 6</span>
-            </div>
-            <div className="flex gap-1.5">
-              {[1, 2, 3, 4, 5, 6].map((n) => (
-                <span
-                  key={n}
-                  className={`h-1.5 flex-1 rounded-full ${n <= 3 ? "bg-green" : "bg-white/15"}`}
-                />
-              ))}
-            </div>
-          </div>
-          <div className="space-y-2">
-            {["Purchase contract", "Insurance binder", "Entity docs"].map((doc, i) => (
-              <div
-                key={doc}
-                className="flex items-center justify-between rounded-xl bg-white/[0.04] px-3 py-2.5"
-              >
-                <span className="text-[0.8125rem] text-white/80">{doc}</span>
-                <span
-                  className={`text-[0.6875rem] font-semibold ${
-                    i < 2 ? "text-green" : "text-white/40"
-                  }`}
-                >
-                  {i < 2 ? "Received" : "Awaiting"}
-                </span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </div>
-
-      <div className="absolute -left-2 top-[18%] z-10 max-w-[11.5rem] rounded-2xl bg-white px-3.5 py-3 shadow-[0_16px_40px_rgba(0,0,0,0.12)] sm:-left-10">
-        <div className="flex items-start gap-2.5">
-          <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-green-soft text-green">
-            <svg viewBox="0 0 16 16" className="h-3.5 w-3.5" fill="none" aria-hidden>
-              <path
-                d="M3.5 8.2 6.2 10.9 12.5 4.6"
-                stroke="currentColor"
-                strokeWidth="1.7"
-                strokeLinecap="round"
-              />
-            </svg>
-          </span>
-          <p className="text-[0.75rem] font-medium leading-snug text-ink">
-            Status updated — package received
-          </p>
-        </div>
-      </div>
-      <div className="absolute -right-1 bottom-[22%] z-10 max-w-[12rem] rounded-2xl bg-white px-3.5 py-3 shadow-[0_16px_40px_rgba(0,0,0,0.12)] sm:-right-8">
-        <div className="flex items-start gap-2.5">
-          <span className="mt-0.5 flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-green text-[0.6875rem] font-bold text-white">
-            3
-          </span>
-          <p className="text-[0.75rem] font-medium leading-snug text-ink">
-            Docs cleared this week on the file
-          </p>
-        </div>
-      </div>
-    </div>
-  );
-}
-
 export function HomeLowerSections({ faqs }: { faqs: FaqItem[] }) {
   const helpPaths = [
     {
       href: "/apply",
-      title: "Fast path to apply",
-      body: "Start a digital file in one sitting",
+      title: "Quickly apply for funding",
+      body: "Complete your loan package in one sitting",
       image: images.investor,
     },
     {
       href: "/login",
-      title: "Plain-language status",
-      body: "Know the gate without jargon",
+      title: "Track your application in real-time",
+      body: "Know where your file stands in Vector by Vault",
       image: images.plans,
     },
     {
       href: "/apply",
-      title: "Secure document center",
-      body: "Upload once, track what’s received",
+      title: "Vector by Vault",
+      body: "Save time and eliminate confusion with our portal. No more uploading documents and endless back-and-forth emails.",
       image: images.rehab,
-    },
-    {
-      href: "/capital-partners",
-      title: "Capital partner path",
-      body: "Deploy into a controlled pipeline",
-      image: images.capital,
-    },
-  ];
-
-  const proofPoints = [
-    {
-      title: "Status without the chase",
-      body: "Every gate — review, package, underwriting, clear to close — is visible in the portal so borrowers know what is next without calling for updates.",
-      label: "Borrower experience",
-    },
-    {
-      title: "Documents that stay with the file",
-      body: "Upload contracts, insurance, and entity packages once. Missing items come back as info requests tagged to the stage they belong to.",
-      label: "Document center",
-    },
-    {
-      title: "Diligence-ready history",
-      body: "Assignment, conditions, and funding events remain on the file — usable for capital partner review, not decorative marketing claims.",
-      label: "Capital partners",
     },
   ];
 
   return (
     <>
-      {/* What investors notice — soft stage + floating portal proof */}
-      <SoftBanner src={images.funded.src} alt="" className="bg-green-mist">
-        <div className="mx-auto max-w-[1080px] px-6 py-[var(--spacing-section)] lg:px-8">
-          <div className="mx-auto max-w-[36rem] text-center">
-            <h2 className="headline-lg text-balance">What investors notice first.</h2>
-            <p className="body-lg mt-5">
-              Clarity of status, documents, and next steps — the same audited lifecycle on the
-              marketing site and inside the file.
-            </p>
-          </div>
-
-          <div className="mt-14 grid items-center gap-12 lg:grid-cols-[1fr_minmax(0,340px)_1fr]">
-            <ul className="order-2 space-y-4 lg:order-1">
-              {proofPoints.slice(0, 2).map((item) => (
-                <li
-                  key={item.title}
-                  className="rounded-[1.75rem] bg-white/90 px-6 py-6 shadow-[0_16px_50px_rgba(0,0,0,0.07)] backdrop-blur-sm"
-                >
-                  <p className="text-[0.8125rem] font-semibold text-green">{item.label}</p>
-                  <p className="mt-2 text-[1.125rem] font-semibold tracking-[-0.02em] text-ink">
-                    {item.title}
-                  </p>
-                  <p className="mt-3 text-[1.0625rem] leading-relaxed text-charcoal">{item.body}</p>
-                </li>
-              ))}
-            </ul>
-
-            <div className="order-1 lg:order-2">
-              <PortalMock />
-            </div>
-
-            <div className="order-3 space-y-4">
-              <div className="rounded-[1.75rem] bg-white/90 px-6 py-6 shadow-[0_16px_50px_rgba(0,0,0,0.07)] backdrop-blur-sm">
-                <p className="text-[0.8125rem] font-semibold text-green">{proofPoints[2].label}</p>
-                <p className="mt-2 text-[1.125rem] font-semibold tracking-[-0.02em] text-ink">
-                  {proofPoints[2].title}
-                </p>
-                <p className="mt-3 text-[1.0625rem] leading-relaxed text-charcoal">
-                  {proofPoints[2].body}
-                </p>
-              </div>
-              <div className="rounded-[1.75rem] bg-green-soft/80 px-6 py-5">
-                <p className="text-[0.875rem] font-semibold text-ink">Why the portal matters</p>
-                <p className="mt-2 text-[0.9375rem] leading-relaxed text-steel">
-                  Same audited lifecycle on the marketing site and inside the file — so the borrower
-                  view matches operations.
-                </p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </SoftBanner>
-
       {/* How can we help — image tiles */}
       <section className="bg-ink">
         <div className="mx-auto max-w-[1080px] px-6 py-[var(--spacing-section)] lg:px-8">
           <h2 className="headline-lg mx-auto max-w-[18ch] text-balance text-center text-white">
-            How can we help today?
+            Get started now with Vault.
           </h2>
           <ul className="mt-12 grid gap-4 sm:grid-cols-2">
             {helpPaths.map((card) => (
@@ -257,7 +98,7 @@ export function HomeLowerSections({ faqs }: { faqs: FaqItem[] }) {
           <div className="mx-auto max-w-[36rem] text-center">
             <h2 className="headline-lg text-balance">Vault FAQs</h2>
             <p className="body-lg mt-5">
-              Straight answers for borrowers and capital partners — without invented rate tables.
+              Straight answers for borrowers — without invented rate tables.
             </p>
           </div>
           <div className="mt-10 rounded-[2rem] bg-white/95 px-5 py-2 shadow-[0_20px_60px_rgba(0,0,0,0.06)] backdrop-blur-sm sm:px-8">
@@ -529,11 +370,11 @@ export function HomeLowerSections({ faqs }: { faqs: FaqItem[] }) {
         <div className="relative mx-auto max-w-[720px] px-6 py-[var(--spacing-section)] text-center lg:px-8">
           <div className="rounded-[2rem] bg-white/95 px-8 py-12 shadow-[0_24px_70px_rgba(0,0,0,0.08)] ring-1 ring-black/[0.04] backdrop-blur-sm sm:px-12">
             <h2 className="headline-lg mx-auto max-w-[16ch] text-balance text-ink">
-              Ready when your contract is.
+              Get started now with Vault.
             </h2>
             <p className="mx-auto mt-5 max-w-[32rem] text-[1.125rem] leading-relaxed text-steel">
-              Apply now to open the borrower portal — return, update documents, and track
-              status across the full funding lifecycle. Not a promise of approval.
+              Apply now to open Vector by Vault — return, update documents, and track status
+              across the full funding lifecycle. Not a promise of approval.
             </p>
             <div className="mt-8 flex flex-wrap items-center justify-center gap-3">
               <Button href={CTA_PRIMARY.href} shine>

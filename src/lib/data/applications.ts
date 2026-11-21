@@ -39,7 +39,9 @@ export function usesLiveBackend(): boolean {
 
 export async function createApplicationLive(
   input: CreateApplicationInput & { password?: string; establishSession?: boolean },
-): Promise<CreateApplicationResult & { sessionEstablished?: boolean }> {
+): Promise<
+  CreateApplicationResult & { sessionEstablished?: boolean; portalPassword?: string }
+> {
   const res = await fetch("/api/applications", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
@@ -49,16 +51,25 @@ export async function createApplicationLive(
   if (!res.ok) {
     throw new Error(body.error || `Failed to create application (${res.status})`);
   }
-  return body as CreateApplicationResult & { sessionEstablished?: boolean };
+  return body as CreateApplicationResult & {
+    sessionEstablished?: boolean;
+    portalPassword?: string;
+  };
 }
 
 export async function createApplication(
   input: CreateApplicationInput & { password?: string; establishSession?: boolean },
-): Promise<CreateApplicationResult & { sessionEstablished?: boolean }> {
+): Promise<
+  CreateApplicationResult & { sessionEstablished?: boolean; portalPassword?: string }
+> {
   if (usesSupabaseData()) {
     return createApplicationLive(input);
   }
-  return { ...createMockApplication(input), sessionEstablished: false };
+  return {
+    ...createMockApplication(input),
+    sessionEstablished: false,
+    portalPassword: input.password?.trim() || undefined,
+  };
 }
 
 export async function listApplicationsForBorrower(borrowerId?: string): Promise<LoanApplication[]> {

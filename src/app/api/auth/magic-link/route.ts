@@ -13,7 +13,7 @@ export async function POST(request: Request) {
   if (!email) return NextResponse.json({ error: "Email is required." }, { status: 400 });
 
   const site =
-    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "http://localhost:3000";
+    process.env.NEXT_PUBLIC_SITE_URL?.replace(/\/$/, "") || "https://vfs-swart.vercel.app";
   const nextPath = body.next?.startsWith("/") ? body.next : "/portal";
   const redirectTo = `${site}/auth/callback?next=${encodeURIComponent(nextPath)}`;
 

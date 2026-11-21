@@ -1,5 +1,5 @@
 import type { FaqItem } from "@/components/marketing/FaqAccordion";
-import { fundingSpeedClaim } from "@/lib/config/claims";
+import { fundingSpeedClaimDetailed } from "@/lib/config/claims";
 
 /**
  * FAQ pattern: lead with the direct answer, then the qualifier.
@@ -7,23 +7,23 @@ import { fundingSpeedClaim } from "@/lib/config/claims";
  */
 export const homepageFaqs: FaqItem[] = [
   {
-    question: "How fast can funding happen?",
-    answer: `${fundingSpeedClaim()} Timeline depends on package completeness, diligence, and third parties — never a guaranteed close date.`,
+    question: "How fast can I get my project funded?",
+    answer: fundingSpeedClaimDetailed(),
   },
   {
-    question: "How fast can I start an application?",
+    question: "How fast can I apply for a loan?",
     answer:
-      "You can start a file in one sitting: property, borrower, and loan intent in a structured digital flow. On submit, borrower portal access is created so you can return with documents without starting over.",
+      "Vector by Vault is designed to allow you to apply for project funding in one sitting. Of course, if you need to gather more information your application is automatically saved for you to resume later.",
   },
   {
-    question: "Will I know where my file stands?",
+    question: "How do I know the status of my application?",
     answer:
-      "Yes — every file moves through six published gates (application, review, package, underwriting, clear to close, and funding) with plain-language status and retained history. Qualifier: status language is operational, not a credit decision.",
+      "Once your application is submitted, you can track it in real-time from start to finish.",
   },
   {
-    question: "What if information is missing?",
+    question: "What happens if you need more information?",
     answer:
-      "The Processor requests what’s needed and the file enters an info-requested state tagged to its stage, then returns there once you resubmit. You do not lose your place in the lifecycle.",
+      "No more missed emails, endless back-and-forths, and confusion. Requests for more information are clearly displayed in our app (don’t worry, we also send an email to alert you).",
   },
   {
     question: "What loan products does Vault offer?",
@@ -31,14 +31,14 @@ export const homepageFaqs: FaqItem[] = [
       "Private money for acquisition and rehab, fix-and-flip, bridge, ground-up construction with draws, and DSCR / non-QM rental credit. Fit is evaluated against the property, exit, and borrower experience — not a one-size quote sheet.",
   },
   {
-    question: "Who can apply?",
+    question: "Is Vault the right lender for me?",
     answer:
-      "Real estate investors and entities using investment property as collateral. Primary-residence consumer mortgages and MCA / small-business working-capital products are outside this set.",
+      "Vault provides loans to real estate investors, entities using investment property as collateral, and consumers purchasing a second home. Vault is not a lender for primary-residence consumer mortgages or MCA/business loans.",
   },
   {
     question: "What documents will I need?",
     answer:
-      "Expect identity and entity paperwork, property details, purchase contract or payoff statement, rehab scope or rent roll when relevant, and liquidity evidence. Exact checklists appear in the borrower portal after you start a file.",
+      "Expect identity and entity paperwork, property details, purchase contract or payoff statement, rehab scope or rent roll when relevant, and liquidity evidence. Exact checklists appear in Vector by Vault after you start a file.",
   },
   {
     question: "Do you publish rates and LTVs on the site?",
@@ -51,14 +51,9 @@ export const homepageFaqs: FaqItem[] = [
       "Vault uses a national operating model with priority markets listed under Locations. Formal licensing details live under Trust — request the compliance pack for license-level confirmation rather than assuming coverage from a marketing page.",
   },
   {
-    question: "How does the borrower portal work?",
+    question: "How does Vector by Vault work?",
     answer:
       "Submitting Apply creates portal access tied to your organization and file. Upload documents, respond to info requests, and follow lifecycle status without restarting — the same account stays with you across deals.",
-  },
-  {
-    question: "How do capital partners get started?",
-    answer:
-      "Review Why Partner With Vault and How Deployment Works, then submit a Partner Application. That opens a capital-partner organization record for diligence on a gated, auditable pipeline — a real intake, not a disposable lead form.",
   },
   {
     question: "Can I work with a broker or correspondent?",
@@ -68,7 +63,7 @@ export const homepageFaqs: FaqItem[] = [
   {
     question: "How do I contact Vault before applying?",
     answer:
-      "Use Contact for general inquiries, or Check if your deal fits for a four-field preliminary read. When you have a live deal, Apply Now is the fastest path to a portal record.",
+      "Use Contact for general inquiries, or give us 2 minutes on the deal screener for a preliminary pre-approval read. When you have a live deal, Apply Now is the fastest path into Vector by Vault.",
   },
 ];
 
@@ -93,6 +88,6 @@ export const expandedFaqs: FaqItem[] = [
   {
     question: "Who logs into Client Login?",
     answer:
-      "Borrowers use Client Login after Apply creates portal access. Brokers and capital partners use role-scoped access once their organizations are activated. Marketing pages explain the model; live credentials are issued after your organization is set up.",
+      "Borrowers use Client Login after Apply creates Vector by Vault access. Use the email and portal password from your Apply confirmation. Brokers use role-scoped access once their organizations are activated.",
   },
 ];

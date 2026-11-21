@@ -11,7 +11,7 @@ export const metadata: Metadata = {
     absolute: "Vault Financial Services | Private Capital for Real Estate Investors",
   },
   description:
-    "Institutional private capital for real estate investors. Fix & flip, bridge, ground-up construction, and DSCR lending with a gated lifecycle and borrower portal.",
+    "Institutional private capital for real estate investors. Fix & flip, bridge, ground-up construction, and DSCR lending with Vector by Vault.",
   openGraph: {
     title: "Vault Financial Services | Private Capital for Real Estate Investors",
     description:

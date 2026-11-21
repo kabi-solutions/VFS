@@ -168,7 +168,7 @@ export function DealScreener() {
       </form>
       <div className="rounded-[2rem] bg-green-mist px-6 py-8 sm:px-8">
         <p className="text-[0.8125rem] font-semibold tracking-[0.06em] text-green uppercase">
-          Fit indication
+          Is Vault the right fit for your project?
         </p>
         <h3 className="mt-3 text-[1.25rem] font-semibold tracking-[-0.02em] text-ink">
           {copy.title}

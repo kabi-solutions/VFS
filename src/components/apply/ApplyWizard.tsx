@@ -210,13 +210,14 @@ export function ApplyWizard({
   const [errors, setErrors] = useState<HardErrors>({});
   const [errorSummary, setErrorSummary] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
-  const [portalPassword] = useState("");
+  const [portalPassword, setPortalPassword] = useState("");
   const [submitError, setSubmitError] = useState<string | null>(null);
   const [savedAt, setSavedAt] = useState<string | null>(null);
   const [result, setResult] = useState<{
     referenceCode: string;
     applicationId: string;
     email: string;
+    portalPassword?: string;
     missingLabels: string[];
     packageComplete: boolean;
   } | null>(null);
@@ -487,7 +488,7 @@ export function ApplyWizard({
         parseMoney(finalPkg.strategy.estimated_arv);
 
       setSubmitError(null);
-      const { application, user } = await createApplication({
+      const created = await createApplication({
         property_address: finalPkg.subject_property.address,
         property_city: finalPkg.subject_property.city || "—",
         property_state: finalPkg.subject_property.state || "NV",
@@ -518,6 +519,7 @@ export function ApplyWizard({
         // Always establish a portal session after submit (server generates a password if needed).
         establishSession: true,
       });
+      const { application, user, portalPassword: issuedPassword } = created;
 
       const completeness = getPackageCompleteness(
         finalPkg,
@@ -530,6 +532,7 @@ export function ApplyWizard({
         referenceCode: application.reference_code,
         applicationId: application.id,
         email: user.email,
+        portalPassword: issuedPassword || portalPassword.trim() || undefined,
         missingLabels: completeness.missing.map((m) => m.label),
         packageComplete: application.package_complete,
       });
@@ -620,7 +623,7 @@ export function ApplyWizard({
           Your file is on the record.
         </h2>
         <p className="mt-4 text-[1.0625rem] leading-relaxed text-steel">
-          Portal access was created for{" "}
+          Vector by Vault access was created for{" "}
           <span className="font-medium text-charcoal">{result.email}</span>. Finish your package in
           the borrower workspace — we will show what is still missing.
         </p>
@@ -629,6 +632,16 @@ export function ApplyWizard({
             <dt className="text-steel">Reference</dt>
             <dd className="font-mono text-charcoal">{result.referenceCode}</dd>
           </div>
+          {result.portalPassword ? (
+            <div className="rounded-2xl bg-green-mist/80 px-4 py-3">
+              <dt className="text-[0.8125rem] font-semibold text-green">Portal password</dt>
+              <dd className="mt-1 font-mono text-[1.0625rem] text-ink">{result.portalPassword}</dd>
+              <p className="mt-2 text-[0.8125rem] leading-relaxed text-steel">
+                Save this password. Use it with your email on Client Login anytime — no magic-link
+                email required.
+              </p>
+            </div>
+          ) : null}
           <div className="flex flex-wrap justify-between gap-2">
             <dt className="text-steel">Package</dt>
             <dd className="text-charcoal">
@@ -748,7 +761,31 @@ export function ApplyWizard({
           <DealLoanPanel {...shared} />
         ) : null}
         {location.phaseId === "deal" && location.subStepId === "contact" ? (
-          <DealContactPanel {...shared} />
+          <>
+            <DealContactPanel {...shared} />
+            <div className="mt-8 border-t border-line pt-6">
+              <label
+                htmlFor="portal-password"
+                className="block text-[0.875rem] font-medium text-charcoal"
+              >
+                Choose a Vector by Vault password
+              </label>
+              <input
+                id="portal-password"
+                type="password"
+                autoComplete="new-password"
+                className="mt-1.5 w-full rounded-xl border border-line bg-white px-3.5 py-2.5 text-[1rem] text-ink outline-none focus:border-green"
+                value={portalPassword}
+                onChange={(e) => setPortalPassword(e.target.value)}
+                placeholder="At least 8 characters (optional — we can generate one)"
+                minLength={8}
+              />
+              <p className="mt-2 text-[0.8125rem] leading-relaxed text-steel">
+                This is how you sign back into Client Login. If you leave it blank, we generate one
+                and show it after submit.
+              </p>
+            </div>
+          </>
         ) : null}
         {location.phaseId === "profile" && location.subStepId === "borrower" ? (
           <ProfileBorrowerPanel {...shared} />
