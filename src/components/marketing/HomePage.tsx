@@ -230,7 +230,7 @@ export function HomePage() {
       </section>
 
       {/* Solutions intro */}
-      <section className="bg-paper pt-16 lg:pt-20">
+      <section className="bg-white pt-16 lg:pt-20">
         <div className="mx-auto max-w-[40rem] px-6 text-center lg:px-8">
           <h2 className="headline-lg text-balance">The right solution for you.</h2>
           <p className="body-lg mt-5">
